@@ -10,11 +10,16 @@ class CorsMiddleware
     public function handle(Request $request): bool
     {
         $origin = $_SERVER['HTTP_ORIGIN'] ?? '*';
+        if ($origin === 'null' || empty($origin)) {
+            $origin = '*';
+        }
         
         header("Access-Control-Allow-Origin: {$origin}");
         header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
         header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization, X-Device-Id, X-App-Version, X-Language");
-        header("Access-Control-Allow-Credentials: true");
+        if ($origin !== '*') {
+            header("Access-Control-Allow-Credentials: true");
+        }
         header("Access-Control-Max-Age: 86400");
 
         if ($request->getMethod() === 'OPTIONS') {

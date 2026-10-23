@@ -84,7 +84,7 @@ class OtpService
         ];
     }
 
-    public static function verifyOtp(string $rawPhone, string $otp, string $role = 'customer', ?string $fullName = null): array
+    public static function verifyOtp(string $rawPhone, string $otp, string $role = 'customer', ?string $fullName = null, string $category = 'toto'): array
     {
         $phone = self::formatPhone($rawPhone);
         $db = Database::getConnection();
@@ -141,17 +141,22 @@ class OtpService
                 $profile = $checkProf->fetch();
                 if (!$profile) {
                     $insProf = $db->prepare("
-                        INSERT INTO driver_profiles (user_id, status, ownership_model)
-                        VALUES (?, 'pending_review', 'owner_operator')
+                        INSERT INTO driver_profiles (user_id, status, ownership_model, vehicle_category)
+                        VALUES (?, 'pending_review', 'owner_operator', ?)
                     ");
-                    $insProf->execute([$user['id']]);
+                    $insProf->execute([$user['id'], $category]);
                     $profileId = $db->lastInsertId();
 
                     // Create wallet
                     $insWallet = $db->prepare("INSERT INTO driver_wallets (driver_id) VALUES (?)");
                     $insWallet->execute([$profileId]);
 
-                    $profile = ['id' => $profileId, 'status' => 'pending_review'];
+                    $profile = ['id' => $profileId, 'status' => 'pending_review', 'vehicle_category' => $category];
+                } else {
+                    if (!empty($category)) {
+                        $db->prepare("UPDATE driver_profiles SET vehicle_category = ? WHERE id = ?")->execute([$category, $profile['id']]);
+                        $profile['vehicle_category'] = $category;
+                    }
                 }
             } else {
                 $checkProf = $db->prepare("SELECT * FROM customer_profiles WHERE user_id = ?");

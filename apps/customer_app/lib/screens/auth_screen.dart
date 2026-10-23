@@ -88,6 +88,16 @@ class _AuthScreenState extends State<AuthScreen> {
       return;
     }
 
+    final name = _nameController.text.trim();
+    if (name.isEmpty) {
+      setState(() => _errorMessage = _currentLang == 'bn'
+          ? 'অনুগ্রহ করে আপনার পুরো নাম লিখুন (নাম আবশ্যক)।'
+          : (_currentLang == 'hi'
+              ? 'कृपया अपना पूरा नाम दर्ज करें (नाम अनिवार्य है)।'
+              : 'Please enter your Full Name (Mandatory).'));
+      return;
+    }
+
     setState(() {
       _isLoading = true;
       _errorMessage = null;
@@ -97,7 +107,7 @@ class _AuthScreenState extends State<AuthScreen> {
       final res = await ApiService().verifyOtp(
         _phoneController.text.trim(),
         otp,
-        fullName: _nameController.text.trim().isNotEmpty ? _nameController.text.trim() : null,
+        fullName: name,
       );
 
       setState(() => _isLoading = false);
@@ -319,12 +329,14 @@ class _AuthScreenState extends State<AuthScreen> {
                 ),
                 const SizedBox(height: 16),
 
-                // Optional Name Field for first time riders
+                // Mandatory Full Name Field
                 TextField(
                   controller: _nameController,
-                  decoration: const InputDecoration(
-                    labelText: 'Full Name (Optional for new users)',
-                    prefixIcon: Icon(Icons.person_outline),
+                  decoration: InputDecoration(
+                    labelText: _currentLang == 'bn'
+                        ? 'আপনার পুরো নাম লিখুন *'
+                        : (_currentLang == 'hi' ? 'पूरा नाम दर्ज करें (अनिवार्य) *' : 'Full Name (Mandatory) *'),
+                    prefixIcon: const Icon(Icons.person_outline),
                   ),
                 ),
                 const SizedBox(height: 24),

@@ -25,6 +25,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
 
   bool _isOnline = false;
   bool _isLoading = true;
+  String _mapMode = 'road'; // 'road', 'satellite', 'traffic'
   Map<String, dynamic>? _profile;
   Map<String, dynamic>? _activeTrip;
   Map<String, dynamic>? _earningsToday;
@@ -111,7 +112,88 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
     _pollTripTimer?.cancel();
   }
 
+  String _getCategoryIcon(String? cat) {
+    switch (cat?.toLowerCase()) {
+      case 'bike':
+        return '🏍️';
+      case 'cab':
+        return '🚗';
+      case 'cargo':
+        return '🚛';
+      case 'parcel':
+        return '📦';
+      case 'toto':
+      default:
+        return '🛺';
+    }
+  }
+
+  String _getCategoryLabel(String? cat) {
+    switch (cat?.toLowerCase()) {
+      case 'bike':
+        return 'Bike';
+      case 'cab':
+        return 'Cab';
+      case 'cargo':
+        return 'Cargo';
+      case 'parcel':
+        return 'Parcel';
+      case 'toto':
+      default:
+        return 'Toto';
+    }
+  }
+
+  void _showKycPendingDialog() {
+    final loc = DriverLocalizations(DriverApiService().language);
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        title: Row(
+          children: [
+            const Icon(Icons.verified_user_outlined, color: Color(0xFFD97706), size: 28),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                loc.tr('kyc_pending_title'),
+                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+              ),
+            ),
+          ],
+        ),
+        content: Text(
+          loc.tr('kyc_pending_msg'),
+          style: const TextStyle(fontSize: 13, height: 1.4),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('OK'),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(backgroundColor: DriverColors.primaryGreen),
+            onPressed: () {
+              Navigator.pop(ctx);
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (_) => const KycDocumentsScreen(isOnboarding: false)),
+              );
+            },
+            child: Text(loc.tr('upload_kyc_docs')),
+          ),
+        ],
+      ),
+    );
+  }
+
   Future<void> _handleToggleOnline() async {
+    final status = _profile?['status']?.toString();
+    if (status != 'verified_active') {
+      _showKycPendingDialog();
+      return;
+    }
+
     final targetState = !_isOnline;
     setState(() => _isLoading = true);
 
@@ -136,6 +218,37 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
   }
 
   // --- TRIP STAGES ACTIONS ---
+  Future<void> _handleAcceptTrip() async {
+    if (_activeTrip == null) return;
+    final bId = int.tryParse(_activeTrip!['id']?.toString() ?? '') ?? 0;
+    setState(() => _isLoading = true);
+
+    final res = await DriverApiService().acceptTrip(bId);
+    setState(() => _isLoading = false);
+
+    if (res['success'] == true) {
+      final updated = await DriverApiService().getActiveTrip();
+      setState(() => _activeTrip = updated);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Ride Accepted! Head to passenger pickup.')),
+        );
+      }
+    } else {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(backgroundColor: DriverColors.errorRed, content: Text(res['message'] ?? 'Could not accept ride.')),
+        );
+      }
+    }
+  }
+
+  void _handleDeclineTrip() {
+    setState(() {
+      _activeTrip = null;
+    });
+  }
+
   Future<void> _handleArrived() async {
     if (_activeTrip == null) return;
     final bId = int.tryParse(_activeTrip!['id']?.toString() ?? '') ?? 0;
@@ -259,32 +372,75 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
     super.dispose();
   }
 
+  Widget _buildMapModePill(String mode, String label) {
+    final isSelected = _mapMode == mode;
+    return InkWell(
+      onTap: () => setState(() => _mapMode = mode),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        decoration: BoxDecoration(
+          color: isSelected ? DriverColors.primaryGreen : Colors.transparent,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            fontSize: 11,
+            fontWeight: FontWeight.w700,
+            color: isSelected ? Colors.white : DriverColors.deepNavy,
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final loc = DriverLocalizations(DriverApiService().language);
     final tripStatus = _activeTrip?['booking_status'];
+    final categoryCode = _profile?['vehicle_category'] ?? 'toto';
 
     return Scaffold(
       body: Stack(
         children: [
-          // 1. Full Map with Current Location
+          // 1. Full Map with Current Location & 3 Modes (Road / Satellite / Traffic)
           FlutterMap(
             mapController: _mapController,
             options: MapOptions(
               initialCenter: _currentLocation,
               initialZoom: 15.0,
+              maxZoom: 19.0,
+              minZoom: 4.0,
             ),
             children: [
-              TileLayer(
-                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                userAgentPackageName: 'in.oitoto.driver',
-              ),
+              if (_mapMode == 'satellite')
+                TileLayer(
+                  urlTemplate: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+                  userAgentPackageName: 'in.oitoto.driver',
+                  maxZoom: 19,
+                  maxNativeZoom: 19,
+                )
+              else if (_mapMode == 'traffic')
+                TileLayer(
+                  urlTemplate: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+                  subdomains: const ['a', 'b', 'c', 'd'],
+                  userAgentPackageName: 'in.oitoto.driver',
+                  maxZoom: 19,
+                  maxNativeZoom: 19,
+                )
+              else
+                TileLayer(
+                  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                  userAgentPackageName: 'in.oitoto.driver',
+                  maxZoom: 19,
+                  maxNativeZoom: 19,
+                ),
               MarkerLayer(
                 markers: [
                   Marker(
                     point: _currentLocation,
-                    width: 50,
-                    height: 50,
+                    width: 52,
+                    height: 52,
                     child: Container(
                       decoration: BoxDecoration(
                         color: _isOnline ? DriverColors.onlineGreen : DriverColors.offlineGray,
@@ -294,8 +450,8 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                           BoxShadow(color: Colors.black.withOpacity(0.25), blurRadius: 8),
                         ],
                       ),
-                      child: const Center(
-                        child: Text('🛺', style: TextStyle(fontSize: 22)),
+                      child: Center(
+                        child: Text(_getCategoryIcon(categoryCode), style: const TextStyle(fontSize: 22)),
                       ),
                     ),
                   ),
@@ -304,7 +460,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
             ],
           ),
 
-          // 2. Top Driver Header & Online Toggle Switch
+          // 2. Top Driver Header & Online Toggle Switch + Vehicle Category Badge
           SafeArea(
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -314,7 +470,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                   InkWell(
                     onTap: _handleToggleOnline,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 9),
                       decoration: BoxDecoration(
                         color: _isOnline ? DriverColors.onlineGreen : Colors.white,
                         borderRadius: BorderRadius.circular(30),
@@ -334,17 +490,40 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                             size: 18,
                             color: _isOnline ? Colors.white : DriverColors.offlineGray,
                           ),
-                          const SizedBox(width: 8),
+                          const SizedBox(width: 6),
                           Text(
                             _isOnline ? loc.tr('go_offline') : loc.tr('go_online'),
                             style: TextStyle(
                               fontWeight: FontWeight.w800,
-                              fontSize: 13,
+                              fontSize: 12,
                               color: _isOnline ? Colors.white : DriverColors.textMain,
                             ),
                           ),
                         ],
                       ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  // Vehicle Category Badge
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(20),
+                      boxShadow: [
+                        BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 8),
+                      ],
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(_getCategoryIcon(categoryCode), style: const TextStyle(fontSize: 15)),
+                        const SizedBox(width: 4),
+                        Text(
+                          _getCategoryLabel(categoryCode),
+                          style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 11, color: DriverColors.deepNavy),
+                        ),
+                      ],
                     ),
                   ),
                   const Spacer(),
@@ -356,7 +535,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                     icon: Container(
                       padding: const EdgeInsets.all(8),
                       decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
-                      child: const Icon(Icons.account_balance_wallet, color: DriverColors.primaryGreen),
+                      child: const Icon(Icons.account_balance_wallet, color: DriverColors.primaryGreen, size: 20),
                     ),
                   ),
                   // Profile Button
@@ -367,13 +546,89 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                     icon: Container(
                       padding: const EdgeInsets.all(8),
                       decoration: const BoxDecoration(color: Colors.white, shape: BoxShape.circle),
-                      child: const Icon(Icons.person, color: DriverColors.deepNavy),
+                      child: const Icon(Icons.person, color: DriverColors.deepNavy, size: 20),
                     ),
                   ),
                 ],
               ),
             ),
           ),
+
+          // 2.1 3-Mode Location Map Selector Pill (Road / Satellite / Traffic)
+          Positioned(
+            top: 68,
+            right: 16,
+            child: Container(
+              padding: const EdgeInsets.all(3),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: [
+                  BoxShadow(color: Colors.black.withOpacity(0.12), blurRadius: 8, offset: const Offset(0, 3)),
+                ],
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _buildMapModePill('road', '🛣️ ${loc.tr('map_road')}'),
+                  _buildMapModePill('satellite', '🛰️ ${loc.tr('map_satellite')}'),
+                  _buildMapModePill('traffic', '🚦 ${loc.tr('map_traffic')}'),
+                ],
+              ),
+            ),
+          ),
+
+          // 2.2 KYC Verification Notice Banner if not active
+          if (_profile != null && _profile!['status'] != 'verified_active')
+            Positioned(
+              top: 112,
+              left: 16,
+              right: 16,
+              child: InkWell(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const KycDocumentsScreen(isOnboarding: false)),
+                  );
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFFFFBEB),
+                    borderRadius: BorderRadius.circular(12),
+                    border: Border.all(color: const Color(0xFFF59E0B)),
+                    boxShadow: [
+                      BoxShadow(color: Colors.black.withOpacity(0.08), blurRadius: 8),
+                    ],
+                  ),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.verified_user_outlined, color: Color(0xFFD97706), size: 20),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              loc.tr('kyc_pending_title'),
+                              style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 12, color: Color(0xFF92400E)),
+                            ),
+                            Text(
+                              loc.tr('kyc_pending_msg'),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(fontSize: 10, color: Color(0xFFB45309)),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(width: 6),
+                      const Icon(Icons.chevron_right, color: Color(0xFFB45309), size: 18),
+                    ],
+                  ),
+                ),
+              ),
+            ),
 
           // 3. Active Trip Execution Panel (Bottom Sheet)
           if (_activeTrip != null)
@@ -391,6 +646,102 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
+                    // Stage 0: Requested -> Accept or Decline
+                    if (tripStatus == 'requested') ...[
+                      Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: DriverColors.primaryGreenLight,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Row(
+                              children: [
+                                Text(_getCategoryIcon(_activeTrip!['vehicle_category'] ?? categoryCode), style: const TextStyle(fontSize: 16)),
+                                const SizedBox(width: 5),
+                                Text(
+                                  loc.tr('new_booking'),
+                                  style: const TextStyle(fontWeight: FontWeight.w800, color: DriverColors.primaryGreenDark, fontSize: 13),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const Spacer(),
+                          Text(
+                            '₹${_activeTrip!['estimated_fare'] ?? '20'}',
+                            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w900, color: DriverColors.primaryGreen),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Icon(Icons.trip_origin, color: DriverColors.primaryGreen, size: 18),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text('Pickup Location:', style: TextStyle(fontSize: 11, color: DriverColors.textMuted, fontWeight: FontWeight.bold)),
+                                Text(_activeTrip!['pickup_address'] ?? 'Pickup point', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Icon(Icons.location_on, color: DriverColors.errorRed, size: 18),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text('Destination:', style: TextStyle(fontSize: 11, color: DriverColors.textMuted, fontWeight: FontWeight.bold)),
+                                Text(_activeTrip!['drop_address'] ?? 'Destination point', style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        children: [
+                          Expanded(
+                            flex: 1,
+                            child: OutlinedButton(
+                              onPressed: _handleDeclineTrip,
+                              style: OutlinedButton.styleFrom(
+                                foregroundColor: DriverColors.textMuted,
+                                side: BorderSide(color: Colors.grey.shade400),
+                                padding: const EdgeInsets.symmetric(vertical: 14),
+                              ),
+                              child: Text(loc.tr('reject_ride')),
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            flex: 2,
+                            child: ElevatedButton(
+                              onPressed: _isLoading ? null : _handleAcceptTrip,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: DriverColors.primaryGreen,
+                                padding: const EdgeInsets.symmetric(vertical: 14),
+                              ),
+                              child: Text(
+                                loc.tr('accept_ride'),
+                                style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+
                     // Stage 1: Accepted -> Arrived at pickup
                     if (tripStatus == 'accepted') ...[
                       Row(

@@ -55,9 +55,10 @@ class AuthController
         $otp = (string)$request->get('otp');
         $role = (string)$request->get('role', 'customer');
         $fullName = $request->get('full_name');
+        $category = (string)$request->get('category', 'toto');
 
         try {
-            $result = OtpService::verifyOtp($phone, $otp, $role, $fullName);
+            $result = OtpService::verifyOtp($phone, $otp, $role, $fullName, $category);
             Response::success($result, 'Logged in successfully.');
         } catch (Throwable $e) {
             Response::error($e->getMessage(), 401);

@@ -61,7 +61,7 @@ class DriverApiService {
     return jsonDecode(res.body);
   }
 
-  Future<Map<String, dynamic>> verifyOtp(String phone, String otp, {String? fullName}) async {
+  Future<Map<String, dynamic>> verifyOtp(String phone, String otp, {String? fullName, String vehicleCategory = 'toto'}) async {
     final url = Uri.parse('${DriverConstants.baseUrl}${DriverConstants.verifyOtp}');
     final res = await http.post(
       url,
@@ -71,6 +71,7 @@ class DriverApiService {
         'otp': otp,
         'role': 'driver',
         'full_name': fullName,
+        'category': vehicleCategory,
       }),
     );
     final json = jsonDecode(res.body);

@@ -13,15 +13,16 @@ class MatchingService
     /**
      * Find nearby online, verified, available E-Rickshaw drivers within radius
      */
-    public static function findNearbyDrivers(float $pickupLat, float $pickupLng, float $radiusKm = 4.0, int $limit = 10): array
+    public static function findNearbyDrivers(float $pickupLat, float $pickupLng, float $radiusKm = 4.0, int $limit = 10, ?string $category = null): array
     {
         $db = Database::getConnection();
 
-        $stmt = $db->prepare("
+        $sql = "
             SELECT 
                 dp.id AS driver_id,
                 dp.user_id,
                 dp.vehicle_id,
+                dp.vehicle_category,
                 dp.ownership_model,
                 dp.rating_avg,
                 dp.total_trips,
@@ -47,8 +48,16 @@ class MatchingService
               AND v.status = 'approved'
               AND dp.current_lat IS NOT NULL 
               AND dp.current_lng IS NOT NULL
-        ");
-        $stmt->execute();
+        ";
+        $params = [];
+
+        if (!empty($category)) {
+            $sql .= " AND dp.vehicle_category = ?";
+            $params[] = $category;
+        }
+
+        $stmt = $db->prepare($sql);
+        $stmt->execute($params);
         $candidates = $stmt->fetchAll();
 
         $nearby = [];

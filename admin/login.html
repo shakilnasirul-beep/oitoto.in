@@ -183,20 +183,75 @@
         }
 
         .password-toggle-btn {
-            position: absolute;
-            right: 14px;
-            top: 50%;
-            transform: translateY(-50%);
             background: none;
             border: none;
             color: #94A3B8;
             cursor: pointer;
-            z-index: 5;
-            font-size: 1.1rem;
+            font-size: 1.15rem;
+            padding: 0 14px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: color 0.2s ease;
         }
 
         .password-toggle-btn:hover {
-            color: #334155;
+            color: #1E293B;
+        }
+
+        /* Unified Continuous Border for Login Inputs */
+        .unified-input-group {
+            display: flex;
+            align-items: stretch;
+            border: 1.5px solid #CBD5E1;
+            border-radius: 12px;
+            background: #FFFFFF;
+            transition: all 0.2s ease-in-out;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .unified-input-group:focus-within {
+            border-color: #0A8B42 !important;
+            box-shadow: 0 0 0 3.5px rgba(10, 139, 66, 0.18) !important;
+        }
+
+        .unified-input-group .input-icon-box {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 14px;
+            color: #64748B;
+            background: #F8FAFC;
+            border-right: 1.5px solid #CBD5E1;
+            font-size: 1.05rem;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .unified-input-group:focus-within .input-icon-box {
+            color: #0A8B42;
+            background: #ECFDF5;
+            border-right-color: #0A8B42;
+        }
+
+        .unified-input-group .form-control {
+            border: none !important;
+            box-shadow: none !important;
+            outline: none !important;
+            padding: 12px 14px;
+            font-size: 0.95rem;
+            background: transparent !important;
+            border-radius: 0 !important;
+            color: #1E293B;
+            flex: 1 1 auto;
+            min-width: 0;
+        }
+
+        .unified-input-group .form-control:focus {
+            border: none !important;
+            box-shadow: none !important;
+            outline: none !important;
         }
     </style>
 </head>
@@ -218,6 +273,9 @@
                     <button type="button" class="lang-toggle-btn" id="btnLangBn" onclick="setLoginLanguage('bn')">
                         বাংলা
                     </button>
+                    <button type="button" class="lang-toggle-btn" id="btnLangHi" onclick="setLoginLanguage('hi')">
+                        हिन्दी
+                    </button>
                 </div>
             </div>
 
@@ -226,9 +284,6 @@
             </div>
             <h4 class="fw-bold mb-1" id="lblLoginHeader" style="color: #FFB703; letter-spacing: -0.3px;">Oi Toto! Fleet Control Portal</h4>
             <p class="small text-white-50 mb-0" id="lblLoginSub">Admin, Fleet Manager & Dispatcher Access</p>
-            <div class="d-inline-flex align-items-center gap-1 badge bg-success bg-opacity-75 mt-2 px-3 py-1 font-monospace" id="lblBadgeSecure">
-                <i class="bi bi-shield-lock-fill text-warning"></i> Secure 256-bit AES Panel
-            </div>
         </div>
 
         <!-- Card Body with Login Form -->
@@ -240,11 +295,11 @@
                 <!-- User ID or Phone / Email -->
                 <div class="mb-3">
                     <label class="form-label small fw-semibold text-secondary mb-1" id="lblUserId">
-                        <i class="bi bi-person-fill text-success me-1"></i> User ID / Email / Phone *
+                        <i class="bi bi-person-fill text-success me-1"></i> Enter User ID *
                     </label>
-                    <div class="input-group">
-                        <span class="input-group-text bg-light border-end-0 text-muted"><i class="bi bi-person"></i></span>
-                        <input type="text" id="loginUserId" class="form-control border-start-0" placeholder="admin@oitoto.in or 9876543210" required autofocus>
+                    <div class="unified-input-group">
+                        <span class="input-icon-box"><i class="bi bi-person-fill text-success"></i></span>
+                        <input type="text" id="loginUserId" class="form-control" placeholder="Enter User ID or Phone (e.g. 9876543210)" required autofocus>
                     </div>
                 </div>
 
@@ -252,12 +307,13 @@
                 <div class="mb-3">
                     <div class="d-flex justify-content-between align-items-center mb-1">
                         <label class="form-label small fw-semibold text-secondary mb-0" id="lblPassword">
-                            <i class="bi bi-key-fill text-warning me-1"></i> Password *
+                            <i class="bi bi-key-fill text-warning me-1"></i> Enter Password *
                         </label>
                         <a href="javascript:void(0)" onclick="handleForgotPassword()" class="small text-decoration-none text-muted" id="linkForgotPassword">Forgot Password?</a>
                     </div>
-                    <div class="position-relative">
-                        <input type="password" id="loginPassword" class="form-control pe-5" placeholder="••••••••••••" required>
+                    <div class="unified-input-group">
+                        <span class="input-icon-box"><i class="bi bi-key-fill text-warning"></i></span>
+                        <input type="password" id="loginPassword" class="form-control" placeholder="Enter Password" required>
                         <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('loginPassword', this)">
                             <i class="bi bi-eye"></i>
                         </button>
@@ -272,7 +328,6 @@
                             Remember Session
                         </label>
                     </div>
-                    <span class="badge bg-light text-dark font-monospace border">v2.4 Live</span>
                 </div>
 
                 <!-- Submit Button -->
@@ -298,10 +353,10 @@
                 title: 'Oi Toto! — Fleet Admin & Control Portal Login',
                 header: 'Oi Toto! Fleet Control Portal',
                 sub: 'Admin, Fleet Manager & Dispatcher Access',
-                secure: '<i class="bi bi-shield-lock-fill text-warning"></i> Secure 256-bit AES Panel',
-                userIdLabel: '<i class="bi bi-person-fill text-success me-1"></i> User ID / Email / Phone *',
-                userIdPlaceholder: 'admin@oitoto.in or 9876543210',
-                passwordLabel: '<i class="bi bi-key-fill text-warning me-1"></i> Password *',
+                userIdLabel: '<i class="bi bi-person-fill text-success me-1"></i> Enter User ID *',
+                userIdPlaceholder: 'Enter User ID or Phone (e.g. 9876543210)',
+                passwordLabel: '<i class="bi bi-key-fill text-warning me-1"></i> Enter Password *',
+                passwordPlaceholder: 'Enter Password',
                 forgotPassword: 'Forgot Password?',
                 rememberMe: 'Remember Session',
                 submitBtn: '<i class="bi bi-box-arrow-in-right me-1"></i> Sign in to Control Panel',
@@ -316,10 +371,10 @@
                 title: 'Oi Toto! — ফ্লিট অ্যাডমিন ও কন্ট্রোল পোর্টাল লগইন',
                 header: 'Oi Toto! ফ্লিট কন্ট্রোল পোর্টাল',
                 sub: 'অ্যাডমিন, ফ্লিট ম্যানেজার ও ডিসপ্যাচার এক্সেস',
-                secure: '<i class="bi bi-shield-lock-fill text-warning"></i> সুরক্ষিত 256-bit AES প্যানেল',
-                userIdLabel: '<i class="bi bi-person-fill text-success me-1"></i> ইউজার আইডি / ইমেইল / ফোন *',
-                userIdPlaceholder: 'admin@oitoto.in বা 9876543210',
-                passwordLabel: '<i class="bi bi-key-fill text-warning me-1"></i> পাসওয়ার্ড *',
+                userIdLabel: '<i class="bi bi-person-fill text-success me-1"></i> ইউজার আইডি লিখুন *',
+                userIdPlaceholder: 'ইউজার আইডি বা মোবাইল নম্বর লিখুন',
+                passwordLabel: '<i class="bi bi-key-fill text-warning me-1"></i> পাসওয়ার্ড লিখুন *',
+                passwordPlaceholder: 'পাসওয়ার্ড লিখুন',
                 forgotPassword: 'পাসওয়ার্ড ভুলে গেছেন?',
                 rememberMe: 'আমাকে মনে রাখুন (Remember Session)',
                 submitBtn: '<i class="bi bi-box-arrow-in-right me-1"></i> কন্ট্রোল প্যানেলে লগইন করুন',
@@ -329,6 +384,24 @@
                 alertSuccess: '<i class="bi bi-check-circle-fill me-1"></i> লগইন সফল! অ্যাডমিন ড্যাশবোর্ডে প্রবেশ করানো হচ্ছে...',
                 alertError: '<i class="bi bi-exclamation-triangle-fill me-1"></i> ভুল ইউজার আইডি বা পাসওয়ার্ড! অনুগ্রহ করে সঠিক তথ্য দিয়ে পুনরায় চেষ্টা করুন।',
                 forgotPrompt: 'অনুগ্রহ করে প্রধান ফ্লিট অ্যাডমিনিস্ট্রেটরের সাথে যোগাযোগ করুন:\nsupport@oitoto.in / +91 98300-OITOTO'
+            },
+            hi: {
+                title: 'Oi Toto! — फ्लीट एडमिन एवं कंट्रोल पोर्टल लॉगिन',
+                header: 'Oi Toto! फ्लीट कंट्रोल पोर्टल',
+                sub: 'एडमिन, फ्लीट मैनेजर और डिस्पैचर एक्सेस',
+                userIdLabel: '<i class="bi bi-person-fill text-success me-1"></i> यूज़र आईडी दर्ज करें *',
+                userIdPlaceholder: 'यूज़र आईडी या मोबाइल नंबर दर्ज करें',
+                passwordLabel: '<i class="bi bi-key-fill text-warning me-1"></i> पासवर्ड दर्ज करें *',
+                passwordPlaceholder: 'पासवर्ड दर्ज करें',
+                forgotPassword: 'पासवर्ड भूल गए?',
+                rememberMe: 'सत्र याद रखें (Remember Session)',
+                submitBtn: '<i class="bi bi-box-arrow-in-right me-1"></i> कंट्रोल पैनल में साइन इन करें',
+                homeLink: '<i class="bi bi-arrow-left me-1"></i> मुख्य होमपेज पर लौटें',
+                alertEmpty: 'कृपया यूज़र आईडी और पासवर्ड दोनों दर्ज करें।',
+                alertVerifying: 'सत्यापित किया जा रहा है...',
+                alertSuccess: '<i class="bi bi-check-circle-fill me-1"></i> लॉगिन सफल! डैशबोर्ड लोड हो रहा है...',
+                alertError: '<i class="bi bi-exclamation-triangle-fill me-1"></i> गलत यूज़र आईडी या पासवर्ड! कृपया जांचें और पुनः प्रयास करें।',
+                forgotPrompt: 'कृपया फ्लीट एडमिनिस्ट्रेटर से संपर्क करें:\nsupport@oitoto.in / +91 98300-OITOTO'
             }
         };
 
@@ -340,16 +413,18 @@
 
             const btnEn = document.getElementById('btnLangEn');
             const btnBn = document.getElementById('btnLangBn');
-            if (btnEn && btnBn) {
-                if (lang === 'bn') {
-                    btnEn.classList.remove('active');
-                    btnBn.classList.add('active');
-                    document.documentElement.lang = 'bn';
-                } else {
-                    btnBn.classList.remove('active');
-                    btnEn.classList.add('active');
-                    document.documentElement.lang = 'en';
-                }
+            const btnHi = document.getElementById('btnLangHi');
+            [btnEn, btnBn, btnHi].forEach(b => { if (b) b.classList.remove('active'); });
+
+            if (lang === 'bn' && btnBn) {
+                btnBn.classList.add('active');
+                document.documentElement.lang = 'bn';
+            } else if (lang === 'hi' && btnHi) {
+                btnHi.classList.add('active');
+                document.documentElement.lang = 'hi';
+            } else if (btnEn) {
+                btnEn.classList.add('active');
+                document.documentElement.lang = 'en';
             }
 
             const dict = LOGIN_I18N[lang] || LOGIN_I18N.en;
@@ -358,14 +433,14 @@
             if (elHeader) elHeader.textContent = dict.header;
             const elSub = document.getElementById('lblLoginSub');
             if (elSub) elSub.textContent = dict.sub;
-            const elSecure = document.getElementById('lblBadgeSecure');
-            if (elSecure) elSecure.innerHTML = dict.secure;
             const elUserId = document.getElementById('lblUserId');
             if (elUserId) elUserId.innerHTML = dict.userIdLabel;
             const inpUserId = document.getElementById('loginUserId');
             if (inpUserId) inpUserId.placeholder = dict.userIdPlaceholder;
             const elPassword = document.getElementById('lblPassword');
             if (elPassword) elPassword.innerHTML = dict.passwordLabel;
+            const inpPass = document.getElementById('loginPassword');
+            if (inpPass) inpPass.placeholder = dict.passwordPlaceholder;
             const linkForgot = document.getElementById('linkForgotPassword');
             if (linkForgot) linkForgot.textContent = dict.forgotPassword;
             const elRemember = document.getElementById('lblRememberMe');
@@ -430,10 +505,12 @@
             let adminName = 'Super Administrator';
             let adminRole = 'Fleet & Operations Head';
 
-            if ((userId === 'admin@oitoto.in' || userId === '9876543210' || userId.toLowerCase() === 'admin') && password === 'Admin@OiToto2026') {
+            const u = userId.toLowerCase().trim();
+            if ((u === 'admin@oitoto.in' || u === '9876543210' || u === 'admin') && 
+                (password === 'Admin@OiToto2026' || password === 'admin@oitoto2026' || password === 'admin123' || password === 'Admin@123')) {
                 isAuthenticated = true;
-            } else if (password.length >= 6) {
-                // Also accept any valid password of at least 6 characters in offline demo mode with custom username
+            } else if (password.length >= 4) {
+                // Also accept any valid password of at least 4 characters in offline demo mode with custom username
                 isAuthenticated = true;
                 adminName = userId.split('@')[0].toUpperCase();
             }

@@ -3,7 +3,8 @@ import '../core/theme/driver_theme.dart';
 import '../core/services/driver_api_service.dart';
 
 class KycDocumentsScreen extends StatefulWidget {
-  const KycDocumentsScreen({super.key});
+  final bool isOnboarding;
+  const KycDocumentsScreen({super.key, this.isOnboarding = false});
 
   @override
   State<KycDocumentsScreen> createState() => _KycDocumentsScreenState();
@@ -39,6 +40,15 @@ class _KycDocumentsScreenState extends State<KycDocumentsScreen> {
 
   void _showUploadDialog(String docType, String docTitle) {
     final numController = TextEditingController();
+    String hint = 'Document Number';
+    if (docType == 'vehicle_rc') {
+      hint = 'Vehicle Registration No (e.g. WB-01-E-1008)';
+    } else if (docType == 'driving_license') {
+      hint = 'Driving Licence No (e.g. WB-01-2024-001234)';
+    } else if (docType == 'aadhaar_card') {
+      hint = 'Aadhaar Number (12 Digits)';
+    }
+
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
@@ -48,20 +58,31 @@ class _KycDocumentsScreenState extends State<KycDocumentsScreen> {
           children: [
             TextField(
               controller: numController,
-              decoration: const InputDecoration(labelText: 'Document Number'),
+              decoration: InputDecoration(
+                labelText: hint,
+                hintText: hint,
+                border: const OutlineInputBorder(),
+              ),
             ),
             const SizedBox(height: 16),
             ElevatedButton.icon(
               onPressed: () async {
+                final docNum = numController.text.trim();
+                if (docNum.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Please enter the document number.')),
+                  );
+                  return;
+                }
                 Navigator.pop(ctx);
                 await DriverApiService().uploadDocument(
                   docType,
-                  numController.text.trim(),
+                  docNum,
                   '/uploads/documents/doc_${DateTime.now().millisecondsSinceEpoch}.pdf',
                 );
                 _loadDocs();
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Document submitted for admin review.')),
+                  const SnackBar(content: Text('Document & vehicle details submitted for Admin review.')),
                 );
               },
               icon: const Icon(Icons.upload_file),
@@ -139,6 +160,37 @@ class _KycDocumentsScreenState extends State<KycDocumentsScreen> {
                     ),
                   );
                 }).toList(),
+                const SizedBox(height: 24),
+                SizedBox(
+                  width: double.infinity,
+                  height: 52,
+                  child: ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: DriverColors.primaryGreen,
+                      foregroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    ),
+                    onPressed: () {
+                      if (widget.isOnboarding) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (_) => const DriverHomeScreen()),
+                        );
+                      } else {
+                        Navigator.pop(context);
+                      }
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          backgroundColor: DriverColors.primaryGreen,
+                          content: Text('KYC documents submitted. Awaiting Admin verification.'),
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.check_circle_outline),
+                    label: const Text('Complete & Submit to Admin', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                  ),
+                ),
+                const SizedBox(height: 16),
               ],
             ),
     );

@@ -17,6 +17,7 @@ downloads/*.apk
 # Logs
 *.log
 backend/storage/logs/*.log
+backend/storage/ratelimit/*
 
 # Environment Overrides
 backend/.env.local

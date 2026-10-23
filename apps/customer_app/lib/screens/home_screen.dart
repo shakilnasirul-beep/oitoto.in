@@ -45,6 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String? _promoCode;
 
   // Real GPS & Navigation State
+  String _mapMode = 'road'; // 'road', 'satellite', 'traffic'
   bool _isLocatingGps = false;
   bool _isLoadingRoute = false;
   List<LatLng> _routePoints = [];
@@ -362,6 +363,7 @@ class _HomeScreenState extends State<HomeScreen> {
         dropLng: _dropLocation!.longitude,
         paymentMode: _selectedPaymentMode,
         promoCode: _promoCode,
+        category: widget.selectedCategory,
       );
 
       setState(() => _isBooking = false);
@@ -414,13 +416,33 @@ class _HomeScreenState extends State<HomeScreen> {
             options: MapOptions(
               initialCenter: _currentLocation,
               initialZoom: 15.0,
+              maxZoom: 19.0,
+              minZoom: 4.0,
               onTap: (tapPosition, point) => _setDestination(point),
             ),
             children: [
-              TileLayer(
-                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-                userAgentPackageName: 'in.oitoto.customer',
-              ),
+              if (_mapMode == 'satellite')
+                TileLayer(
+                  urlTemplate: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+                  userAgentPackageName: 'in.oitoto.customer',
+                  maxZoom: 19,
+                  maxNativeZoom: 19,
+                )
+              else if (_mapMode == 'traffic')
+                TileLayer(
+                  urlTemplate: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
+                  subdomains: const ['a', 'b', 'c', 'd'],
+                  userAgentPackageName: 'in.oitoto.customer',
+                  maxZoom: 19,
+                  maxNativeZoom: 19,
+                )
+              else
+                TileLayer(
+                  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                  userAgentPackageName: 'in.oitoto.customer',
+                  maxZoom: 19,
+                  maxNativeZoom: 19,
+                ),
 
               // Road Route Layer following traffic/street network
               if (_routePoints.isNotEmpty)
@@ -645,6 +667,30 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: const Icon(Icons.person, color: AppColors.primaryGreen, size: 20),
                     ),
                   ),
+                ],
+              ),
+            ),
+          ),
+
+          // 2.1 3-Mode Location Map Selector Pill (Road / Satellite / Traffic)
+          Positioned(
+            top: 72,
+            right: 16,
+            child: Container(
+              padding: const EdgeInsets.all(3),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(24),
+                boxShadow: [
+                  BoxShadow(color: Colors.black.withOpacity(0.12), blurRadius: 8, offset: const Offset(0, 3)),
+                ],
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  _buildMapModePill('road', '🛣️ Road'),
+                  _buildMapModePill('satellite', '🛰️ Sat'),
+                  _buildMapModePill('traffic', '🚦 Traffic'),
                 ],
               ),
             ),
@@ -934,6 +980,27 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
         ],
+      ),
+    );
+  Widget _buildMapModePill(String mode, String label) {
+    final isSelected = _mapMode == mode;
+    return InkWell(
+      onTap: () => setState(() => _mapMode = mode),
+      borderRadius: BorderRadius.circular(20),
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
+        decoration: BoxDecoration(
+          color: isSelected ? AppColors.primaryGreen : Colors.transparent,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        child: Text(
+          label,
+          style: TextStyle(
+            fontSize: 11,
+            fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
+            color: isSelected ? Colors.white : AppColors.deepNavy,
+          ),
+        ),
       ),
     );
   }

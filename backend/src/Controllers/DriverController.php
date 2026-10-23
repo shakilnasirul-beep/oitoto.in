@@ -243,6 +243,33 @@ class DriverController
             return;
         }
 
+        // Auto-link vehicle or update driver details based on document
+        if ($docType === 'vehicle_rc' && !empty($docNumber)) {
+            $vNum = strtoupper(trim($docNumber));
+            $vStmt = $db->prepare("SELECT id FROM vehicles WHERE vehicle_number = ?");
+            $vStmt->execute([$vNum]);
+            $existingVeh = $vStmt->fetch();
+            if ($existingVeh) {
+                $driver['vehicle_id'] = $existingVeh['id'];
+            } else {
+                $insVeh = $db->prepare("
+                    INSERT INTO vehicles (vehicle_number, status, ownership_type, brand_make, current_driver_id)
+                    VALUES (?, 'pending_verification', 'driver_owned', 'Mayuri Deluxe EV', ?)
+                ");
+                $insVeh->execute([$vNum, $driver['id']]);
+                $driver['vehicle_id'] = $db->lastInsertId();
+            }
+            $db->prepare("UPDATE driver_profiles SET vehicle_id = ? WHERE id = ?")->execute([$driver['vehicle_id'], $driver['id']]);
+        }
+
+        if ($docType === 'driving_license' && !empty($docNumber)) {
+            $db->prepare("UPDATE driver_profiles SET driving_license_no = ? WHERE id = ?")->execute([trim($docNumber), $driver['id']]);
+        }
+
+        if ($docType === 'aadhaar_card' && !empty($docNumber)) {
+            $db->prepare("UPDATE driver_profiles SET aadhaar_number = ? WHERE id = ?")->execute([trim($docNumber), $driver['id']]);
+        }
+
         // Upsert document
         $chk = $db->prepare("SELECT id FROM driver_documents WHERE driver_id = ? AND document_type = ?");
         $chk->execute([$driver['id'], $docType]);

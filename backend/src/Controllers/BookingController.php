@@ -90,6 +90,8 @@ class BookingController
         // Fare Calculation
         $fare = FareCalculatorService::calculate($distanceKm, 0, (int)$areaId, $promoCode ? (string)$promoCode : null);
 
+        $category = (string)$request->get('category', 'toto');
+
         // Generate 4-digit ride start OTP
         $rideOtp = (string)random_int(1000, 9999);
         $bookingCode = 'OT-' . date('Ymd') . '-' . strtoupper(bin2hex(random_bytes(2)));
@@ -98,7 +100,7 @@ class BookingController
         try {
             $stmt = $db->prepare("
                 INSERT INTO bookings (
-                    booking_code, customer_id, service_area_id,
+                    booking_code, customer_id, service_area_id, vehicle_category,
                     pickup_address, pickup_lat, pickup_lng,
                     drop_address, drop_lat, drop_lng,
                     estimated_distance_km, estimated_duration_mins, estimated_fare,
@@ -107,7 +109,7 @@ class BookingController
                     payment_mode, payment_status, booking_status, start_otp,
                     scheduled_at, requested_at
                 ) VALUES (
-                    ?, ?, ?,
+                    ?, ?, ?, ?,
                     ?, ?, ?,
                     ?, ?, ?,
                     ?, ?, ?,
@@ -121,6 +123,7 @@ class BookingController
                 $bookingCode,
                 $user['id'],
                 $areaId,
+                $category,
                 $pAddr,
                 $pLat,
                 $pLng,
@@ -150,13 +153,13 @@ class BookingController
             ")->execute([
                 $bookingId,
                 $user['id'],
-                json_encode(['fare' => $fare['final_fare'], 'distance_km' => $distanceKm])
+                json_encode(['fare' => $fare['final_fare'], 'distance_km' => $distanceKm, 'category' => $category])
             ]);
 
             $db->commit();
 
-            // Broadcast to nearby drivers
-            $nearbyDrivers = MatchingService::findNearbyDrivers($pLat, $pLng, 4.0, 8);
+            // Broadcast to nearby drivers of the SAME vehicle category
+            $nearbyDrivers = MatchingService::findNearbyDrivers($pLat, $pLng, 4.0, 8, $category);
             foreach ($nearbyDrivers as $drv) {
                 NotificationService::send(
                     (int)$drv['user_id'],
@@ -199,10 +202,56 @@ class BookingController
         $db = Database::getConnection();
 
         $role = $user['role'];
-        $whereClause = ($role === 'driver')
-            ? "b.driver_id = (SELECT id FROM driver_profiles WHERE user_id = ?) AND b.booking_status IN ('accepted', 'arrived', 'in_progress')"
-            : "b.customer_id = ? AND b.booking_status IN ('requested', 'dispatched', 'accepted', 'arrived', 'in_progress')";
+        if ($role === 'driver') {
+            // 1. Check if driver has an accepted or in-progress trip
+            $stmt = $db->prepare("
+                SELECT b.*,
+                       u_c.full_name AS customer_name, u_c.phone AS customer_phone,
+                       u_d.full_name AS driver_name, u_d.phone AS driver_phone, u_d.avatar_url AS driver_avatar,
+                       dp.rating_avg AS driver_rating, dp.current_lat AS driver_lat, dp.current_lng AS driver_lng, dp.heading AS driver_heading,
+                       v.vehicle_number, v.brand_make, v.color AS vehicle_color, v.ownership_type
+                FROM bookings b
+                JOIN users u_c ON u_c.id = b.customer_id
+                LEFT JOIN driver_profiles dp ON dp.id = b.driver_id
+                LEFT JOIN users u_d ON u_d.id = dp.user_id
+                LEFT JOIN vehicles v ON v.id = b.vehicle_id
+                WHERE b.driver_id = (SELECT id FROM driver_profiles WHERE user_id = ?) 
+                  AND b.booking_status IN ('accepted', 'arrived', 'in_progress')
+                ORDER BY b.id DESC
+                LIMIT 1
+            ");
+            $stmt->execute([$user['id']]);
+            $booking = $stmt->fetch();
 
+            // 2. If no active trip, check for incoming requested bookings of driver's category
+            if (!$booking) {
+                $dProfStmt = $db->prepare("SELECT id, vehicle_category, is_online, is_busy, status FROM driver_profiles WHERE user_id = ?");
+                $dProfStmt->execute([$user['id']]);
+                $dProf = $dProfStmt->fetch();
+
+                if ($dProf && $dProf['is_online'] == 1 && $dProf['is_busy'] == 0 && $dProf['status'] === 'verified_active') {
+                    $cat = $dProf['vehicle_category'] ?? 'toto';
+                    $reqStmt = $db->prepare("
+                        SELECT b.*,
+                               u_c.full_name AS customer_name, u_c.phone AS customer_phone
+                        FROM bookings b
+                        JOIN users u_c ON u_c.id = b.customer_id
+                        WHERE b.booking_status = 'requested'
+                          AND b.driver_id IS NULL
+                          AND (b.vehicle_category = ? OR b.vehicle_category IS NULL)
+                        ORDER BY b.id DESC
+                        LIMIT 1
+                    ");
+                    $reqStmt->execute([$cat]);
+                    $booking = $reqStmt->fetch();
+                }
+            }
+
+            Response::success($booking ?: null);
+            return;
+        }
+
+        // Customer path
         $stmt = $db->prepare("
             SELECT b.*,
                    u_c.full_name AS customer_name, u_c.phone AS customer_phone,
@@ -214,7 +263,7 @@ class BookingController
             LEFT JOIN driver_profiles dp ON dp.id = b.driver_id
             LEFT JOIN users u_d ON u_d.id = dp.user_id
             LEFT JOIN vehicles v ON v.id = b.vehicle_id
-            WHERE {$whereClause}
+            WHERE b.customer_id = ? AND b.booking_status IN ('requested', 'dispatched', 'accepted', 'arrived', 'in_progress')
             ORDER BY b.id DESC
             LIMIT 1
         ");

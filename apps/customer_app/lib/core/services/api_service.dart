@@ -120,6 +120,7 @@ class ApiService {
     required double dropLng,
     String paymentMode = 'cash',
     String? promoCode,
+    String category = 'toto',
   }) async {
     final url = Uri.parse('${ApiConstants.baseUrl}${ApiConstants.createBooking}');
     final res = await http.post(
@@ -134,6 +135,7 @@ class ApiService {
         'drop_lng': dropLng,
         'payment_mode': paymentMode,
         'promo_code': promoCode,
+        'category': category,
       }),
     );
     return jsonDecode(res.body);
