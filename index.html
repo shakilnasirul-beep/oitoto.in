@@ -883,33 +883,22 @@
             line-height: 1.6;
         }
 
+        /* 3. Core Ecosystem Compact Portals */
+        .portal-compact-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
         .bento-portal-card {
-            border-radius: 22px;
-            padding: 30px 32px;
+            border-radius: 16px;
+            padding: 12px 20px;
             position: relative;
-            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 3px 12px rgba(15, 23, 42, 0.03);
+            border: 1.5px solid #E2E8F0;
             overflow: hidden;
-            box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
-            cursor: pointer;
-        }
-
-        /* Mouse Spotlight Overlay (Copying Team Card Effect) */
-        .bento-portal-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(550px circle at var(--mouse-x, 50%) var(--mouse-y, 30%), rgba(255, 255, 255, 0.75), transparent 50%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .bento-portal-card:hover::before {
-            opacity: 1;
+            background: #FFFFFF;
         }
 
         /* Top Color Accent Sheen Bar */
@@ -919,73 +908,92 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 4px;
-            transition: all 0.3s ease;
-            z-index: 3;
+            height: 3.5px;
+            transition: all 0.25s ease;
+            z-index: 2;
         }
 
-        /* ALTERNATE TRANSPARENT GLASSMORPHIC COLORS FOR PORTALS */
-        /* 1. Passenger App: Soft Emerald Tint */
+        /* 1. Passenger App: Soft Emerald */
         .portal-card-cust {
-            background: linear-gradient(145deg, rgba(10, 139, 66, 0.05) 0%, rgba(255, 255, 255, 0.95) 50%, rgba(255, 183, 3, 0.03) 100%);
-            border: 1.5px solid rgba(10, 139, 66, 0.22);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
+            background: linear-gradient(135deg, rgba(10, 139, 66, 0.04) 0%, #FFFFFF 65%, rgba(255, 183, 3, 0.03) 100%);
+            border-color: rgba(10, 139, 66, 0.24);
         }
         .portal-card-cust::after {
             background: linear-gradient(90deg, #0A8B42 0%, #10B981 50%, #FFB703 100%);
         }
         .portal-card-cust:hover {
-            background: #FFFFFF !important;
             border-color: #0A8B42;
-            transform: translateY(-6px);
-            box-shadow: 0 20px 42px -10px rgba(10, 139, 66, 0.22), 0 0 0 1.5px rgba(10, 139, 66, 0.35);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 24px -4px rgba(10, 139, 66, 0.16), 0 0 0 1px #0A8B42;
+            background: #FFFFFF !important;
+        }
+        .portal-card-cust:hover .portal-card-title {
+            color: #0A8B42 !important;
         }
 
-        /* 2. Driver Partner App: Soft Amber/Gold Tint */
+        /* 2. Driver Partner App: Soft Amber/Gold */
         .portal-card-drv {
-            background: linear-gradient(145deg, rgba(255, 183, 3, 0.07) 0%, rgba(255, 255, 255, 0.95) 50%, rgba(245, 158, 11, 0.04) 100%);
-            border: 1.5px solid rgba(255, 183, 3, 0.32);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
+            background: linear-gradient(135deg, rgba(255, 183, 3, 0.05) 0%, #FFFFFF 65%, rgba(245, 158, 11, 0.03) 100%);
+            border-color: rgba(255, 183, 3, 0.32);
         }
         .portal-card-drv::after {
             background: linear-gradient(90deg, #FFB703 0%, #F59E0B 100%);
         }
         .portal-card-drv:hover {
-            background: #FFFFFF !important;
             border-color: #F59E0B;
-            transform: translateY(-6px);
-            box-shadow: 0 20px 42px -10px rgba(245, 158, 11, 0.25), 0 0 0 1.5px rgba(245, 158, 11, 0.35);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 24px -4px rgba(245, 158, 11, 0.18), 0 0 0 1px #F59E0B;
+            background: #FFFFFF !important;
+        }
+        .portal-card-drv:hover .portal-card-title {
+            color: #D97706 !important;
         }
 
-        /* 3. Fleet Admin Portal: Soft Ocean Blue/Indigo Tint */
+        /* 3. Fleet Admin Portal: Soft Ocean Blue/Indigo */
         .portal-card-adm {
-            background: linear-gradient(145deg, rgba(2, 132, 199, 0.05) 0%, rgba(255, 255, 255, 0.95) 50%, rgba(99, 102, 241, 0.03) 100%);
-            border: 1.5px solid rgba(2, 132, 199, 0.22);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
+            background: linear-gradient(135deg, rgba(2, 132, 199, 0.04) 0%, #FFFFFF 65%, rgba(99, 102, 241, 0.03) 100%);
+            border-color: rgba(2, 132, 199, 0.24);
         }
         .portal-card-adm::after {
             background: linear-gradient(90deg, #0284C7 0%, #6366F1 100%);
         }
         .portal-card-adm:hover {
-            background: #FFFFFF !important;
             border-color: #0284C7;
-            transform: translateY(-6px);
-            box-shadow: 0 20px 42px -10px rgba(2, 132, 199, 0.24), 0 0 0 1.5px rgba(2, 132, 199, 0.35);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 24px -4px rgba(2, 132, 199, 0.18), 0 0 0 1px #0284C7;
+            background: #FFFFFF !important;
+        }
+        .portal-card-adm:hover .portal-card-title {
+            color: #0284C7 !important;
         }
 
-        .portal-feature-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 10px 18px;
+        .portal-icon-box {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.35rem;
+            flex-shrink: 0;
+            transition: transform 0.25s ease;
+        }
+        .bento-portal-card:hover .portal-icon-box {
+            transform: scale(1.08);
         }
 
-        @media (min-width: 992px) {
-            .portal-divider-left {
-                border-left: 1.5px dashed rgba(148, 163, 184, 0.35);
-            }
+        .btn-portal-action {
+            font-size: 0.82rem;
+            padding: 7px 16px;
+            white-space: nowrap;
+        }
+
+        .portal-feat-pill {
+            display: inline-flex;
+            align-items: center;
+            font-size: 0.8rem;
+            color: #475569;
+            font-weight: 500;
         }
 
         .portal-icon-box {
@@ -1219,35 +1227,17 @@
         }
 
         .fare-rate-tile {
-            border-radius: 18px;
-            padding: 16px 20px;
+            border-radius: 16px;
+            padding: 14px 18px;
             display: flex;
             align-items: center;
             gap: 14px;
-            box-shadow: 0 4px 16px rgba(15, 23, 42, 0.03);
-            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.03);
+            transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
             position: relative;
             overflow: hidden;
             cursor: pointer;
-        }
-
-        /* Mouse Spotlight Overlay (Copying Team Card Effect) */
-        .fare-rate-tile::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(350px circle at var(--mouse-x, 50%) var(--mouse-y, 30%), rgba(255, 255, 255, 0.8), transparent 50%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .fare-rate-tile:hover::before {
-            opacity: 1;
+            background: #FFFFFF;
         }
 
         /* Top Accent Sheen Bar */
@@ -1258,17 +1248,15 @@
             left: 0;
             right: 0;
             height: 3.5px;
-            transition: all 0.3s ease;
-            z-index: 3;
+            transition: all 0.25s ease;
+            z-index: 2;
         }
 
         /* ALTERNATE TRANSPARENT GLASSMORPHIC COLORS FOR FARE TILES */
         /* Tile 1: Base Fare - Soft Emerald Tint */
         .tile-base {
-            background: linear-gradient(145deg, rgba(10, 139, 66, 0.06) 0%, rgba(255, 255, 255, 0.95) 55%, rgba(16, 185, 129, 0.04) 100%);
+            background: linear-gradient(145deg, rgba(10, 139, 66, 0.05) 0%, #FFFFFF 65%, rgba(16, 185, 129, 0.03) 100%);
             border: 1.5px solid rgba(10, 139, 66, 0.22);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
         }
         .tile-base::after {
             background: linear-gradient(90deg, #0A8B42 0%, #10B981 100%);
@@ -1276,16 +1264,14 @@
         .tile-base:hover {
             background: #FFFFFF !important;
             border-color: #0A8B42;
-            transform: translateY(-4px);
-            box-shadow: 0 14px 30px -6px rgba(10, 139, 66, 0.22), 0 0 0 1px rgba(10, 139, 66, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 24px -4px rgba(10, 139, 66, 0.16), 0 0 0 1px #0A8B42;
         }
 
         /* Tile 2: Subsequent Rate - Soft Sky/Blue Tint */
         .tile-km {
-            background: linear-gradient(145deg, rgba(2, 132, 199, 0.06) 0%, rgba(255, 255, 255, 0.95) 55%, rgba(99, 102, 241, 0.04) 100%);
+            background: linear-gradient(145deg, rgba(2, 132, 199, 0.05) 0%, #FFFFFF 65%, rgba(99, 102, 241, 0.03) 100%);
             border: 1.5px solid rgba(2, 132, 199, 0.22);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
         }
         .tile-km::after {
             background: linear-gradient(90deg, #0284C7 0%, #6366F1 100%);
@@ -1293,16 +1279,14 @@
         .tile-km:hover {
             background: #FFFFFF !important;
             border-color: #0284C7;
-            transform: translateY(-4px);
-            box-shadow: 0 14px 30px -6px rgba(2, 132, 199, 0.22), 0 0 0 1px rgba(2, 132, 199, 0.3);
+            transform: translateY(-3px);
+            box-shadow: 0 10px 24px -4px rgba(2, 132, 199, 0.16), 0 0 0 1px #0284C7;
         }
 
         /* Tile 3: Surge Policy - Soft Amber/Gold Tint */
         .tile-surge {
-            background: linear-gradient(145deg, rgba(255, 183, 3, 0.07) 0%, rgba(255, 255, 255, 0.95) 55%, rgba(245, 158, 11, 0.04) 100%);
+            background: linear-gradient(145deg, rgba(255, 183, 3, 0.06) 0%, #FFFFFF 65%, rgba(245, 158, 11, 0.03) 100%);
             border: 1.5px solid rgba(255, 183, 3, 0.32);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
         }
         .tile-surge::after {
             background: linear-gradient(90deg, #FFB703 0%, #F59E0B 100%);
@@ -1310,6 +1294,9 @@
         .tile-surge:hover {
             background: #FFFFFF !important;
             border-color: #F59E0B;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 24px -4px rgba(245, 158, 11, 0.16), 0 0 0 1px #F59E0B;
+        }
             transform: translateY(-4px);
             box-shadow: 0 14px 30px -6px rgba(245, 158, 11, 0.22), 0 0 0 1px rgba(245, 158, 11, 0.3);
         }
@@ -1736,12 +1723,12 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Zone Hub Card - Upgraded with Team Card Glassmorphism & Mouse Spotlight */
+        /* Zone Hub Card - Upgraded Clean Hover Effect */
         .zone-card {
-            border-radius: 20px;
-            padding: 26px 20px 22px;
+            border-radius: 18px;
+            padding: 22px 18px 18px;
             text-align: center;
-            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.28s cubic-bezier(0.16, 1, 0.3, 1);
             height: 100%;
             position: relative;
             overflow: hidden;
@@ -1749,27 +1736,9 @@
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 0 4px 18px rgba(15, 23, 42, 0.03);
+            box-shadow: 0 4px 16px rgba(15, 23, 42, 0.03);
             cursor: pointer;
-        }
-
-        /* Mouse Spotlight Overlay (Copying Team Card Effect) */
-        .zone-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(350px circle at var(--mouse-x, 50%) var(--mouse-y, 30%), rgba(255, 255, 255, 0.75), transparent 50%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .zone-card:hover::before {
-            opacity: 1;
+            background: #FFFFFF;
         }
 
         /* Top Color Accent Sheen Bar */
@@ -1779,18 +1748,16 @@
             top: 0;
             left: 0;
             right: 0;
-            height: 4px;
-            transition: all 0.3s ease;
-            z-index: 3;
+            height: 3.5px;
+            transition: all 0.25s ease;
+            z-index: 2;
         }
 
         /* Alternate Transparent Glassmorphic Hub Colors */
         /* 1. North Kolkata: Soft Emerald */
         .zone-card-north {
-            background: linear-gradient(145deg, rgba(10, 139, 66, 0.05) 0%, rgba(255, 255, 255, 0.95) 50%, rgba(16, 185, 129, 0.03) 100%);
+            background: linear-gradient(145deg, rgba(10, 139, 66, 0.04) 0%, #FFFFFF 65%, rgba(16, 185, 129, 0.03) 100%);
             border: 1.5px solid rgba(10, 139, 66, 0.22);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
         }
         .zone-card-north::after {
             background: linear-gradient(90deg, #0A8B42 0%, #10B981 100%);
@@ -1798,16 +1765,14 @@
         .zone-card-north:hover {
             background: #FFFFFF !important;
             border-color: #0A8B42;
-            transform: translateY(-8px);
-            box-shadow: 0 16px 36px -8px rgba(10, 139, 66, 0.24), 0 0 0 1.5px rgba(10, 139, 66, 0.35);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 26px -6px rgba(10, 139, 66, 0.18), 0 0 0 1px #0A8B42;
         }
 
         /* 2. Central Kolkata: Soft Blue/Cyan */
         .zone-card-central {
-            background: linear-gradient(145deg, rgba(2, 132, 199, 0.05) 0%, rgba(255, 255, 255, 0.95) 50%, rgba(56, 189, 248, 0.03) 100%);
+            background: linear-gradient(145deg, rgba(2, 132, 199, 0.04) 0%, #FFFFFF 65%, rgba(56, 189, 248, 0.03) 100%);
             border: 1.5px solid rgba(2, 132, 199, 0.22);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
         }
         .zone-card-central::after {
             background: linear-gradient(90deg, #0284C7 0%, #38BDF8 100%);
@@ -1815,16 +1780,14 @@
         .zone-card-central:hover {
             background: #FFFFFF !important;
             border-color: #0284C7;
-            transform: translateY(-8px);
-            box-shadow: 0 16px 36px -8px rgba(2, 132, 199, 0.24), 0 0 0 1.5px rgba(2, 132, 199, 0.35);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 26px -6px rgba(2, 132, 199, 0.18), 0 0 0 1px #0284C7;
         }
 
         /* 3. Howrah Corridor: Soft Amber/Gold */
         .zone-card-howrah {
-            background: linear-gradient(145deg, rgba(255, 183, 3, 0.06) 0%, rgba(255, 255, 255, 0.95) 50%, rgba(245, 158, 11, 0.03) 100%);
+            background: linear-gradient(145deg, rgba(255, 183, 3, 0.05) 0%, #FFFFFF 65%, rgba(245, 158, 11, 0.03) 100%);
             border: 1.5px solid rgba(255, 183, 3, 0.32);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
         }
         .zone-card-howrah::after {
             background: linear-gradient(90deg, #FFB703 0%, #F59E0B 100%);
@@ -1832,16 +1795,14 @@
         .zone-card-howrah:hover {
             background: #FFFFFF !important;
             border-color: #F59E0B;
-            transform: translateY(-8px);
-            box-shadow: 0 16px 36px -8px rgba(245, 158, 11, 0.24), 0 0 0 1.5px rgba(245, 158, 11, 0.35);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 26px -6px rgba(245, 158, 11, 0.18), 0 0 0 1px #F59E0B;
         }
 
         /* 4. North Bengal Hub: Soft Purple/Violet */
         .zone-card-nb {
-            background: linear-gradient(145deg, rgba(139, 92, 246, 0.05) 0%, rgba(255, 255, 255, 0.95) 50%, rgba(236, 72, 153, 0.03) 100%);
+            background: linear-gradient(145deg, rgba(139, 92, 246, 0.04) 0%, #FFFFFF 65%, rgba(236, 72, 153, 0.03) 100%);
             border: 1.5px solid rgba(139, 92, 246, 0.22);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
         }
         .zone-card-nb::after {
             background: linear-gradient(90deg, #8B5CF6 0%, #EC4899 100%);
@@ -1849,8 +1810,8 @@
         .zone-card-nb:hover {
             background: #FFFFFF !important;
             border-color: #8B5CF6;
-            transform: translateY(-8px);
-            box-shadow: 0 16px 36px -8px rgba(139, 92, 246, 0.24), 0 0 0 1.5px rgba(139, 92, 246, 0.35);
+            transform: translateY(-4px);
+            box-shadow: 0 12px 26px -6px rgba(139, 92, 246, 0.18), 0 0 0 1px #8B5CF6;
         }
 
         .zone-icon-box {
@@ -1983,29 +1944,11 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
             overflow: hidden;
             box-shadow: 0 4px 18px rgba(15, 23, 42, 0.03);
             cursor: pointer;
-        }
-
-        /* Mouse Spotlight Overlay */
-        .team-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 30%), rgba(255, 255, 255, 0.7), transparent 50%);
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .team-card:hover::before {
-            opacity: 1;
+            background: #FFFFFF;
         }
 
         /* Top Color Accent Sheen Bar */
@@ -2570,156 +2513,110 @@
     </section>
 
     <!-- 3. Core Ecosystem Bento Grid Portals -->
-    <section id="portals" class="py-5" style="background: var(--oi-bg-soft);">
-        <div class="container py-4">
-            <div class="section-header">
-                <span class="section-pill" id="badgeSystemPortals">Access Portals</span>
-                <h2 class="section-title" id="titleEcosystem">Oi Toto Platform Gateways</h2>
-                <p class="section-desc" id="subEcosystem">Three purpose-built interfaces powering everyday urban mobility for passengers, driver partners, and dispatch controllers.</p>
+    <section id="portals" class="py-4" style="background: var(--oi-bg-soft);">
+        <div class="container py-2">
+            <div class="section-header mb-3 text-center">
+                <span class="section-pill mb-1" id="badgeSystemPortals" style="padding: 3px 12px; font-size: 0.72rem;">Access Portals</span>
+                <h2 class="section-title mb-1" id="titleEcosystem" style="font-size: 1.55rem; font-weight: 800;">Oi Toto Platform Gateways</h2>
+                <p class="section-desc mb-0" id="subEcosystem" style="font-size: 0.85rem; color: #64748B;">Three purpose-built interfaces powering everyday urban mobility for passengers, driver partners, and dispatch controllers.</p>
             </div>
 
-            <div class="row g-4 justify-content-center">
+            <div class="portal-compact-stack mx-auto" style="max-width: 1040px;">
                 <!-- Portal 1: Customer Passenger App -->
-                <div class="col-12 col-xl-11">
-                    <div class="bento-portal-card portal-card-cust">
-                        <div class="row align-items-center g-4">
-                            <div class="col-lg-8 col-md-7">
-                                <div class="d-flex align-items-start gap-3">
-                                    <div class="portal-icon-box icon-box-cust flex-shrink-0">
-                                        <i class="bi bi-person-heart"></i>
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
-                                            <h4 class="fw-bold mb-0 text-dark" id="cardCustTitle">1. Passenger App</h4>
-                                            <span class="badge bg-success bg-opacity-10 text-success fw-bold px-2.5 py-1 rounded-pill" style="font-size: 0.72rem;">INSTANT GPS PICKUP</span>
-                                        </div>
-                                        <p class="text-muted small mb-3" id="cardCustDesc">
-                                            Book on demand with instant GPS pickup, live nearby Toto tracking, zero surge fixed pricing, and cash or UPI QR fare payments.
-                                        </p>
-                                        <div class="portal-feature-grid">
-                                            <div class="feature-check-item mb-0">
-                                                <i class="bi bi-check-circle-fill text-success"></i>
-                                                <span id="cardCustF1">Live map pin drop & GPS auto-detection</span>
-                                            </div>
-                                            <div class="feature-check-item mb-0">
-                                                <i class="bi bi-check-circle-fill text-success"></i>
-                                                <span id="cardCustF2">Zero surge pricing — 100% upfront fares</span>
-                                            </div>
-                                            <div class="feature-check-item mb-0">
-                                                <i class="bi bi-check-circle-fill text-success"></i>
-                                                <span id="cardCustF3">4-digit OTP boarding security code</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                <div class="bento-portal-card portal-card-cust">
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                        <!-- Left Info -->
+                        <div class="d-flex align-items-center gap-3 flex-grow-1 min-w-0">
+                            <div class="portal-icon-box icon-box-cust flex-shrink-0">
+                                <i class="bi bi-person-heart"></i>
                             </div>
-                            <div class="col-lg-4 col-md-5 text-md-end text-start ps-lg-4 portal-divider-left">
-                                <a href="downloads/oi_toto_customer.apk?v=1.0.3" download="OiToto_Customer_v1.0.3.apk" class="btn btn-oi-green w-100 py-2.5 fw-bold rounded-3 d-inline-flex align-items-center justify-content-center gap-2 shadow-sm mb-2" id="btnPreviewCust">
-                                    <i class="bi bi-download fs-5"></i> <span id="btnPreviewCustText">Download App (v1.0.3)</span>
-                                </a>
-                                <div class="d-flex align-items-center justify-content-center justify-content-md-end gap-2 text-muted" style="font-size: 0.76rem;">
-                                    <i class="bi bi-android2 text-success"></i>
-                                    <span>Android APK • 23.7 MB • Free Install</span>
+                            <div class="min-w-0">
+                                <div class="d-flex align-items-center gap-2 flex-wrap mb-1">
+                                    <h5 class="portal-card-title fw-bold mb-0 text-dark" id="cardCustTitle">1. Passenger App</h5>
+                                    <span class="badge bg-success bg-opacity-10 text-success fw-bold px-2 py-0.5 rounded-pill" style="font-size: 0.68rem;">GPS AUTO-PICKUP</span>
                                 </div>
+                                <div class="d-flex align-items-center gap-3 flex-wrap small text-muted">
+                                    <span class="portal-feat-pill"><i class="bi bi-check-circle-fill text-success me-1"></i><span id="cardCustF1">Live map pin drop & GPS auto-detection</span></span>
+                                    <span class="portal-feat-pill"><i class="bi bi-check-circle-fill text-success me-1"></i><span id="cardCustF2">Zero surge pricing — 100% upfront fares</span></span>
+                                    <span class="portal-feat-pill"><i class="bi bi-check-circle-fill text-success me-1"></i><span id="cardCustF3">4-digit OTP boarding security code</span></span>
+                                </div>
+                                <span class="d-none" id="cardCustDesc">Book on demand with instant GPS pickup, live nearby Toto tracking, zero surge fixed pricing, and cash or UPI QR fare payments.</span>
                             </div>
+                        </div>
+                        <!-- Right CTA Action -->
+                        <div class="d-flex align-items-center gap-2 flex-shrink-0 ms-auto pt-1 pt-sm-0">
+                            <span class="text-muted d-none d-md-inline" style="font-size: 0.74rem;"><i class="bi bi-android2 text-success me-1"></i>v1.0.3 • 23.7 MB</span>
+                            <a href="downloads/oi_toto_customer.apk?v=1.0.3" download="OiToto_Customer_v1.0.3.apk" class="btn btn-oi-green btn-portal-action fw-bold rounded-3 d-inline-flex align-items-center gap-1.5 shadow-sm" id="btnPreviewCust">
+                                <i class="bi bi-download"></i> <span id="btnPreviewCustText">Download App (v1.0.3)</span>
+                            </a>
                         </div>
                     </div>
                 </div>
 
                 <!-- Portal 2: Driver Partner App -->
-                <div class="col-12 col-xl-11">
-                    <div class="bento-portal-card portal-card-drv">
-                        <div class="row align-items-center g-4">
-                            <div class="col-lg-8 col-md-7">
-                                <div class="d-flex align-items-start gap-3">
-                                    <div class="portal-icon-box icon-box-drv flex-shrink-0">
-                                        <i class="bi bi-ev-front-fill"></i>
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
-                                            <h4 class="fw-bold mb-0 text-dark" id="cardDriverTitle">2. Driver Partner App</h4>
-                                            <span class="badge bg-warning bg-opacity-20 text-warning-emphasis fw-bold px-2.5 py-1 rounded-pill" style="font-size: 0.72rem; color: #B45309 !important;">95% NET EARNINGS</span>
-                                        </div>
-                                        <p class="text-muted small mb-3" id="cardDriverDesc">
-                                            Duty radar mode, instant booking requests with passenger drop points, OTP trip start, and daily earnings ledger with instant settlement.
-                                        </p>
-                                        <div class="portal-feature-grid">
-                                            <div class="feature-check-item mb-0">
-                                                <i class="bi bi-check-circle-fill text-warning"></i>
-                                                <span id="cardDriverF1">Low 5% platform fee — 95% driver net earnings</span>
-                                            </div>
-                                            <div class="feature-check-item mb-0">
-                                                <i class="bi bi-check-circle-fill text-warning"></i>
-                                                <span id="cardDriverF2">Daily automated bank transfers via ICICI</span>
-                                            </div>
-                                            <div class="feature-check-item mb-0">
-                                                <i class="bi bi-check-circle-fill text-warning"></i>
-                                                <span id="cardDriverF3">Digital passbook, trip history & rating score</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                <div class="bento-portal-card portal-card-drv">
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                        <!-- Left Info -->
+                        <div class="d-flex align-items-center gap-3 flex-grow-1 min-w-0">
+                            <div class="portal-icon-box icon-box-drv flex-shrink-0">
+                                <i class="bi bi-ev-front-fill"></i>
                             </div>
-                            <div class="col-lg-4 col-md-5 text-md-end text-start ps-lg-4 portal-divider-left">
-                                <a href="downloads/oi_toto_driver.apk?v=1.0.3" download="OiToto_Driver_v1.0.3.apk" class="btn btn-oi-yellow w-100 py-2.5 fw-bold rounded-3 d-inline-flex align-items-center justify-content-center gap-2 shadow-sm mb-2" id="btnPreviewDriver">
-                                    <i class="bi bi-download fs-5"></i> <span id="btnPreviewDriverText">Download Partner App (v1.0.3)</span>
-                                </a>
-                                <div class="d-flex align-items-center justify-content-center justify-content-md-end gap-2 text-muted" style="font-size: 0.76rem;">
-                                    <i class="bi bi-android2 text-warning"></i>
-                                    <span>Android Partner APK • 23.1 MB • Low 5% Fee</span>
+                            <div class="min-w-0">
+                                <div class="d-flex align-items-center gap-2 flex-wrap mb-1">
+                                    <h5 class="portal-card-title fw-bold mb-0 text-dark" id="cardDriverTitle">2. Driver Partner App</h5>
+                                    <span class="badge bg-warning bg-opacity-20 text-warning-emphasis fw-bold px-2 py-0.5 rounded-pill" style="font-size: 0.68rem; color: #B45309 !important;">95% NET EARNINGS</span>
                                 </div>
+                                <div class="d-flex align-items-center gap-3 flex-wrap small text-muted">
+                                    <span class="portal-feat-pill"><i class="bi bi-check-circle-fill text-warning me-1"></i><span id="cardDriverF1">Low 5% platform fee — 95% driver net earnings</span></span>
+                                    <span class="portal-feat-pill"><i class="bi bi-check-circle-fill text-warning me-1"></i><span id="cardDriverF2">Daily automated bank transfers via ICICI</span></span>
+                                    <span class="portal-feat-pill"><i class="bi bi-check-circle-fill text-warning me-1"></i><span id="cardDriverF3">Digital passbook, trip history & rating score</span></span>
+                                </div>
+                                <span class="d-none" id="cardDriverDesc">Duty radar mode, instant booking requests with passenger drop points, OTP trip start, and daily earnings ledger with instant settlement.</span>
                             </div>
+                        </div>
+                        <!-- Right CTA Action -->
+                        <div class="d-flex align-items-center gap-2 flex-shrink-0 ms-auto pt-1 pt-sm-0">
+                            <span class="text-muted d-none d-md-inline" style="font-size: 0.74rem;"><i class="bi bi-android2 text-warning me-1"></i>v1.0.3 • 23.1 MB</span>
+                            <a href="downloads/oi_toto_driver.apk?v=1.0.3" download="OiToto_Driver_v1.0.3.apk" class="btn btn-oi-yellow btn-portal-action fw-bold rounded-3 d-inline-flex align-items-center gap-1.5 shadow-sm" id="btnPreviewDriver">
+                                <i class="bi bi-download"></i> <span id="btnPreviewDriverText">Download Partner App (v1.0.3)</span>
+                            </a>
                         </div>
                     </div>
                 </div>
 
                 <!-- Portal 3: Fleet Management Admin Portal -->
-                <div class="col-12 col-xl-11">
-                    <div class="bento-portal-card portal-card-adm">
-                        <div class="row align-items-center g-4">
-                            <div class="col-lg-8 col-md-7">
-                                <div class="d-flex align-items-start gap-3">
-                                    <div class="portal-icon-box icon-box-adm flex-shrink-0">
-                                        <i class="bi bi-shield-lock-fill"></i>
-                                    </div>
-                                    <div class="flex-grow-1">
-                                        <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
-                                            <h4 class="fw-bold mb-0 text-dark" id="cardAdminTitle">3. Fleet Admin Portal</h4>
-                                            <span class="badge bg-primary bg-opacity-10 text-primary fw-bold px-2.5 py-1 rounded-pill" style="font-size: 0.72rem;" id="badgeActive">PROD LIVE</span>
-                                        </div>
-                                        <p class="text-muted small mb-3" id="cardAdminDesc">
-                                            Unified central telemetry, live GPS vehicle radar, driver KYC approval audits, manual dispatch desk, and corporate escrow payout vouchers.
-                                        </p>
-                                        <div class="portal-feature-grid">
-                                            <div class="feature-check-item mb-0">
-                                                <i class="bi bi-check-circle-fill text-primary"></i>
-                                                <span id="cardAdminF1">Live Leaflet & GPS radar map with geofencing</span>
-                                            </div>
-                                            <div class="feature-check-item mb-0">
-                                                <i class="bi bi-check-circle-fill text-primary"></i>
-                                                <span id="cardAdminF2">DPDP Act 2023 compliant audit logs & exit slip</span>
-                                            </div>
-                                            <div class="feature-check-item mb-0">
-                                                <i class="bi bi-check-circle-fill text-primary"></i>
-                                                <span id="cardAdminF3">ICICI corporate escrow ledger & settlement slips</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                <div class="bento-portal-card portal-card-adm">
+                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
+                        <!-- Left Info -->
+                        <div class="d-flex align-items-center gap-3 flex-grow-1 min-w-0">
+                            <div class="portal-icon-box icon-box-adm flex-shrink-0">
+                                <i class="bi bi-shield-lock-fill"></i>
                             </div>
-                            <div class="col-lg-4 col-md-5 text-md-end text-start ps-lg-4 portal-divider-left">
-                                <a href="admin/login.html" class="btn btn-outline-primary w-100 py-2.5 fw-bold rounded-3 d-inline-flex align-items-center justify-content-center gap-2 shadow-sm mb-2" id="btnCardAdminLogin" style="border-width: 2px;">
-                                    <i class="bi bi-box-arrow-in-right fs-5"></i> <span id="btnCardAdminLoginText">Sign in to Admin Portal</span>
-                                </a>
-                                <div class="d-flex align-items-center justify-content-center justify-content-md-end gap-2 text-muted" style="font-size: 0.76rem;">
-                                    <i class="bi bi-lock-fill text-primary"></i>
-                                    <span>Super Admin & KYC Desk • Encrypted 256-bit</span>
+                            <div class="min-w-0">
+                                <div class="d-flex align-items-center gap-2 flex-wrap mb-1">
+                                    <h5 class="portal-card-title fw-bold mb-0 text-dark" id="cardAdminTitle">3. Fleet Admin Portal</h5>
+                                    <span class="badge bg-primary bg-opacity-10 text-primary fw-bold px-2 py-0.5 rounded-pill" style="font-size: 0.68rem;" id="badgeActive">PROD LIVE</span>
                                 </div>
+                                <div class="d-flex align-items-center gap-3 flex-wrap small text-muted">
+                                    <span class="portal-feat-pill"><i class="bi bi-check-circle-fill text-primary me-1"></i><span id="cardAdminF1">Live Leaflet & GPS radar map with geofencing</span></span>
+                                    <span class="portal-feat-pill"><i class="bi bi-check-circle-fill text-primary me-1"></i><span id="cardAdminF2">DPDP Act 2023 compliant audit logs & exit slip</span></span>
+                                    <span class="portal-feat-pill"><i class="bi bi-check-circle-fill text-primary me-1"></i><span id="cardAdminF3">ICICI corporate escrow ledger & settlement slips</span></span>
+                                </div>
+                                <span class="d-none" id="cardAdminDesc">Unified central telemetry, live GPS vehicle radar, driver KYC approval audits, manual dispatch desk, and corporate escrow payout vouchers.</span>
                             </div>
+                        </div>
+                        <!-- Right CTA Action -->
+                        <div class="d-flex align-items-center gap-2 flex-shrink-0 ms-auto pt-1 pt-sm-0">
+                            <span class="text-muted d-none d-md-inline" style="font-size: 0.74rem;"><i class="bi bi-lock-fill text-primary me-1"></i>Encrypted 256-bit</span>
+                            <a href="admin/login.html" class="btn btn-outline-primary btn-portal-action fw-bold rounded-3 d-inline-flex align-items-center gap-1.5 shadow-sm" id="btnCardAdminLogin" style="border-width: 1.5px;">
+                                <i class="bi bi-box-arrow-in-right"></i> <span id="btnCardAdminLoginText">Admin Portal Login</span>
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
+        </div>
+    </section>
         </div>
     </section>
 
@@ -4218,14 +4115,16 @@
                 });
             });
 
-            // Modern Interactive Cards Mouse Dynamic Spotlight Reaction (Team Cards, Bento Portals, Fare Tiles, Service Hubs)
-            document.querySelectorAll('.team-card, .bento-portal-card, .fare-rate-tile, .zone-card').forEach(card => {
-                card.addEventListener('mousemove', e => {
-                    const rect = card.getBoundingClientRect();
-                    const x = e.clientX - rect.left;
-                    const y = e.clientY - rect.top;
-                    card.style.setProperty('--mouse-x', `${x}px`);
-                    card.style.setProperty('--mouse-y', `${y}px`);
+            // Header Apps link smooth centering so all 3 portal gateways are visible at a single glance
+            document.querySelectorAll('a[href="#portals"]').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const portalSec = document.getElementById('portals');
+                    if (portalSec) {
+                        const navH = document.querySelector('.navbar-custom')?.offsetHeight || 65;
+                        const targetPos = portalSec.getBoundingClientRect().top + window.pageYOffset - navH - 8;
+                        window.scrollTo({ top: targetPos, behavior: 'smooth' });
+                    }
                 });
             });
         });
