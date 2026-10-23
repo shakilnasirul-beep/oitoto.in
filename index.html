@@ -1,0 +1,3866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="siteTitle">Oi Toto! — Tap. Book. Chalo! | Smart E-Rickshaw Network & Fleet Portal</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="admin/assets/img/logo.png">
+    <!-- Bootstrap 5 CSS & Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Google Fonts: Plus Jakarta Sans & Hind Siliguri -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --oi-green: #0A8B42;
+            --oi-green-dark: #065F2C;
+            --oi-green-glow: #10B981;
+            --oi-green-light: #EBFDF3;
+            --oi-yellow: #FFB703;
+            --oi-yellow-hover: #F59E0B;
+            --oi-yellow-light: #FFFBEB;
+            --oi-navy: #06261E;
+            --oi-slate: #0F172A;
+            --oi-border: #E2E8F0;
+            --oi-card-bg: #FFFFFF;
+            --oi-bg-soft: #F8FAFC;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', 'Hind Siliguri', sans-serif;
+            color: #1E293B;
+            background-color: #FFFFFF;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Ambient Glow & Backgrounds */
+        .glow-sphere {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.35;
+        }
+
+        /* Clean, Modern & Spacious Responsive Header */
+        .navbar-custom {
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-bottom: 1px solid #E2E8F0;
+            padding: 12px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1050;
+            box-shadow: 0 2px 10px rgba(15, 23, 42, 0.04);
+            transition: all 0.25s ease;
+        }
+
+        .header-container {
+            width: 100%;
+            max-width: 1220px;
+            margin: 0 auto;
+            padding-left: 20px;
+            padding-right: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        /* Clean Brand Identity */
+        .navbar-brand-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .brand-logo-img {
+            height: 40px;
+            width: 40px;
+            object-fit: contain;
+            border-radius: 10px;
+            box-shadow: 0 3px 8px rgba(10, 139, 66, 0.15);
+            transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .navbar-brand-badge:hover .brand-logo-img {
+            transform: scale(1.06) rotate(-2deg);
+        }
+
+        .brand-text-wrap {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .brand-title {
+            font-size: 1.4rem;
+            font-weight: 800;
+            color: #0A8B42;
+            line-height: 1;
+            letter-spacing: -0.4px;
+            margin: 0;
+        }
+
+        .brand-title .brand-oi {
+            color: #FFB703;
+        }
+
+        .brand-title .brand-exclaim {
+            color: #FFB703;
+        }
+
+        .brand-sub-badge {
+            font-size: 0.68rem;
+            font-weight: 700;
+            letter-spacing: 0.6px;
+            text-transform: uppercase;
+            color: #0A8B42;
+            background: #E8F5E9;
+            padding: 2px 7px;
+            border-radius: 6px;
+            line-height: 1.2;
+            display: inline-block;
+        }
+
+        /* Open & Breathable Navigation Links */
+        .header-nav-menu {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin: 0 auto;
+            list-style: none;
+            padding: 0;
+        }
+
+        .header-nav-link {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #475569;
+            padding: 8px 14px;
+            border-radius: 10px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+        }
+
+        .header-nav-link i {
+            font-size: 0.95rem;
+            transition: transform 0.2s ease;
+        }
+
+        .header-nav-link:hover {
+            color: #0A8B42;
+            background: rgba(10, 139, 66, 0.07);
+        }
+
+        .header-nav-link:hover i {
+            transform: scale(1.15);
+        }
+
+        /* Right Actions: Language Switcher + Admin Login Button Only */
+        .header-actions-wrap {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+
+        /* Language Toggle Pill */
+        .lang-toggle-wrap {
+            display: inline-flex;
+            align-items: center;
+            background: #F1F5F9;
+            border: 1px solid #CBD5E1;
+            border-radius: 20px;
+            padding: 3px;
+            gap: 2px;
+        }
+
+        .lang-toggle-btn {
+            background: transparent;
+            border: none;
+            color: #475569;
+            font-size: 0.78rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 16px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            line-height: 1.2;
+        }
+
+        .lang-toggle-btn.active {
+            background: #0A8B42;
+            color: #FFFFFF;
+            box-shadow: 0 2px 6px rgba(10, 139, 66, 0.3);
+        }
+
+        /* Prominent & Safe Admin Login Button (Comfortably within viewport) */
+        .btn-header-admin {
+            background: #FFB703;
+            color: #0F172A !important;
+            font-weight: 700;
+            font-size: 0.88rem;
+            padding: 8px 18px;
+            border-radius: 10px;
+            border: 1px solid rgba(217, 119, 6, 0.35);
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            text-decoration: none;
+            white-space: nowrap;
+            box-shadow: 0 3px 10px rgba(255, 183, 3, 0.28);
+            transition: all 0.2s ease;
+        }
+
+        .btn-header-admin:hover {
+            background: #F59E0B;
+            color: #0F172A !important;
+            transform: translateY(-1px);
+            box-shadow: 0 5px 15px rgba(255, 183, 3, 0.4);
+        }
+
+        .btn-header-admin i {
+            font-size: 0.95rem;
+            color: #0F172A;
+        }
+
+        /* Mobile Hamburger Toggle */
+        .header-mobile-toggle {
+            width: 42px;
+            height: 42px;
+            border-radius: 10px;
+            background: rgba(10, 139, 66, 0.08);
+            border: 1px solid rgba(10, 139, 66, 0.2) !important;
+            color: #0A8B42;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s ease;
+        }
+
+        .header-mobile-toggle:hover {
+            background: #0A8B42;
+            color: #FFFFFF;
+        }
+
+        .header-mobile-toggle:hover i {
+            color: #FFFFFF !important;
+        }
+
+        /* Responsive scaling between 992px and 1150px */
+        @media (min-width: 992px) and (max-width: 1150px) {
+            .header-nav-link {
+                padding: 7px 10px;
+                font-size: 0.85rem;
+                gap: 5px;
+            }
+            .header-actions-wrap {
+                gap: 8px;
+            }
+            .btn-header-admin {
+                padding: 7px 14px;
+                font-size: 0.84rem;
+            }
+        }
+
+        /* Mobile Viewport (< 992px) */
+        @media (max-width: 991px) {
+            .header-container {
+                padding-left: 16px;
+                padding-right: 16px;
+            }
+            .navbar-collapse {
+                background: #FFFFFF;
+                border-radius: 16px;
+                padding: 16px;
+                margin-top: 12px;
+                border: 1px solid #E2E8F0;
+                box-shadow: 0 12px 30px rgba(15, 23, 42, 0.1);
+            }
+            .header-nav-menu {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 6px;
+                margin-bottom: 14px;
+            }
+            .header-nav-link {
+                padding: 10px 14px;
+                background: #F8FAFC;
+                border-radius: 10px;
+            }
+            .header-actions-wrap {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 10px;
+                width: 100%;
+            }
+            .lang-toggle-wrap {
+                justify-content: center;
+                width: 100%;
+            }
+            .btn-header-admin {
+                justify-content: center;
+                padding: 11px 16px;
+            }
+        }
+
+        /* Premium Buttons */
+        .btn-oi-green {
+            background: linear-gradient(135deg, #0A8B42 0%, #076A32 100%);
+            color: #FFFFFF;
+            font-weight: 700;
+            padding: 12px 26px;
+            border-radius: 14px;
+            border: none;
+            transition: all 0.25s ease;
+            box-shadow: 0 8px 20px rgba(10, 139, 66, 0.28);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-oi-green:hover {
+            background: linear-gradient(135deg, #076A32 0%, #054F24 100%);
+            color: #FFFFFF;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 26px rgba(10, 139, 66, 0.38);
+        }
+
+        .btn-oi-yellow {
+            background: linear-gradient(135deg, #FFB703 0%, #F59E0B 100%);
+            color: #0F172A;
+            font-weight: 800;
+            padding: 12px 26px;
+            border-radius: 14px;
+            border: none;
+            transition: all 0.25s ease;
+            box-shadow: 0 8px 20px rgba(255, 183, 3, 0.32);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-oi-yellow:hover {
+            background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+            color: #0F172A;
+            transform: translateY(-2px);
+            box-shadow: 0 12px 26px rgba(255, 183, 3, 0.42);
+        }
+
+        .btn-oi-glass {
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #FFFFFF;
+            font-weight: 700;
+            padding: 12px 26px;
+            border-radius: 14px;
+            transition: all 0.25s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-oi-glass:hover {
+            background: rgba(255, 255, 255, 0.22);
+            border-color: rgba(255, 255, 255, 0.5);
+            color: #FFFFFF;
+            transform: translateY(-2px);
+        }
+
+        /* Hero Section - Viewport-Optimized Single Glance (একনজরে) */
+        .hero-section {
+            background: linear-gradient(145deg, #041E17 0%, #083429 45%, #0B4638 100%);
+            color: #FFFFFF;
+            padding: 30px 0 24px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        @media (min-width: 992px) {
+            .hero-section {
+                min-height: calc(100vh - 74px);
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                padding: 20px 0 16px;
+            }
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 85% 20%, rgba(255, 183, 3, 0.18) 0%, transparent 40%),
+                        radial-gradient(circle at 15% 80%, rgba(16, 185, 129, 0.15) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .hero-badge-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 183, 3, 0.15);
+            border: 1px solid rgba(255, 183, 3, 0.35);
+            color: #FFD166;
+            padding: 5px 14px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #10B981;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            animation: pulse 1.8s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        section {
+            scroll-margin-top: 85px;
+        }
+
+        .hero-heading {
+            font-size: clamp(2rem, 3.5vw, 3.2rem);
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -1px;
+            margin-bottom: 12px;
+            white-space: nowrap;
+        }
+
+        @media (max-width: 991px) {
+            .hero-heading {
+                white-space: normal;
+                font-size: 2.3rem;
+            }
+        }
+
+        .hero-heading .gold-text {
+            color: #FFB703;
+            text-shadow: 0 4px 18px rgba(255, 183, 3, 0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.6;
+            max-width: 620px;
+            margin-bottom: 22px;
+        }
+
+        /* Hero Quick Phone Booking Box */
+        .hero-phone-booking-box {
+            display: inline-flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px 14px;
+            background: rgba(6, 38, 30, 0.78);
+            border: 1.5px solid rgba(255, 183, 3, 0.55);
+            border-radius: 14px;
+            padding: 11px 18px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.3);
+        }
+
+        .phone-box-text {
+            color: #FFFFFF;
+            font-size: 0.98rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .phone-state-label {
+            color: #E2E8F0;
+            font-size: 0.96rem;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .hero-booking-phone-badge {
+            color: #FFB703 !important;
+            font-size: 1.25rem;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            background: rgba(255, 183, 3, 0.16);
+            padding: 3px 13px;
+            border-radius: 9px;
+            border: 1.5px solid #FFB703;
+            transition: all 0.25s ease;
+            box-shadow: 0 0 14px rgba(255, 183, 3, 0.35);
+        }
+
+        .hero-booking-phone-badge:hover {
+            background: #FFB703;
+            color: #06261E !important;
+            transform: scale(1.05);
+            box-shadow: 0 4px 18px rgba(255, 183, 3, 0.65);
+        }
+
+        .hero-section .btn-lg {
+            padding: 12px 24px;
+            font-size: 1rem;
+            border-radius: 14px;
+            font-weight: 700;
+        }
+
+        /* Unique Dual-Shape Hero Feature Presentation (Choto Circle + Boro Shape) */
+        .hero-unique-visual-wrap {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            width: 100%;
+            max-width: 440px;
+            margin: 0 auto;
+        }
+
+        /* 1. Logo Badge - Matches the Logo's Signature Squircle Outline Shape */
+        .hero-logo-circle {
+            width: 180px;
+            height: 180px;
+            border-radius: 42px; /* Exact squircle shape matching logo's outer green frame */
+            background: #FFFFFF;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 4;
+            margin-bottom: -26px; /* overlaps gracefully onto the larger orb */
+            border: 3.5px solid #0A8B42; /* Matching the signature dark green outline */
+            box-shadow: 0 22px 52px rgba(0, 0, 0, 0.42), 0 0 0 6px rgba(255, 255, 255, 0.25), 0 0 30px rgba(10, 139, 66, 0.4);
+            animation: logoOrbFloat 4s ease-in-out infinite;
+            transition: transform 0.3s ease, box-shadow 0.5s ease, border-color 0.3s ease;
+            padding: 8px;
+        }
+
+        @keyframes logoOrbFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-6px); }
+        }
+
+        .hero-circle-logo-img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 34px; /* Smoothly mirrors the outer squircle radius */
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .hero-logo-circle:hover {
+            box-shadow: 0 24px 55px rgba(0, 0, 0, 0.45), 0 0 0 6px rgba(255, 255, 255, 0.3), 0 0 35px rgba(10, 139, 66, 0.45);
+        }
+
+        .hero-logo-circle:hover .hero-circle-logo-img {
+            transform: scale(1.05);
+        }
+
+        .logo-circle-tag {
+            position: absolute;
+            bottom: -9px;
+            background: #06261E;
+            color: #FFB703;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+            padding: 3px 14px;
+            border-radius: 20px;
+            border: 1.5px solid rgba(255, 183, 3, 0.5);
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            white-space: nowrap;
+        }
+
+        .pulse-dot-sm {
+            width: 6px;
+            height: 6px;
+            background: #10B981;
+            border-radius: 50%;
+            display: inline-block;
+            box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7);
+            animation: pulse 1.8s infinite;
+        }
+
+        /* 2. Boro Shape (Feature Orb with Dynamic Alternating Backgrounds) */
+        .hero-feature-orb {
+            width: 100%;
+            border-radius: 28px;
+            padding: 32px 24px 16px;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            min-height: 175px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* 4 Alternating Themed Gradients */
+        .hero-feature-orb.theme-0 {
+            background: linear-gradient(135deg, rgba(6, 38, 30, 0.94) 0%, rgba(10, 139, 66, 0.38) 100%);
+            border: 1.5px solid #10B981;
+            box-shadow: 0 20px 48px rgba(10, 139, 66, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+        }
+        .hero-feature-orb.theme-1 {
+            background: linear-gradient(135deg, rgba(6, 38, 48, 0.94) 0%, rgba(2, 132, 199, 0.38) 100%);
+            border: 1.5px solid #38BDF8;
+            box-shadow: 0 20px 48px rgba(2, 132, 199, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+        }
+        .hero-feature-orb.theme-2 {
+            background: linear-gradient(135deg, rgba(28, 16, 48, 0.94) 0%, rgba(124, 58, 237, 0.38) 100%);
+            border: 1.5px solid #A855F7;
+            box-shadow: 0 20px 48px rgba(124, 58, 237, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+        }
+        .hero-feature-orb.theme-3 {
+            background: linear-gradient(135deg, rgba(42, 28, 8, 0.94) 0%, rgba(245, 158, 11, 0.38) 100%);
+            border: 1.5px solid #FBBF24;
+            box-shadow: 0 20px 48px rgba(245, 158, 11, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.18);
+        }
+
+        .hero-feature-orb:hover {
+            transform: translateY(-3px);
+        }
+
+        /* Slides and Smooth Content Transitions */
+        .orb-slides-wrapper {
+            position: relative;
+            min-height: 90px;
+        }
+
+        .orb-slide-item {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            opacity: 0;
+            transform: translateY(10px) scale(0.96);
+            pointer-events: none;
+            transition: opacity 0.45s ease, transform 0.45s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .orb-slide-item.active {
+            position: relative;
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
+
+        .orb-header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .orb-icon-circle {
+            width: 36px;
+            height: 36px;
+            border-radius: 12px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+            transition: all 0.3s ease;
+        }
+
+        .theme-0 .orb-icon-circle { background: rgba(16, 185, 129, 0.22); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.45); }
+        .theme-1 .orb-icon-circle { background: rgba(56, 189, 248, 0.22); color: #38BDF8; border: 1px solid rgba(56, 189, 248, 0.45); }
+        .theme-2 .orb-icon-circle { background: rgba(168, 85, 247, 0.22); color: #A855F7; border: 1px solid rgba(168, 85, 247, 0.45); }
+        .theme-3 .orb-icon-circle { background: rgba(251, 191, 36, 0.22); color: #FBBF24; border: 1px solid rgba(251, 191, 36, 0.45); }
+
+        .orb-tag-badge {
+            font-size: 0.68rem;
+            font-weight: 800;
+            padding: 3px 10px;
+            border-radius: 20px;
+            letter-spacing: 0.4px;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+        }
+
+        .theme-0 .orb-tag-badge { background: rgba(16, 185, 129, 0.22); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.4); }
+        .theme-1 .orb-tag-badge { background: rgba(56, 189, 248, 0.22); color: #38BDF8; border: 1px solid rgba(56, 189, 248, 0.4); }
+        .theme-2 .orb-tag-badge { background: rgba(168, 85, 247, 0.22); color: #A855F7; border: 1px solid rgba(168, 85, 247, 0.4); }
+        .theme-3 .orb-tag-badge { background: rgba(251, 191, 36, 0.22); color: #FBBF24; border: 1px solid rgba(251, 191, 36, 0.4); }
+
+        .orb-headline {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #FFFFFF;
+            margin-bottom: 4px;
+            line-height: 1.25;
+            letter-spacing: -0.3px;
+        }
+
+        .orb-description {
+            font-size: 0.78rem;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 0;
+            line-height: 1.35;
+        }
+
+        /* Bottom Controls / Progress Indicator */
+        .orb-footer-bar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 10px;
+            margin-top: 8px;
+            border-top: 1px solid rgba(255, 255, 255, 0.12);
+        }
+
+        .orb-pills-nav {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .orb-pill-dot {
+            width: 18px;
+            height: 5px;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.25);
+            border: none;
+            cursor: pointer;
+            padding: 0;
+            transition: all 0.3s ease;
+        }
+
+        .orb-pill-dot.active {
+            width: 30px;
+            background: #FFFFFF;
+        }
+
+        .theme-0 .orb-pill-dot.active { background: #10B981; box-shadow: 0 0 10px #10B981; }
+        .theme-1 .orb-pill-dot.active { background: #38BDF8; box-shadow: 0 0 10px #38BDF8; }
+        .theme-2 .orb-pill-dot.active { background: #A855F7; box-shadow: 0 0 10px #A855F7; }
+        .theme-3 .orb-pill-dot.active { background: #FBBF24; box-shadow: 0 0 10px #FBBF24; }
+
+        .orb-click-prompt {
+            font-size: 0.72rem;
+            color: rgba(255, 255, 255, 0.75);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-weight: 700;
+            transition: color 0.2s ease;
+        }
+
+        .orb-click-prompt:hover {
+            color: #FFFFFF;
+        }
+
+        /* Stats Ribbon */
+        .stats-ribbon {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 18px;
+            padding: 14px 20px;
+            margin-top: 20px;
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+
+        .stats-ribbon:hover {
+            background: rgba(255, 255, 255, 0.12);
+            border-color: rgba(255, 183, 3, 0.35);
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.65rem;
+            font-weight: 800;
+            color: #FFB703;
+            line-height: 1.1;
+            font-family: 'Space Grotesk', sans-serif;
+            font-variant-numeric: tabular-nums;
+            display: inline-block;
+            transition: transform 0.2s ease;
+        }
+
+        .stat-label {
+            font-size: 0.74rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.75);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 2px;
+        }
+
+        /* Bento Grid Portals */
+        .section-header {
+            text-align: center;
+            max-width: 680px;
+            margin: 0 auto 50px;
+        }
+
+        .section-pill {
+            background: var(--oi-green-light);
+            color: var(--oi-green);
+            font-size: 0.8rem;
+            font-weight: 800;
+            padding: 6px 16px;
+            border-radius: 30px;
+            display: inline-block;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+        }
+
+        .section-title {
+            font-size: 2.3rem;
+            font-weight: 800;
+            color: #0F172A;
+            letter-spacing: -0.6px;
+            line-height: 1.25;
+            margin-bottom: 14px;
+        }
+
+        .section-desc {
+            font-size: 1.05rem;
+            color: #64748B;
+            line-height: 1.6;
+        }
+
+        .bento-portal-card {
+            background: #FFFFFF;
+            border: 1.5px solid #E2E8F0;
+            border-radius: 24px;
+            padding: 34px 28px;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, 0.04);
+            overflow: hidden;
+        }
+
+        .bento-portal-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 40px rgba(15, 23, 42, 0.09);
+            border-color: #CBD5E1;
+        }
+
+        .bento-portal-card.card-featured {
+            border-color: var(--oi-green);
+            background: linear-gradient(180deg, #FFFFFF 0%, #F6FEF9 100%);
+            box-shadow: 0 16px 36px rgba(10, 139, 66, 0.12);
+        }
+
+        .bento-portal-card.card-featured::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #0A8B42, #10B981, #FFB703);
+        }
+
+        .portal-icon-box {
+            width: 64px;
+            height: 64px;
+            border-radius: 18px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            margin-bottom: 22px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+        }
+
+        .icon-box-cust { background: #E8F5E9; color: var(--oi-green); }
+        .icon-box-drv { background: #FFF8E1; color: #D97706; }
+        .icon-box-adm { background: #E0F2FE; color: #0284C7; }
+
+        .feature-check-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+            color: #475569;
+        }
+
+        .feature-check-item i {
+            font-size: 1.1rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        /* Interactive Fare Estimator Section */
+        .calculator-card {
+            background: linear-gradient(135deg, #083429 0%, #06261E 100%);
+            color: #FFFFFF;
+            border-radius: 28px;
+            padding: 42px;
+            box-shadow: 0 25px 60px rgba(6, 38, 30, 0.35);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .calc-output-box {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 20px;
+            padding: 26px;
+            text-align: center;
+        }
+
+        .fare-price-big {
+            font-size: 3.4rem;
+            font-weight: 800;
+            color: #FFB703;
+            font-family: 'Space Grotesk', sans-serif;
+            line-height: 1;
+            margin: 10px 0;
+        }
+
+        .calc-slider {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            outline: none;
+            accent-color: #FFB703;
+        }
+
+        /* Why Oi Toto Reactive Alternating Transparent Cards */
+        .pillar-card {
+            border-radius: 24px;
+            padding: 30px 24px;
+            height: 100%;
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            cursor: pointer;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* Card 1: 100% Fixed Fares - Emerald Tint */
+        .pillar-card-1 {
+            background: linear-gradient(145deg, rgba(10, 139, 66, 0.08) 0%, rgba(16, 185, 129, 0.02) 100%);
+            border: 1.5px solid rgba(10, 139, 66, 0.22);
+        }
+        .pillar-card-1:hover, .pillar-card-1.active-card {
+            background: linear-gradient(145deg, rgba(10, 139, 66, 0.14) 0%, rgba(16, 185, 129, 0.05) 100%);
+            border-color: #0A8B42;
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 45px rgba(10, 139, 66, 0.16);
+        }
+        .pillar-card-1 .pillar-icon-circle {
+            background: rgba(10, 139, 66, 0.15);
+            color: #0A8B42;
+        }
+
+        /* Card 2: Zero Emission Green EV - Sky Blue Tint */
+        .pillar-card-2 {
+            background: linear-gradient(145deg, rgba(2, 132, 199, 0.08) 0%, rgba(56, 189, 248, 0.02) 100%);
+            border: 1.5px solid rgba(2, 132, 199, 0.22);
+        }
+        .pillar-card-2:hover, .pillar-card-2.active-card {
+            background: linear-gradient(145deg, rgba(2, 132, 199, 0.14) 0%, rgba(56, 189, 248, 0.05) 100%);
+            border-color: #0284C7;
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 45px rgba(2, 132, 199, 0.16);
+        }
+        .pillar-card-2 .pillar-icon-circle {
+            background: rgba(2, 132, 199, 0.15);
+            color: #0284C7;
+        }
+
+        /* Card 3: Verified Drivers & SOS - Royal Violet Tint */
+        .pillar-card-3 {
+            background: linear-gradient(145deg, rgba(124, 58, 237, 0.08) 0%, rgba(168, 85, 247, 0.02) 100%);
+            border: 1.5px solid rgba(124, 58, 237, 0.22);
+        }
+        .pillar-card-3:hover, .pillar-card-3.active-card {
+            background: linear-gradient(145deg, rgba(124, 58, 237, 0.14) 0%, rgba(168, 85, 247, 0.05) 100%);
+            border-color: #7C3AED;
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 45px rgba(124, 58, 237, 0.16);
+        }
+        .pillar-card-3 .pillar-icon-circle {
+            background: rgba(124, 58, 237, 0.15);
+            color: #7C3AED;
+        }
+
+        /* Card 4: Cash or UPI QR Codes - Amber / Gold Tint */
+        .pillar-card-4 {
+            background: linear-gradient(145deg, rgba(245, 158, 11, 0.08) 0%, rgba(251, 191, 36, 0.02) 100%);
+            border: 1.5px solid rgba(245, 158, 11, 0.22);
+        }
+        .pillar-card-4:hover, .pillar-card-4.active-card {
+            background: linear-gradient(145deg, rgba(245, 158, 11, 0.14) 0%, rgba(251, 191, 36, 0.05) 100%);
+            border-color: #F59E0B;
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 45px rgba(245, 158, 11, 0.16);
+        }
+        .pillar-card-4 .pillar-icon-circle {
+            background: rgba(245, 158, 11, 0.15);
+            color: #D97706;
+        }
+
+        .pillar-icon-circle {
+            width: 58px;
+            height: 58px;
+            border-radius: 18px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin-bottom: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .pillar-card:hover .pillar-icon-circle {
+            transform: scale(1.1) rotate(-6deg);
+        }
+
+        .pillar-reactive-drawer {
+            margin-top: auto;
+            padding-top: 16px;
+            border-top: 1px dashed rgba(0, 0, 0, 0.08);
+        }
+
+        .pillar-reactive-pill {
+            font-size: 0.74rem;
+            font-weight: 700;
+            padding: 5px 12px;
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.25s ease;
+        }
+
+        .pillar-card-1 .pillar-reactive-pill {
+            background: rgba(10, 139, 66, 0.12);
+            color: #0A8B42;
+            border: 1px solid rgba(10, 139, 66, 0.25);
+        }
+        .pillar-card-2 .pillar-reactive-pill {
+            background: rgba(2, 132, 199, 0.12);
+            color: #0284C7;
+            border: 1px solid rgba(2, 132, 199, 0.25);
+        }
+        .pillar-card-3 .pillar-reactive-pill {
+            background: rgba(124, 58, 237, 0.12);
+            color: #7C3AED;
+            border: 1px solid rgba(124, 58, 237, 0.25);
+        }
+        .pillar-card-4 .pillar-reactive-pill {
+            background: rgba(245, 158, 11, 0.12);
+            color: #D97706;
+            border: 1px solid rgba(245, 158, 11, 0.25);
+        }
+
+        .pillar-card.glow-pulse {
+            animation: pillarGlowPulse 1.2s ease-in-out;
+        }
+
+        @keyframes pillarGlowPulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(10, 139, 66, 0.6); }
+            50% { transform: scale(1.04); box-shadow: 0 0 0 16px rgba(10, 139, 66, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(10, 139, 66, 0); }
+        }
+
+        /* -------------------------------------------------------------
+           Popular Route Rates Section (#fareChart) - Modern Redesign
+        ------------------------------------------------------------- */
+        #fareChart {
+            background: linear-gradient(180deg, #F8FAFC 0%, #FFFFFF 50%, #F8FAFC 100%);
+            border-top: 1px solid #E2E8F0;
+            border-bottom: 1px solid #E2E8F0;
+            position: relative;
+        }
+
+        /* 3 Left Fare Metric Tiles */
+        .fare-rate-cards-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .fare-rate-tile {
+            background: #FFFFFF;
+            border: 1.5px solid #E2E8F0;
+            border-radius: 16px;
+            padding: 14px 18px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            box-shadow: 0 4px 14px rgba(15, 23, 42, 0.03);
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+        }
+
+        .fare-rate-tile:hover {
+            border-color: #0A8B42;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(10, 139, 66, 0.08);
+        }
+
+        .tile-icon-wrap {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            flex-shrink: 0;
+        }
+
+        .tile-base .tile-icon-wrap {
+            background: rgba(10, 139, 66, 0.1);
+            color: #0A8B42;
+        }
+
+        .tile-km .tile-icon-wrap {
+            background: rgba(14, 165, 233, 0.1);
+            color: #0284C7;
+        }
+
+        .tile-surge .tile-icon-wrap {
+            background: rgba(245, 158, 11, 0.12);
+            color: #D97706;
+        }
+
+        .tile-content {
+            flex-grow: 1;
+        }
+
+        .tile-label {
+            font-size: 0.78rem;
+            font-weight: 700;
+            color: #64748B;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .tile-value {
+            font-size: 1.35rem;
+            font-weight: 800;
+            color: #0F172A;
+            line-height: 1.1;
+        }
+
+        .tile-unit {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #64748B;
+            margin-left: 2px;
+        }
+
+        .tile-tag-badge {
+            font-size: 0.72rem;
+            font-weight: 700;
+            padding: 3px 8px;
+            border-radius: 6px;
+            background: #F1F5F9;
+            color: #475569;
+            letter-spacing: 0.4px;
+            white-space: nowrap;
+        }
+
+        /* Formula Banner */
+        .fare-formula-banner {
+            background: #FFFFFF;
+            border: 1.5px dashed #CBD5E1;
+            border-radius: 16px;
+            padding: 16px 22px;
+            box-shadow: 0 4px 12px rgba(15, 23, 42, 0.02);
+            max-width: 960px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .formula-icon-box {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            background: rgba(10, 139, 66, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .formula-code-badge {
+            background: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-radius: 8px;
+            padding: 5px 12px;
+            display: inline-block;
+            font-weight: 700;
+            color: #0A8B42;
+            font-family: monospace;
+            font-size: 0.88rem;
+        }
+
+        /* Right Column Rate Table Card */
+        .rate-table-card {
+            background: #FFFFFF;
+            border-radius: 20px;
+            border: 1.5px solid #E2E8F0;
+            box-shadow: 0 16px 40px rgba(15, 23, 42, 0.06);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .rate-card-header {
+            padding: 18px 24px;
+            background: #FFFFFF;
+            border-bottom: 1px solid #F1F5F9;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .rate-card-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #0F172A;
+        }
+
+        .rate-table-filter-bar {
+            padding: 12px 24px;
+            background: #F8FAFC;
+            border-bottom: 1px solid #F1F5F9;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .filter-label {
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #334155;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .route-filter-btn {
+            background: #FFFFFF;
+            border: 1px solid #CBD5E1;
+            color: #475569;
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 5px 13px;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .route-filter-btn:hover {
+            border-color: #0A8B42;
+            color: #0A8B42;
+            background: rgba(10, 139, 66, 0.05);
+        }
+
+        .route-filter-btn.active {
+            background: #0A8B42;
+            border-color: #0A8B42;
+            color: #FFFFFF;
+            box-shadow: 0 3px 10px rgba(10, 139, 66, 0.28);
+        }
+
+        /* Table Styling */
+        .rate-table-responsive {
+            width: 100%;
+            overflow-x: auto;
+        }
+
+        .table-header-row th {
+            background: #F8FAFC !important;
+            color: #64748B;
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 12px 16px;
+            border-bottom: 1px solid #E2E8F0;
+            white-space: nowrap;
+        }
+
+        .rate-row-item {
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+            border-bottom: 1px solid #F1F5F9;
+        }
+
+        .rate-row-item:last-child {
+            border-bottom: none;
+        }
+
+        .rate-row-item td {
+            padding: 14px 16px;
+            vertical-align: middle;
+        }
+
+        .rate-row-item:hover {
+            background: rgba(10, 139, 66, 0.04) !important;
+        }
+
+        .rate-row-item.selected-rate-row {
+            background: rgba(10, 139, 66, 0.08) !important;
+            border-left: 4px solid #0A8B42 !important;
+        }
+
+        .loc-pin-origin {
+            width: 9px;
+            height: 9px;
+            background: #EF4444;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+            flex-shrink: 0;
+        }
+
+        .loc-pin-dest {
+            width: 9px;
+            height: 9px;
+            background: #10B981;
+            border-radius: 50%;
+            display: inline-block;
+            margin-right: 8px;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+            flex-shrink: 0;
+        }
+
+        .dist-badge {
+            background: #F1F5F9;
+            color: #1E293B;
+            font-weight: 700;
+            font-size: 0.82rem;
+            padding: 4px 10px;
+            border-radius: 8px;
+            border: 1px solid #E2E8F0;
+            white-space: nowrap;
+            display: inline-block;
+        }
+
+        .time-badge {
+            color: #64748B;
+            font-size: 0.84rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .fare-badge-pill {
+            background: #E8F5E9;
+            color: #0A8B42;
+            font-weight: 800;
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: 0.95rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            border: 1.5px solid rgba(10, 139, 66, 0.25);
+            box-shadow: 0 2px 6px rgba(10, 139, 66, 0.08);
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .rate-row-item:hover .fare-badge-pill,
+        .rate-row-item.selected-rate-row .fare-badge-pill {
+            background: #0A8B42;
+            color: #FFFFFF;
+            box-shadow: 0 4px 12px rgba(10, 139, 66, 0.3);
+        }
+
+        .btn-route-action {
+            background: rgba(10, 139, 66, 0.08);
+            border: 1.5px solid rgba(10, 139, 66, 0.25);
+            color: #0A8B42;
+            font-weight: 700;
+            font-size: 0.82rem;
+            padding: 6px 14px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .btn-route-action:hover,
+        .btn-route-action.active {
+            background: #0A8B42;
+            color: #FFFFFF;
+            border-color: #0A8B42;
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(10, 139, 66, 0.25);
+        }
+
+        /* Mobile View (< 768px): Transforms rows into clean, touch-friendly route cards */
+        @media (max-width: 767px) {
+            .rate-card-header {
+                padding: 14px 16px;
+            }
+            .rate-table-filter-bar {
+                padding: 10px 14px;
+                gap: 8px;
+            }
+            .route-filter-btn {
+                padding: 4px 10px;
+                font-size: 0.75rem;
+            }
+            .rate-table-responsive {
+                padding: 12px;
+            }
+            .rate-table-responsive table thead {
+                display: none;
+            }
+            .rate-table-responsive table,
+            .rate-table-responsive tbody {
+                display: block;
+                width: 100%;
+            }
+            .rate-table-responsive tr.rate-row-item {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                justify-content: space-between;
+                background: #FFFFFF;
+                border: 1.5px solid #E2E8F0;
+                border-radius: 16px;
+                padding: 14px;
+                margin-bottom: 12px;
+                box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+            }
+            .rate-table-responsive tr.rate-row-item.selected-rate-row {
+                border-color: #0A8B42;
+                background: rgba(10, 139, 66, 0.04) !important;
+                box-shadow: 0 6px 18px rgba(10, 139, 66, 0.12);
+            }
+            .rate-table-responsive tr.rate-row-item td {
+                padding: 3px 0 !important;
+                border: none !important;
+            }
+            .rate-table-responsive tr.rate-row-item .col-pickup {
+                flex: 0 0 100%;
+                margin-bottom: 4px;
+            }
+            .rate-table-responsive tr.rate-row-item .col-drop {
+                flex: 0 0 100%;
+                margin-bottom: 10px;
+                padding-bottom: 8px;
+                border-bottom: 1px dashed #E2E8F0 !important;
+            }
+            .rate-table-responsive tr.rate-row-item .col-dist {
+                flex: 0 0 auto;
+            }
+            .rate-table-responsive tr.rate-row-item .col-time {
+                flex: 0 0 auto;
+            }
+            .rate-table-responsive tr.rate-row-item .col-fare {
+                flex: 0 0 auto;
+            }
+            .rate-table-responsive tr.rate-row-item .col-action {
+                flex: 0 0 auto;
+            }
+        }
+
+        .route-sync-toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            z-index: 1080;
+            background: #06261E;
+            color: #FFFFFF;
+            border: 1px solid #10B981;
+            border-radius: 16px;
+            padding: 12px 20px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+            display: none;
+            align-items: center;
+            gap: 12px;
+            font-size: 0.86rem;
+            animation: toastFadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes toastFadeIn {
+            from { opacity: 0; transform: translateY(16px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Zone Hub Card */
+        .zone-card {
+            background: #FFFFFF;
+            border: 1.5px solid #E2E8F0;
+            border-radius: 20px;
+            padding: 24px 20px;
+            text-align: center;
+            transition: all 0.25s ease;
+            height: 100%;
+        }
+
+        .zone-card:hover {
+            border-color: var(--oi-green);
+            box-shadow: 0 10px 26px rgba(10, 139, 66, 0.08);
+            transform: translateY(-3px);
+        }
+
+        .zone-icon {
+            font-size: 2rem;
+            margin-bottom: 12px;
+            display: inline-block;
+        }
+
+        /* Driver Onboarding Banner */
+        .driver-cta-banner {
+            background: linear-gradient(135deg, #06261E 0%, #0A4A3C 60%, #0D5E4D 100%);
+            color: #FFFFFF;
+            border-radius: 28px;
+            padding: 50px 42px;
+            box-shadow: 0 20px 50px rgba(6, 38, 30, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* ==========================================================
+           10. OI TOTO MEMBER & TEAM SECTION (COMPACT & GLASSMORPHIC)
+           ========================================================== */
+        .team-section-wrap {
+            position: relative;
+            background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFC 50%, #F1F5F9 100%);
+            padding: 40px 0 45px;
+            overflow: hidden;
+            scroll-margin-top: 65px;
+        }
+
+        @media (min-width: 992px) {
+            #subTeam {
+                white-space: nowrap !important;
+                max-width: 100% !important;
+            }
+
+            #portals .section-header,
+            #features .section-header {
+                max-width: 1140px !important;
+            }
+
+            #subEcosystem {
+                white-space: nowrap !important;
+                max-width: 100% !important;
+                font-size: clamp(0.85rem, 1.05vw, 0.98rem) !important;
+            }
+
+            #titleWhyOiToto {
+                white-space: nowrap !important;
+                max-width: 100% !important;
+            }
+
+            #subWhyOiToto {
+                white-space: nowrap !important;
+                max-width: 100% !important;
+                font-size: clamp(0.84rem, 1.05vw, 0.96rem) !important;
+            }
+
+            #descRoutes {
+                white-space: nowrap !important;
+                max-width: 100% !important;
+                font-size: clamp(0.72rem, 0.88vw, 0.88rem) !important;
+                letter-spacing: -0.15px;
+            }
+        }
+
+        .team-ambient-glow-1 {
+            position: absolute;
+            top: 10%;
+            left: -100px;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(10, 139, 66, 0.10) 0%, rgba(10, 139, 66, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            filter: blur(60px);
+            z-index: 0;
+        }
+
+        .team-ambient-glow-2 {
+            position: absolute;
+            bottom: 5%;
+            right: -120px;
+            width: 420px;
+            height: 420px;
+            background: radial-gradient(circle, rgba(255, 183, 3, 0.12) 0%, rgba(255, 183, 3, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            filter: blur(70px);
+            z-index: 0;
+        }
+
+        .team-card-col {
+            position: relative;
+            z-index: 1;
+        }
+
+        .team-card {
+            border-radius: 20px;
+            padding: 22px 18px 16px;
+            text-align: center;
+            position: relative;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+            overflow: hidden;
+            box-shadow: 0 4px 18px rgba(15, 23, 42, 0.03);
+            cursor: pointer;
+        }
+
+        /* Mouse Spotlight Overlay */
+        .team-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(400px circle at var(--mouse-x, 50%) var(--mouse-y, 30%), rgba(255, 255, 255, 0.7), transparent 50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .team-card:hover::before {
+            opacity: 1;
+        }
+
+        /* Top Color Accent Sheen Bar */
+        .team-card::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            transition: all 0.3s ease;
+            z-index: 3;
+        }
+
+        /* ALTERNATE TRANSPARENT GLASSMORPHIC COLORS */
+        /* 1. Founder Card: Soft Emerald Tint */
+        .team-card-founder {
+            background: linear-gradient(145deg, rgba(10, 139, 66, 0.05) 0%, rgba(255, 183, 3, 0.03) 100%);
+            border: 1.5px solid rgba(10, 139, 66, 0.22);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+        }
+        .team-card-founder::after {
+            background: linear-gradient(90deg, #0A8B42 0%, #FFB703 100%);
+        }
+        .team-card-founder:hover {
+            background: #FFFFFF !important;
+            border-color: #0A8B42;
+            transform: translateY(-8px);
+            box-shadow: 0 16px 36px -8px rgba(10, 139, 66, 0.24), 0 0 0 1.5px rgba(10, 139, 66, 0.35);
+        }
+
+        /* 2. CEO Card: Soft Cyan/Blue Tint */
+        .team-card-ceo {
+            background: linear-gradient(145deg, rgba(2, 132, 199, 0.05) 0%, rgba(16, 185, 129, 0.03) 100%);
+            border: 1.5px solid rgba(2, 132, 199, 0.22);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+        }
+        .team-card-ceo::after {
+            background: linear-gradient(90deg, #0284C7 0%, #10B981 100%);
+        }
+        .team-card-ceo:hover {
+            background: #FFFFFF !important;
+            border-color: #0284C7;
+            transform: translateY(-8px);
+            box-shadow: 0 16px 36px -8px rgba(2, 132, 199, 0.24), 0 0 0 1.5px rgba(2, 132, 199, 0.35);
+        }
+
+        /* 3. Developer Card: Soft Indigo/Violet Tint */
+        .team-card-dev {
+            background: linear-gradient(145deg, rgba(99, 102, 241, 0.05) 0%, rgba(168, 85, 247, 0.03) 100%);
+            border: 1.5px solid rgba(99, 102, 241, 0.22);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+        }
+        .team-card-dev::after {
+            background: linear-gradient(90deg, #6366F1 0%, #A855F7 100%);
+        }
+        .team-card-dev:hover {
+            background: #FFFFFF !important;
+            border-color: #6366F1;
+            transform: translateY(-8px);
+            box-shadow: 0 16px 36px -8px rgba(99, 102, 241, 0.24), 0 0 0 1.5px rgba(99, 102, 241, 0.35);
+        }
+
+        /* Avatar Container & Interactive Ring */
+        .team-avatar-container {
+            position: relative;
+            width: 104px;
+            height: 104px;
+            margin: 0 auto 12px;
+            z-index: 2;
+        }
+
+        .team-avatar-ring {
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border-radius: 50%;
+            transition: all 0.4s ease;
+            z-index: 1;
+        }
+
+        .team-card-founder .team-avatar-ring {
+            background: linear-gradient(135deg, rgba(10, 139, 66, 0.45), rgba(255, 183, 3, 0.55));
+        }
+        .team-card-ceo .team-avatar-ring {
+            background: linear-gradient(135deg, rgba(2, 132, 199, 0.45), rgba(16, 185, 129, 0.55));
+        }
+        .team-card-dev .team-avatar-ring {
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.45), rgba(168, 85, 247, 0.55));
+        }
+
+        .team-card:hover .team-avatar-ring {
+            transform: rotate(180deg) scale(1.08);
+            filter: blur(1px);
+        }
+
+        .team-avatar-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            overflow: hidden;
+            background: #F1F5F9;
+            border: 3.5px solid #FFFFFF;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+            z-index: 2;
+            transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .team-card:hover .team-avatar-inner {
+            transform: scale(1.05);
+        }
+
+        .team-avatar-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.35s ease;
+        }
+
+        .team-card:hover .team-avatar-img {
+            transform: scale(1.06);
+        }
+
+        /* Verified Pill / Floating Role Badge */
+        .team-verified-pill {
+            position: absolute;
+            bottom: -1px;
+            right: 2px;
+            background: #FFFFFF;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
+            z-index: 3;
+            font-size: 0.92rem;
+            transition: transform 0.3s ease;
+        }
+
+        .team-card:hover .team-verified-pill {
+            transform: scale(1.18) rotate(10deg);
+        }
+
+        /* Role Badges */
+        .team-role-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.72rem;
+            font-weight: 800;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            padding: 4px 12px;
+            border-radius: 16px;
+            margin-bottom: 8px;
+            z-index: 2;
+            position: relative;
+            transition: all 0.25s ease;
+        }
+
+        .role-pill-founder {
+            background: #ECFDF5;
+            color: #047857;
+            border: 1px solid #A7F3D0;
+        }
+        .role-pill-ceo {
+            background: #F0F9FF;
+            color: #0369A1;
+            border: 1px solid #BAE6FD;
+        }
+        .role-pill-dev {
+            background: #EEF2FF;
+            color: #4338CA;
+            border: 1px solid #C7D2FE;
+        }
+
+        .team-card:hover .team-role-pill {
+            transform: translateY(-2px);
+        }
+
+        /* Name & Degrees (High contrast on hover) */
+        .team-name {
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #0F172A;
+            margin-bottom: 2px;
+            letter-spacing: -0.3px;
+            z-index: 2;
+            position: relative;
+            transition: color 0.25s ease;
+        }
+
+        .team-card-founder:hover .team-name {
+            color: #047857 !important;
+        }
+        .team-card-ceo:hover .team-name {
+            color: #0284C7 !important;
+        }
+        .team-card-dev:hover .team-name {
+            color: #4338CA !important;
+        }
+
+        .team-degree-pill {
+            display: inline-block;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #475569;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 2px 10px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            border: 1px solid #CBD5E1;
+            z-index: 2;
+            position: relative;
+            transition: all 0.25s ease;
+        }
+
+        .team-card:hover .team-degree-pill {
+            background: #0F172A;
+            color: #FFFFFF !important;
+            border-color: #0F172A;
+        }
+
+        /* Bio Description (Clear & High Contrast on Hover) */
+        .team-bio {
+            font-size: 0.79rem;
+            color: #475569;
+            line-height: 1.55;
+            margin-bottom: 12px;
+            z-index: 2;
+            position: relative;
+            text-align: center;
+            transition: color 0.25s ease, font-weight 0.25s ease;
+        }
+
+        .team-card:hover .team-bio {
+            color: #0F172A !important;
+            font-weight: 600;
+        }
+
+        /* Interactive Card Footer (Social & Connect) */
+        .team-card-footer {
+            border-top: 1px dashed rgba(203, 213, 225, 0.8);
+            padding-top: 10px;
+            margin-top: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 2;
+            position: relative;
+        }
+
+        .team-org-label {
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #64748B;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: color 0.25s ease;
+        }
+
+        .team-card:hover .team-org-label {
+            color: #0F172A;
+        }
+
+        .team-social-links {
+            display: flex;
+            gap: 5px;
+        }
+
+        .team-social-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(241, 245, 249, 0.9);
+            color: #475569;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .team-social-btn:hover {
+            background: #0A8B42;
+            color: #FFFFFF;
+            transform: translateY(-2px);
+        }
+
+        .team-card-ceo .team-social-btn:hover {
+            background: #0284C7;
+        }
+
+        .team-card-dev .team-social-btn:hover {
+            background: #6366F1;
+        }
+
+        /* Footer */
+        footer {
+            background: #051F19;
+            color: #94A3B8;
+            padding: 70px 0 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+
+        footer h6 {
+            color: #F8FAFC;
+            font-size: 0.95rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            letter-spacing: 0.3px;
+        }
+
+        .footer-link {
+            color: #94A3B8;
+            text-decoration: none;
+            transition: color 0.2s ease;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+
+        .footer-link:hover {
+            color: #FFB703;
+        }
+
+        .footer-admin-btn {
+            background: rgba(255, 183, 3, 0.15);
+            border: 1px solid rgba(255, 183, 3, 0.4);
+            color: #FFB703 !important;
+            font-weight: 700;
+            padding: 6px 14px;
+            border-radius: 10px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .footer-admin-btn:hover {
+            background: #FFB703;
+            color: #0F172A !important;
+        }
+
+        @media (max-width: 991px) {
+            .hero-heading { font-size: 2.6rem; }
+            .hero-subtitle { font-size: 1rem; }
+            .calculator-card { padding: 28px 20px; }
+            .driver-cta-banner { padding: 34px 22px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. Top Navbar (Clean, Modern & Responsive Header) -->
+    <nav class="navbar navbar-expand-lg navbar-custom">
+        <div class="header-container">
+            <!-- Brand Logo & Name -->
+            <a href="index.html" class="navbar-brand-badge" title="Oi Toto Mobility">
+                <img src="assets/branding/oi_toto_logo.png" alt="Oi Toto Logo" class="brand-logo-img">
+                <div class="brand-text-wrap">
+                    <span class="brand-title"><span class="brand-oi">Oi</span> Toto<span class="brand-exclaim">!</span></span>
+                    <span class="brand-sub-badge">Mobility</span>
+                </div>
+            </a>
+
+            <!-- Mobile Toggler -->
+            <button class="navbar-toggler header-mobile-toggle border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <i class="bi bi-list fs-2"></i>
+            </button>
+
+            <!-- Nav Links & Right Actions (No Simulator Button) -->
+            <div class="collapse navbar-collapse justify-content-between" id="navbarContent">
+                <!-- Navigation Menu Links -->
+                <div class="header-nav-menu">
+                    <a href="#portals" class="header-nav-link" id="navPortals"><i class="bi bi-grid-fill text-success"></i> Apps</a>
+                    <a href="#fareCalculator" class="header-nav-link" id="navFareCalc"><i class="bi bi-calculator-fill text-warning"></i> F. Calculator</a>
+                    <a href="#features" class="header-nav-link" id="navFeatures"><i class="bi bi-shield-check text-info"></i> Why Oi Toto?</a>
+                    <a href="#fareChart" class="header-nav-link" id="navFareChart"><i class="bi bi-pin-map-fill text-danger"></i> Fare</a>
+                    <a href="#coverage" class="header-nav-link" id="navCoverage"><i class="bi bi-geo-alt-fill text-primary"></i> Zone</a>
+                    <a href="#team" class="header-nav-link" id="navTeam"><i class="bi bi-people-fill text-success"></i> Team</a>
+                </div>
+
+                <!-- Right Actions: Language Switcher + Admin Login Only -->
+                <div class="header-actions-wrap">
+                    <div class="lang-toggle-wrap">
+                        <button type="button" class="lang-toggle-btn active" id="btnLangEn" onclick="setSiteLanguage('en')">EN</button>
+                        <button type="button" class="lang-toggle-btn" id="btnLangBn" onclick="setSiteLanguage('bn')">বাংলা</button>
+                        <button type="button" class="lang-toggle-btn" id="btnLangHi" onclick="setSiteLanguage('hi')">हिन्दी</button>
+                    </div>
+
+                    <a href="admin/login.html" class="btn-header-admin" id="btnNavLogin" title="Fleet Super Admin Portal">
+                        <i class="bi bi-shield-lock-fill"></i>
+                        <span id="btnNavLoginText">Admin Login</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 2. Hero Section -->
+    <section class="hero-section">
+        <div class="container position-relative" style="z-index: 1;">
+            <div class="row align-items-center g-4 g-lg-4">
+                <div class="col-lg-7">
+                    <!-- Live Pill -->
+                    <div class="hero-badge-pill" id="heroBadge">
+                        <span class="pulse-dot"></span>
+                        <span id="heroBadgeText">West Bengal's #1 Smart E-Rickshaw Network</span>
+                    </div>
+
+                    <h1 class="hero-heading" id="heroTitle">
+                        Tap. Book. <span class="gold-text">Chalo!</span>
+                    </h1>
+
+                    <div class="hero-subtitle mb-4" id="heroDesc">
+                        <p class="mb-2">Fast, eco-friendly, and transparent fixed-fare smart Toto commuting across West Bengal and Bihar. No bargaining, zero surge fees, and 100% verified driver partners at your fingertips.</p>
+                        <div class="hero-phone-booking-box mt-3">
+                            <span class="phone-box-text"><i class="bi bi-phone-vibrate-fill text-warning me-1"></i> Don't know how to use mobile apps? Book Oi Toto by phone:</span>
+                            <div class="d-inline-flex flex-wrap align-items-center gap-2 mt-1">
+                                <span class="phone-state-label">for W.B —</span>
+                                <a href="tel:9832199977" class="hero-booking-phone-badge"><i class="bi bi-telephone-fill me-1"></i> 9832199977</a>
+                                <span class="phone-state-label ms-md-2">for Bihar —</span>
+                                <a href="tel:9572453828" class="hero-booking-phone-badge"><i class="bi bi-telephone-fill me-1"></i> 9572453828</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Primary Action Buttons -->
+                    <div class="d-flex flex-wrap gap-3 mb-3">
+                        <a href="tel:7001315215" class="btn btn-oi-yellow btn-lg d-inline-flex align-items-center gap-2" id="heroBtnCustomerCare" title="Click to call Customer Care">
+                            <i class="bi bi-headset fs-5"></i>
+                            <span id="heroBtnCustomerCareText">Customer Care: 7001315215</span>
+                        </a>
+                        <a href="preview/index.html" class="btn btn-oi-glass btn-lg d-inline-flex align-items-center gap-2" id="heroBtnSimulator" title="Launch Dual App Simulator">
+                            <i class="bi bi-phone-fill fs-5"></i>
+                            <span id="heroBtnSimulatorText">Launch Dual App Simulator</span>
+                        </a>
+                    </div>
+
+                    <!-- Trust Indicators -->
+                    <div class="d-flex align-items-center gap-3 flex-wrap pt-2.5 border-top border-white border-opacity-10 small text-white-50" id="heroFeaturesStrip">
+                        <div><i class="bi bi-check-circle-fill text-warning me-1"></i> <span id="featFixedFare">Fixed ₹15.00 Base Fare</span></div>
+                        <div><i class="bi bi-check-circle-fill text-warning me-1"></i> <span id="featCashQr">Cash & UPI QR Accepted</span></div>
+                        <div><i class="bi bi-check-circle-fill text-warning me-1"></i> <span id="featVerified">100% KYC Verified Drivers</span></div>
+                    </div>
+                </div>
+
+                <div class="col-lg-5">
+                    <!-- Unique Dual-Shape Presentation (Choto Logo Circle + Animated Alternating Feature Orb) -->
+                    <div class="hero-unique-visual-wrap">
+                        <!-- Top Circle: Big Branded Logo Disc -->
+                        <div class="hero-logo-circle" title="Oi Toto Mobility">
+                            <img src="assets/branding/oi_toto_logo.png" alt="Oi Toto Logo" class="hero-circle-logo-img">
+                            <span class="logo-circle-tag"><span class="pulse-dot-sm"></span> CHALO!</span>
+                        </div>
+
+                        <!-- Bottom Shape: Alternating Background Animated Feature Orb -->
+                        <div class="hero-feature-orb theme-0" id="heroFeatureOrb" onclick="onHeroOrbClick()" title="Click to view full policy in Why Oi Toto">
+                            <div class="orb-slides-wrapper">
+                                <!-- 1. 100% Fixed Fares -->
+                                <div class="orb-slide-item active" id="orbSlide0">
+                                    <div class="orb-header-row">
+                                        <div class="orb-icon-circle"><i class="bi bi-currency-rupee"></i></div>
+                                        <span class="orb-tag-badge" id="orbTag0">Zero Surge Fee</span>
+                                    </div>
+                                    <h4 class="orb-headline" id="orbTitle0">100% Fixed Fares</h4>
+                                    <p class="orb-description" id="orbSub0">No surge pricing • No bargaining • Upfront locked</p>
+                                </div>
+
+                                <!-- 2. Green EV Toto -->
+                                <div class="orb-slide-item" id="orbSlide1">
+                                    <div class="orb-header-row">
+                                        <div class="orb-icon-circle"><i class="bi bi-battery-charging"></i></div>
+                                        <span class="orb-tag-badge" id="orbTag1">Lithium EV</span>
+                                    </div>
+                                    <h4 class="orb-headline" id="orbTitle1">Green EV Toto</h4>
+                                    <p class="orb-description" id="orbSub1">100% Smoke-free • Smart BMS • Clean Bengal</p>
+                                </div>
+
+                                <!-- 3. Verified Drivers & SOS -->
+                                <div class="orb-slide-item" id="orbSlide2">
+                                    <div class="orb-header-row">
+                                        <div class="orb-icon-circle"><i class="bi bi-shield-check"></i></div>
+                                        <span class="orb-tag-badge" id="orbTag2">Safety Verified</span>
+                                    </div>
+                                    <h4 class="orb-headline" id="orbTitle2">Verified Drivers & SOS</h4>
+                                    <p class="orb-description" id="orbSub2">Police KYC • In-app SOS • Aadhaar checked</p>
+                                </div>
+
+                                <!-- 4. Cash & UPI QR -->
+                                <div class="orb-slide-item" id="orbSlide3">
+                                    <div class="orb-header-row">
+                                        <div class="orb-icon-circle"><i class="bi bi-qr-code-scan"></i></div>
+                                        <span class="orb-tag-badge" id="orbTag3">UPI & Cash</span>
+                                    </div>
+                                    <h4 class="orb-headline" id="orbTitle3">Cash & UPI QR</h4>
+                                    <p class="orb-description" id="orbSub3">PhonePe • GPay • Paytm QR • Exact cash accepted</p>
+                                </div>
+                            </div>
+
+                            <!-- Bottom Controls / Progress Dots -->
+                            <div class="orb-footer-bar">
+                                <div class="orb-pills-nav">
+                                    <button type="button" class="orb-pill-dot active" id="orbDot0" onclick="event.stopPropagation(); setOrbSlide(0)" title="100% Fixed Fares"></button>
+                                    <button type="button" class="orb-pill-dot" id="orbDot1" onclick="event.stopPropagation(); setOrbSlide(1)" title="Green EV Toto"></button>
+                                    <button type="button" class="orb-pill-dot" id="orbDot2" onclick="event.stopPropagation(); setOrbSlide(2)" title="Verified Drivers & SOS"></button>
+                                    <button type="button" class="orb-pill-dot" id="orbDot3" onclick="event.stopPropagation(); setOrbSlide(3)" title="Cash & UPI QR"></button>
+                                </div>
+                                <span class="orb-click-prompt">
+                                    <span id="orbPromptText">Explore Features</span> <i class="bi bi-arrow-right"></i>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats Ribbon -->
+            <div class="stats-ribbon" id="heroStatsRibbon">
+                <div class="row g-2 g-md-3 align-items-center">
+                    <div class="col-6 col-md-3">
+                        <div class="stat-item">
+                            <div class="stat-number stat-counter" id="statNumFleet" data-start="0" data-target="500" data-decimals="0" data-prefix="" data-suffix="+">500+</div>
+                            <div class="stat-label" id="statLabelFleet">Active E-Rickshaws</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="stat-item">
+                            <div class="stat-number stat-counter" id="statNumFare" data-start="0" data-target="15" data-decimals="2" data-prefix="₹" data-suffix="">₹15.00</div>
+                            <div class="stat-label" id="statLabelFare">Starting Base Fare</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="stat-item">
+                            <div class="stat-number stat-counter" id="statNumRating" data-start="0" data-target="4.92" data-decimals="2" data-prefix="" data-suffix=" ★">4.92 ★</div>
+                            <div class="stat-label" id="statLabelRating">Rider Satisfaction</div>
+                        </div>
+                    </div>
+                    <div class="col-6 col-md-3">
+                        <div class="stat-item">
+                            <div class="stat-number stat-counter" id="statNumSurge" data-start="10" data-target="0" data-decimals="0" data-prefix="" data-suffix="%">0%</div>
+                            <div class="stat-label" id="statLabelSurge">Surge Fee Always</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 3. Core Ecosystem Bento Grid Portals -->
+    <section id="portals" class="py-5" style="background: var(--oi-bg-soft);">
+        <div class="container py-4">
+            <div class="section-header">
+                <span class="section-pill" id="badgeSystemPortals">Access Portals</span>
+                <h2 class="section-title" id="titleEcosystem">Oi Toto Platform Gateways</h2>
+                <p class="section-desc" id="subEcosystem">Three purpose-built interfaces powering everyday urban mobility for passengers, driver partners, and dispatch controllers.</p>
+            </div>
+
+            <div class="row g-4">
+                <!-- Portal 1: Customer Passenger App -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="bento-portal-card">
+                        <div class="portal-icon-box icon-box-cust">
+                            <i class="bi bi-person-heart"></i>
+                        </div>
+                        <h4 class="fw-bold mb-2 text-dark" id="cardCustTitle">1. Passenger App</h4>
+                        <p class="text-muted small mb-4 flex-grow-1" id="cardCustDesc">
+                            Book on demand with instant GPS pickup, live nearby Toto tracking, zero surge fixed pricing, and cash or UPI QR fare payments.
+                        </p>
+                        <div class="mb-4">
+                            <div class="feature-check-item">
+                                <i class="bi bi-check-circle-fill text-success"></i>
+                                <span id="cardCustF1">Live map pin drop & GPS auto-detection</span>
+                            </div>
+                            <div class="feature-check-item">
+                                <i class="bi bi-check-circle-fill text-success"></i>
+                                <span id="cardCustF2">Zero surge pricing — 100% upfront fares</span>
+                            </div>
+                            <div class="feature-check-item">
+                                <i class="bi bi-check-circle-fill text-success"></i>
+                                <span id="cardCustF3">4-digit OTP boarding security code</span>
+                            </div>
+                        </div>
+                        <a href="downloads/oi_toto_customer.apk" download="OiToto_Customer.apk" class="btn btn-oi-yellow w-100 py-2.5 fw-bold rounded-3 d-inline-flex align-items-center justify-content-center gap-2 shadow-sm" id="btnPreviewCust">
+                            <i class="bi bi-download fs-5"></i> <span id="btnPreviewCustText">Download App</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Portal 2: Driver Partner App -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="bento-portal-card">
+                        <div class="portal-icon-box icon-box-drv">
+                            <i class="bi bi-ev-front-fill"></i>
+                        </div>
+                        <h4 class="fw-bold mb-2 text-dark" id="cardDriverTitle">2. Driver Partner App</h4>
+                        <p class="text-muted small mb-4 flex-grow-1" id="cardDriverDesc">
+                            Duty radar mode, instant booking requests with passenger drop points, OTP trip start, and daily earnings ledger with instant settlement.
+                        </p>
+                        <div class="mb-4">
+                            <div class="feature-check-item">
+                                <i class="bi bi-check-circle-fill text-warning"></i>
+                                <span id="cardDriverF1">Low 5% platform fee — 95% driver net earnings</span>
+                            </div>
+                            <div class="feature-check-item">
+                                <i class="bi bi-check-circle-fill text-warning"></i>
+                                <span id="cardDriverF2">Daily automated bank transfers via ICICI</span>
+                            </div>
+                            <div class="feature-check-item">
+                                <i class="bi bi-check-circle-fill text-warning"></i>
+                                <span id="cardDriverF3">Digital passbook, trip history & rating score</span>
+                            </div>
+                        </div>
+                        <a href="downloads/oi_toto_driver.apk" download="OiToto_Driver.apk" class="btn btn-oi-yellow w-100 py-2.5 fw-bold rounded-3 d-inline-flex align-items-center justify-content-center gap-2 shadow-sm" id="btnPreviewDriver">
+                            <i class="bi bi-download fs-5"></i> <span id="btnPreviewDriverText">Download Partner App</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Portal 3: Fleet Management Admin Portal (Featured) -->
+                <div class="col-lg-4 col-md-12">
+                    <div class="bento-portal-card card-featured">
+                        <div class="d-flex justify-content-between align-items-start mb-3">
+                            <div class="portal-icon-box icon-box-adm mb-0">
+                                <i class="bi bi-shield-lock-fill"></i>
+                            </div>
+                            <span class="badge bg-success px-3 py-2 fw-bold" id="badgeActive">PROD LIVE</span>
+                        </div>
+                        <h4 class="fw-bold mb-2 text-dark" id="cardAdminTitle">3. Fleet Admin Portal</h4>
+                        <p class="text-muted small mb-4 flex-grow-1" id="cardAdminDesc">
+                            Unified central telemetry, live GPS vehicle radar, driver KYC approval audits, manual dispatch desk, and corporate escrow payout vouchers.
+                        </p>
+                        <div class="mb-4">
+                            <div class="feature-check-item">
+                                <i class="bi bi-check-circle-fill text-primary"></i>
+                                <span id="cardAdminF1">Live Leaflet & GPS radar map with geofencing</span>
+                            </div>
+                            <div class="feature-check-item">
+                                <i class="bi bi-check-circle-fill text-primary"></i>
+                                <span id="cardAdminF2">DPDP Act 2023 compliant audit logs & exit slip</span>
+                            </div>
+                            <div class="feature-check-item">
+                                <i class="bi bi-check-circle-fill text-primary"></i>
+                                <span id="cardAdminF3">ICICI corporate escrow ledger & settlement slips</span>
+                            </div>
+                        </div>
+                        <a href="admin/login.html" class="btn btn-oi-green w-100 py-2 fw-bold rounded-3 shadow-sm" id="btnCardAdminLogin">
+                            <i class="bi bi-box-arrow-in-right me-1"></i> <span id="btnCardAdminLoginText">Sign in to Admin Portal</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 4. Interactive Live Fare Calculator Section -->
+    <section id="fareCalculator" class="py-5">
+        <div class="container py-4">
+            <div class="calculator-card">
+                <div class="row align-items-center g-5">
+                    <div class="col-lg-7">
+                        <span class="badge bg-warning text-dark px-3 py-1 fw-bold mb-3" id="badgeCalc">Transparent Estimation</span>
+                        <h2 class="fw-bold mb-3" id="titleCalc">Calculate Your Fixed Fare Instantly</h2>
+                        <p class="text-white-50 mb-4" id="descCalc">
+                            No bargaining and no surge pricing. First 1 km base fare is fixed at ₹15.00, followed by ₹10.00/km onwards. Use the slider or select standard Kolkata commuter routes below.
+                        </p>
+
+                        <!-- Preset Route Select -->
+                        <div class="mb-4">
+                            <label class="form-label small fw-bold text-white-50" id="lblQuickRoute">Select Popular Route Preset:</label>
+                            <select class="form-select bg-dark text-white border-secondary py-2" id="quickRouteSelect" onchange="onSelectRoutePreset(this.value)">
+                                <option value="1.8">Shyambazar ➔ Hatibagan Market (1.8 km)</option>
+                                <option value="2.3">Hatibagan ➔ College Street Boi Para (2.3 km)</option>
+                                <option value="1.5">Sealdah Station ➔ Moulali Crossing (1.5 km)</option>
+                                <option value="1.2">Baghbazar Ghat ➔ Shyambazar Metro (1.2 km)</option>
+                                <option value="0.9">MG Road Metro ➔ College Square (0.9 km)</option>
+                                <option value="custom">Custom Distance (use slider below)</option>
+                            </select>
+                        </div>
+
+                        <!-- Distance Slider -->
+                        <div class="mb-3">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="small text-white-50" id="lblSliderDist">Trip Distance:</span>
+                                <strong class="text-warning"><span id="calcDistVal">1.8</span> km</strong>
+                            </div>
+                            <input type="range" class="calc-slider" id="calcSlider" min="0.5" max="10.0" step="0.1" value="1.8" oninput="updateFareFromSlider(this.value)">
+                            <div class="d-flex justify-content-between text-white-50 small mt-1">
+                                <span>0.5 km</span>
+                                <span>5.0 km</span>
+                                <span>10.0 km</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-5">
+                        <div class="calc-output-box">
+                            <span class="text-white-50 small text-uppercase fw-bold" id="lblEstFare">Total Fixed Upfront Fare</span>
+                            <div class="fare-price-big" id="calcFareBig">₹23.00</div>
+                            <div class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 px-3 py-1 mb-4" id="badgeZeroSurge">
+                                <i class="bi bi-shield-check me-1"></i> Zero Surge Guaranteed
+                            </div>
+
+                            <div class="d-flex justify-content-around text-start border-top border-secondary border-opacity-50 pt-3 mb-4">
+                                <div>
+                                    <small class="text-white-50 d-block" id="lblEstTime">Est. Commute</small>
+                                    <strong class="text-white" id="calcTimeVal">~8 mins</strong>
+                                </div>
+                                <div>
+                                    <small class="text-white-50 d-block" id="lblCo2">CO₂ Prevented</small>
+                                    <strong class="text-success" id="calcCo2Val">0.36 kg</strong>
+                                </div>
+                            </div>
+
+                            <a href="preview/index.html" class="btn btn-oi-yellow w-100 fw-bold py-2 rounded-3 shadow" id="btnCalcSimulator">
+                                <i class="bi bi-play-circle-fill me-1"></i> <span id="btnCalcSimulatorText">Book This Route in Simulator</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 5. Key Value Pillars -->
+    <section id="features" class="py-5" style="background: var(--oi-bg-soft);">
+        <div class="container py-4">
+            <div class="section-header">
+                <span class="section-pill" id="badgeTechAdv">Core Advantages</span>
+                <h2 class="section-title" id="titleWhyOiToto">Why Bengal Commuters Choose Oi Toto</h2>
+                <p class="section-desc" id="subWhyOiToto">Designed ground-up to solve the daily challenges of short-distance urban commuting with safety, dignity, and technological ease.</p>
+            </div>
+
+            <div class="row g-4" id="whyCardsRow">
+                <!-- 1. 100% Fixed Fares -->
+                <div class="col-lg-3 col-sm-6">
+                    <div class="pillar-card pillar-card-1" id="pillarCard1" onclick="togglePillarReactive(1)" title="Click to view benefit policy">
+                        <div class="pillar-icon-circle"><i class="bi bi-currency-rupee"></i></div>
+                        <h5 class="fw-bold mb-2 text-dark" id="featBox1Title">100% Fixed Fares</h5>
+                        <p class="text-muted small mb-3" id="featBox1Desc">No bargaining, no rain surge, and no peak hour spikes. The fare on screen is the final fare you pay.</p>
+                        <div class="pillar-reactive-drawer">
+                            <span class="pillar-reactive-pill" id="featPill1">
+                                <i class="bi bi-shield-check"></i> <span id="featPill1Text">Upfront Locked Fare</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Zero Emission Green EV -->
+                <div class="col-lg-3 col-sm-6">
+                    <div class="pillar-card pillar-card-2" id="pillarCard2" onclick="togglePillarReactive(2)" title="Click to view benefit policy">
+                        <div class="pillar-icon-circle"><i class="bi bi-battery-charging"></i></div>
+                        <h5 class="fw-bold mb-2 text-dark" id="featBox2Title">Zero Emission Green EV</h5>
+                        <p class="text-muted small mb-3" id="featBox2Desc">Fleet of modern Lithium-ion electric rickshaws providing quiet, smoke-free rides that keep Bengal clean.</p>
+                        <div class="pillar-reactive-drawer">
+                            <span class="pillar-reactive-pill" id="featPill2">
+                                <i class="bi bi-lightning-charge-fill"></i> <span id="featPill2Text">100% Smoke-Free</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Verified Drivers & SOS -->
+                <div class="col-lg-3 col-sm-6">
+                    <div class="pillar-card pillar-card-3" id="pillarCard3" onclick="togglePillarReactive(3)" title="Click to view benefit policy">
+                        <div class="pillar-icon-circle"><i class="bi bi-shield-check"></i></div>
+                        <h5 class="fw-bold mb-2 text-dark" id="featBox3Title">Verified Drivers & SOS</h5>
+                        <p class="text-muted small mb-3" id="featBox3Desc">Aadhaar and police KYC authenticated driver partners. In-app SOS button sends live coordinates to family.</p>
+                        <div class="pillar-reactive-drawer">
+                            <span class="pillar-reactive-pill" id="featPill3">
+                                <i class="bi bi-shield-lock-fill"></i> <span id="featPill3Text">Police & Aadhaar KYC</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Cash or UPI QR Codes -->
+                <div class="col-lg-3 col-sm-6">
+                    <div class="pillar-card pillar-card-4" id="pillarCard4" onclick="togglePillarReactive(4)" title="Click to view benefit policy">
+                        <div class="pillar-icon-circle"><i class="bi bi-qr-code-scan"></i></div>
+                        <h5 class="fw-bold mb-2 text-dark" id="featBox4Title">Cash or UPI QR Codes</h5>
+                        <p class="text-muted small mb-3" id="featBox4Desc">No change hassles. Scan PhonePe, GPay, Paytm QR code on driver dashboard or pay in cash as preferred.</p>
+                        <div class="pillar-reactive-drawer">
+                            <span class="pillar-reactive-pill" id="featPill4">
+                                <i class="bi bi-wallet2"></i> <span id="featPill4Text">Cash or Any UPI QR</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 6. Popular Kolkata Route Fare Chart (Stacked Layout: Top Rules & Metrics + Bottom Live Route Matrix) -->
+    <section id="fareChart" class="py-5">
+        <div class="container py-4">
+            <!-- Part 1: Top Section (Heading, Description, 3 Metrics Cards & Formula Banner) -->
+            <div class="text-center mx-auto mb-4" style="max-width: 1180px;">
+                <span class="section-pill mb-2" id="badgeFareChart">Transparent Price Table</span>
+                <h2 class="fw-bold mb-3 text-dark" id="titleRoutes">Popular Kolkata Commute Routes</h2>
+                <p class="text-muted mx-auto" id="descRoutes">
+                    Oi Toto follows a transparent kilometer-based price structure approved for e-rickshaws. Base fare covers the first kilometer at ₹15.00, and subsequent distance is ₹10.00/km.
+                </p>
+            </div>
+
+            <!-- 3 Modern Metric Tiles (In 3 Columns horizontally on Top) -->
+            <div class="row g-3 mb-4 justify-content-center">
+                <!-- Tile 1: Base Fare -->
+                <div class="col-md-4 col-sm-6">
+                    <div class="fare-rate-tile tile-base h-100">
+                        <div class="tile-icon-wrap"><i class="bi bi-geo-alt-fill"></i></div>
+                        <div class="tile-content">
+                            <span class="tile-label" id="lblBaseFareRow">Base Fare (First 1 km):</span>
+                            <div class="tile-value">₹15<span class="tile-unit">.00</span></div>
+                        </div>
+                        <span class="tile-tag-badge">Flat Start</span>
+                    </div>
+                </div>
+
+                <!-- Tile 2: Subsequent Rate -->
+                <div class="col-md-4 col-sm-6">
+                    <div class="fare-rate-tile tile-km h-100">
+                        <div class="tile-icon-wrap"><i class="bi bi-speedometer2"></i></div>
+                        <div class="tile-content">
+                            <span class="tile-label" id="lblPerKmRow">Subsequent Rate:</span>
+                            <div class="tile-value">₹10<span class="tile-unit">.00 / km</span></div>
+                        </div>
+                        <span class="tile-tag-badge">Exact Distance</span>
+                    </div>
+                </div>
+
+                <!-- Tile 3: Surge Policy -->
+                <div class="col-md-4 col-sm-12">
+                    <div class="fare-rate-tile tile-surge h-100">
+                        <div class="tile-icon-wrap"><i class="bi bi-shield-check"></i></div>
+                        <div class="tile-content">
+                            <span class="tile-label" id="lblDiscountRow">Surge Pricing Policy:</span>
+                            <div class="tile-value text-success" id="valDiscountRow">Zero Surge Fees</div>
+                        </div>
+                        <span class="tile-tag-badge bg-success bg-opacity-10 text-success">100% Locked</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Formula Banner (Spanning neatly across center) -->
+            <div class="fare-formula-banner mb-5">
+                <div class="d-flex align-items-center justify-content-between flex-wrap gap-3">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="formula-icon-box"><i class="bi bi-calculator-fill text-success fs-5"></i></div>
+                        <div>
+                            <strong class="text-dark small d-block">Government Verified Rate Formula</strong>
+                            <div class="formula-code-badge mt-1">
+                                <code>Fare = ₹15.00 + (Km - 1) × ₹10.00</code>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center gap-3 text-muted small flex-wrap">
+                        <span><i class="bi bi-check2-circle text-success me-1"></i>No Rain Surge</span>
+                        <span><i class="bi bi-check2-circle text-success me-1"></i>No Peak Hours</span>
+                        <span><i class="bi bi-check2-circle text-success me-1"></i>GPS Metered</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Part 2: Bottom Section (Wide Live Commute Rate Chart Table Card) -->
+            <div class="rate-table-card shadow-sm" id="mainRateTableCard">
+                <!-- Card Header -->
+                <div class="rate-card-header">
+                    <div class="d-flex align-items-center gap-2.5">
+                        <span class="pulse-dot"></span>
+                        <div>
+                            <h6 class="rate-card-title mb-0" id="tableHeaderTitle">
+                                <i class="bi bi-pin-map text-danger me-1"></i> Kolkata Live Commute Rate Chart
+                            </h6>
+                            <small class="text-muted" id="tableHeaderSub">Click any route to load into fare calculator & test</small>
+                        </div>
+                    </div>
+                    <span class="badge bg-success bg-opacity-10 text-success fw-bold px-3 py-1.5 rounded-pill" style="font-size: 0.72rem; letter-spacing: 0.5px;">
+                        <i class="bi bi-check-circle-fill me-1"></i> ACTIVE RATES
+                    </span>
+                </div>
+
+                <!-- Interactive Corridor Filter Pills -->
+                <div class="rate-table-filter-bar">
+                    <span class="filter-label"><i class="bi bi-funnel-fill text-success"></i> Corridor:</span>
+                    <div class="d-flex align-items-center gap-1.5 flex-wrap">
+                        <button type="button" class="route-filter-btn active" id="btnFilterAllRoutes" onclick="filterRouteRates('all')">All Routes (6)</button>
+                        <button type="button" class="route-filter-btn" id="btnFilterNorthRoutes" onclick="filterRouteRates('north')">North Kolkata (4)</button>
+                        <button type="button" class="route-filter-btn" id="btnFilterCentralRoutes" onclick="filterRouteRates('central')">Central Kolkata (2)</button>
+                        <button type="button" class="route-filter-btn" id="btnFilterCheapRoutes" onclick="filterRouteRates('under20')">Under ₹20 (2)</button>
+                    </div>
+                </div>
+
+                <!-- Table / Cards Responsive Container -->
+                <div class="rate-table-responsive">
+                    <table class="table align-middle mb-0">
+                        <thead class="table-header-row">
+                            <tr>
+                                <th id="thPickup" class="col-pickup"><i class="bi bi-circle-fill text-danger me-1" style="font-size: 0.65rem;"></i> Pickup Point</th>
+                                <th id="thDrop" class="col-drop"><i class="bi bi-geo-alt-fill text-success me-1"></i> Destination</th>
+                                <th id="thDist" class="col-dist"><i class="bi bi-pin-map text-primary me-1"></i> Distance</th>
+                                <th id="thTime" class="col-time"><i class="bi bi-clock text-secondary me-1"></i> Avg Time</th>
+                                <th id="thFare" class="col-fare"><i class="bi bi-currency-rupee text-warning me-1"></i> Fixed Fare</th>
+                                <th id="thAction" class="col-action text-end"><i class="bi bi-lightning-charge text-success me-1"></i> Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="small" id="fareTableBody">
+                            <!-- Dynamic rows loaded by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. Driver Partner Onboarding Banner -->
+    <section id="driverPartner" class="py-5" style="background: var(--oi-bg-soft);">
+        <div class="container py-4">
+            <div class="driver-cta-banner">
+                <div class="row align-items-center g-4">
+                    <div class="col-lg-8">
+                        <span class="badge bg-warning text-dark px-3 py-1 fw-bold mb-3" id="badgeDriverPartner">Partner with Dignity</span>
+                        <h2 class="fw-bold mb-3" id="titleDriveEarn">Drive Your Own Toto, Earn ₹25,000+ per Month!</h2>
+                        <p class="text-white-50 mb-4" id="descDriveEarn">
+                            Join West Bengal\'s fastest growing EV aggregator. Enjoy flexible working hours, respect from commuters, low 5% platform commission, and daily automated bank settlements.
+                        </p>
+                        <div class="row g-3 text-white small">
+                            <div class="col-sm-4">
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="bi bi-wallet2 text-warning fs-3"></i>
+                                    <div><strong id="kpi1Title">Daily Settlement</strong><br><span class="text-white-50" id="kpi1Sub">ICICI Auto-Transfer</span></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="bi bi-clock-history text-warning fs-3"></i>
+                                    <div><strong id="kpi2Title">Flexible Hours</strong><br><span class="text-white-50" id="kpi2Sub">Go on/off duty anytime</span></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="bi bi-headset text-warning fs-3"></i>
+                                    <div><strong id="kpi3Title">24x7 Help Desk</strong><br><span class="text-white-50" id="kpi3Sub">Control Room Backup</span></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 text-lg-end">
+                        <a href="admin/login.html" class="btn btn-oi-yellow btn-lg px-4 py-3 fw-bold shadow" id="btnAdminAccessOnly">
+                            <i class="bi bi-shield-lock-fill me-1"></i> <span id="btnAdminAccessOnlyText">Admin Portal Login</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 8. Service Zones & Hubs -->
+    <section id="coverage" class="py-5">
+        <div class="container py-4 text-center">
+            <span class="section-pill" id="badgeCoverage">Operational Corridors</span>
+            <h2 class="section-title mb-4" id="titleCoverage">Current Service Hubs Across Bengal</h2>
+            <div class="row g-4 justify-content-center">
+                <div class="col-lg-3 col-6">
+                    <div class="zone-card">
+                        <span class="zone-icon text-success"><i class="bi bi-compass"></i></span>
+                        <h6 class="fw-bold text-dark mb-1" id="hubNorthTitle">Kolkata North</h6>
+                        <small class="text-muted d-block" id="hubNorthSub">Shyambazar, Hatibagan, Bagbazar, Sovabazar</small>
+                        <span class="badge bg-success bg-opacity-10 text-success fw-bold mt-2" style="font-size: 0.7rem;">98 Totos Active</span>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-6">
+                    <div class="zone-card">
+                        <span class="zone-icon text-primary"><i class="bi bi-geo-alt"></i></span>
+                        <h6 class="fw-bold text-dark mb-1" id="hubCentralTitle">Kolkata Central</h6>
+                        <small class="text-muted d-block" id="hubCentralSub">Sealdah, College Street, MG Road, Moulali</small>
+                        <span class="badge bg-primary bg-opacity-10 text-primary fw-bold mt-2" style="font-size: 0.7rem;">85 Totos Active</span>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-6">
+                    <div class="zone-card">
+                        <span class="zone-icon text-warning"><i class="bi bi-pin-map"></i></span>
+                        <h6 class="fw-bold text-dark mb-1" id="hubHowrahTitle">Howrah Corridor</h6>
+                        <small class="text-muted d-block" id="hubHowrahSub">Howrah Station, Kadamtala, Foreshore Road</small>
+                        <span class="badge bg-warning bg-opacity-10 text-warning fw-bold mt-2" style="font-size: 0.7rem;">64 Totos Active</span>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-6">
+                    <div class="zone-card">
+                        <span class="zone-icon text-info"><i class="bi bi-signpost-split"></i></span>
+                        <h6 class="fw-bold text-dark mb-1" id="hubNorthBengalTitle">North Bengal Hub</h6>
+                        <small class="text-muted d-block" id="hubNorthBengalSub">Siliguri Junction & Hashmi Chowk Corridor</small>
+                        <span class="badge bg-info bg-opacity-10 text-info fw-bold mt-2" style="font-size: 0.7rem;">52 Totos Active</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 9. Oi Toto Member & Team Section -->
+    <section id="team" class="team-section-wrap">
+        <div class="team-ambient-glow-1"></div>
+        <div class="team-ambient-glow-2"></div>
+        <div class="container text-center position-relative" style="z-index: 2;">
+            <span class="section-pill mb-1" id="badgeTeam" style="font-size: 0.72rem; padding: 4px 12px;"><i class="bi bi-stars text-warning me-1"></i> Leadership & Builders</span>
+            <h2 class="section-title mb-1" id="titleTeam" style="font-size: 1.55rem; font-weight: 800;">Oi Toto Member & Team</h2>
+            <p class="section-desc mb-4" id="subTeam" style="max-width: 980px; margin-left: auto; margin-right: auto; font-size: 0.84rem; color: #64748B;">
+                The visionary leaders, automotive engineers, and software architects pioneering West Bengal's smartest electric transit network.
+            </p>
+
+            <div class="row g-4 justify-content-center">
+                <!-- CARD 1: FOUNDER -->
+                <div class="col-lg-4 col-md-6 team-card-col">
+                    <div class="team-card team-card-founder">
+                        <div>
+                            <!-- Avatar with rotating halo and fallback -->
+                            <div class="team-avatar-container">
+                                <div class="team-avatar-ring"></div>
+                                <div class="team-avatar-inner">
+                                    <img src="assets/team/zohirul_islam.png" onerror="this.onerror=null; this.src='assets/team/zohirul_islam.svg';" alt="Mr. Zohirul Islam" class="team-avatar-img" style="object-position: center 20%;">
+                                </div>
+                                <div class="team-verified-pill text-success" title="Verified Founder">
+                                    <i class="bi bi-patch-check-fill"></i>
+                                </div>
+                            </div>
+
+                            <span class="team-role-pill role-pill-founder" id="teamRoleFounder">
+                                <i class="bi bi-award-fill text-warning"></i> Founder & Visionary
+                            </span>
+
+                            <h4 class="team-name" id="teamNameFounder">Mr. Zohirul Islam</h4>
+                            <span class="team-degree-pill" id="teamDegFounder">M.A, M.Ed</span>
+
+                            <p class="team-bio" id="teamBioFounder">
+                                Academic visionary and pioneer of clean urban transit in Bengal. Dedicated to bridging socio-economic empowerment for grassroots e-rickshaw drivers while delivering fixed, dignified, and safe daily mobility for passengers.
+                            </p>
+                        </div>
+
+                        <!-- Card Footer -->
+                        <div class="team-card-footer">
+                            <span class="team-org-label">
+                                <i class="bi bi-ev-front-fill text-success"></i> Oi Toto Board
+                            </span>
+                            <div class="team-social-links">
+                                <a href="javascript:void(0)" class="team-social-btn" title="Executive Profile"><i class="bi bi-person-badge-fill"></i></a>
+                                <a href="javascript:void(0)" class="team-social-btn" title="Contact Founder"><i class="bi bi-envelope-fill"></i></a>
+                                <a href="javascript:void(0)" class="team-social-btn" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARD 2: CEO -->
+                <div class="col-lg-4 col-md-6 team-card-col">
+                    <div class="team-card team-card-ceo">
+                        <div>
+                            <!-- Avatar with rotating halo and fallback -->
+                            <div class="team-avatar-container">
+                                <div class="team-avatar-ring"></div>
+                                <div class="team-avatar-inner">
+                                    <img src="assets/team/monirul_islam.jpg" onerror="this.onerror=null; this.src='assets/team/monirul_islam.svg';" alt="Mr. Monirul Islam" class="team-avatar-img" style="object-position: center 8%;">
+                                </div>
+                                <div class="team-verified-pill text-primary" title="Chief Executive Officer">
+                                    <i class="bi bi-lightning-charge-fill"></i>
+                                </div>
+                            </div>
+
+                            <span class="team-role-pill role-pill-ceo" id="teamRoleCeo">
+                                <i class="bi bi-cpu-fill text-primary"></i> Chief Executive Officer (CEO)
+                            </span>
+
+                            <h4 class="team-name" id="teamNameCeo">Mr. Monirul Islam</h4>
+                            <span class="team-degree-pill" id="teamDegCeo">Electrical Engineer</span>
+
+                            <p class="team-bio" id="teamBioCeo">
+                                Electrical Engineer directing Oi Toto's technological hardware, smart lithium battery safety, and operational fleet scaling. Driving reliable green energy mobility across Kolkata and Bengal corridors.
+                            </p>
+                        </div>
+
+                        <!-- Card Footer -->
+                        <div class="team-card-footer">
+                            <span class="team-org-label">
+                                <i class="bi bi-gear-wide-connected text-primary"></i> Fleet Operations
+                            </span>
+                            <div class="team-social-links">
+                                <a href="javascript:void(0)" class="team-social-btn" title="Executive Profile"><i class="bi bi-person-badge-fill"></i></a>
+                                <a href="javascript:void(0)" class="team-social-btn" title="Contact CEO"><i class="bi bi-envelope-fill"></i></a>
+                                <a href="javascript:void(0)" class="team-social-btn" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARD 3: DEVELOPER -->
+                <div class="col-lg-4 col-md-6 team-card-col">
+                    <div class="team-card team-card-dev">
+                        <div>
+                            <!-- Avatar with rotating halo and fallback -->
+                            <div class="team-avatar-container">
+                                <div class="team-avatar-ring"></div>
+                                <div class="team-avatar-inner">
+                                    <img src="assets/team/nasirul_islam_shakil.jpg" onerror="this.onerror=null; this.src='assets/team/nasirul_islam_shakil.svg';" alt="Mr. Nasirul Islam_Shakil" class="team-avatar-img" style="object-position: center 20%;">
+                                </div>
+                                <div class="team-verified-pill text-info" title="Lead Architect">
+                                    <i class="bi bi-code-slash"></i>
+                                </div>
+                            </div>
+
+                            <span class="team-role-pill role-pill-dev" id="teamRoleDev">
+                                <i class="bi bi-terminal-fill" style="color: #6366F1;"></i> Lead Developer & Architect
+                            </span>
+
+                            <h4 class="team-name" id="teamNameDev">Mr. Nasirul Islam_Shakil</h4>
+                            <span class="team-degree-pill" id="teamDegDev">M.A, M.Ed & Computer Science</span>
+
+                            <p class="team-bio" id="teamBioDev">
+                                Bridging education pedagogy and high-performance software engineering. Chief architect of Oi Toto's real-time matching algorithms, offline QR payments, concurrency-safe dispatch engine, and mobile apps.
+                            </p>
+                        </div>
+
+                        <!-- Card Footer -->
+                        <div class="team-card-footer">
+                            <span class="team-org-label">
+                                <i class="bi bi-terminal text-info"></i> Core Systems Lab
+                            </span>
+                            <div class="team-social-links">
+                                <a href="javascript:void(0)" class="team-social-btn" title="GitHub / Tech Stack"><i class="bi bi-github"></i></a>
+                                <a href="javascript:void(0)" class="team-social-btn" title="Contact Developer"><i class="bi bi-envelope-fill"></i></a>
+                                <a href="javascript:void(0)" class="team-social-btn" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 10. Modern Footer -->
+    <footer>
+        <div class="container">
+            <div class="row g-4 mb-5">
+                <div class="col-lg-4">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <img src="assets/branding/oi_toto_logo.png" alt="Oi Toto Logo" style="height: 44px; border-radius: 10px;">
+                        <span class="fs-4 fw-bold text-white"><span style="color: #FFB703;">Oi</span> Toto!</span>
+                    </div>
+                    <p class="small text-white-50 mb-3" id="footerAbout">
+                        West Bengal\'s premier smart and secure electric rickshaw aggregator platform. Making daily urban last-mile travel eco-friendly, predictable, and dignified.
+                    </p>
+                    <div class="d-flex gap-2 flex-wrap">
+                        <span class="badge bg-dark border text-warning"><i class="bi bi-shield-check"></i> RBI Escrow Compliant</span>
+                        <span class="badge bg-dark border text-success"><i class="bi bi-battery-charging"></i> Zero Emission EV</span>
+                    </div>
+                </div>
+
+                <div class="col-lg-2 col-6">
+                    <h6 id="footerPortalsTitle">System Portals</h6>
+                    <ul class="list-unstyled">
+                        <li><a href="preview/index.html" class="footer-link" id="footerCustApp">Passenger App</a></li>
+                        <li><a href="preview/index.html" class="footer-link" id="footerDriverApp">Driver Partner App</a></li>
+                        <li class="mt-2"><a href="admin/login.html" class="footer-admin-btn" id="footerAdminLink"><i class="bi bi-shield-lock-fill"></i> Admin Portal</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-2 col-6">
+                    <h6 id="footerCompanyTitle">Company</h6>
+                    <ul class="list-unstyled" id="footerCompanyList">
+                        <li><a href="#features" class="footer-link">About Us</a></li>
+                        <li><a href="#fareChart" class="footer-link">Fare Policy</a></li>
+                        <li><a href="#coverage" class="footer-link">Service Zones</a></li>
+                        <li><a href="#team" class="footer-link" id="footerTeamLink">Leadership & Team</a></li>
+                        <li><a href="#driverPartner" class="footer-link">Driver Safety</a></li>
+                    </ul>
+                </div>
+
+                <div class="col-lg-4">
+                    <h6 id="footerContactTitle">Support & Emergency</h6>
+                    <ul class="list-unstyled small text-white-50" id="footerContactList">
+                        <li class="mb-2"><i class="bi bi-telephone text-warning me-2"></i> Helpline: <a href="tel:7331315215" class="text-white text-decoration-none fw-bold">7331315215</a></li>
+                        <li class="mb-2"><i class="bi bi-envelope text-warning me-2"></i> Email: <a href="mailto:oitoto.in@gmail.com" class="text-white text-decoration-none fw-bold">oitoto.in@gmail.com</a></li>
+                        <li class="mb-2"><i class="bi bi-geo-alt text-warning me-2"></i> Head Office: <span class="text-white">Chanchal, Near College, Malda, West Bengal, India</span></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-top border-secondary border-opacity-25 pt-4 d-flex flex-wrap justify-content-between align-items-center small text-white-50">
+                <div id="footerCopy">© 2026 Oi Toto Mobility Private Limited. All rights reserved.</div>
+                <div id="footerTech">Technology & Banking Partner: ICICI Corporate Banking & UPI</div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Reactive Route Sync Toast Notification -->
+    <div class="route-sync-toast" id="routeSyncToast">
+        <i class="bi bi-check-circle-fill text-success fs-5"></i>
+        <div>
+            <strong class="d-block text-white" id="toastTitle">Fare Calculator Synced!</strong>
+            <span class="small text-white-50" id="routeSyncToastText">Route loaded into fare estimator</span>
+        </div>
+    </div>
+
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        let currentSiteLang = 'en';
+        let currentRouteFilter = 'all';
+        let selectedRouteId = null;
+        let toastTimeout = null;
+
+        const SITE_I18N = {
+            en: {
+                siteTitle: 'Oi Toto! — Tap. Book. Chalo! | Smart E-Rickshaw Network & Fleet Portal',
+                navPortals: '<i class="bi bi-grid-fill text-success"></i> Apps',
+                navFareCalc: '<i class="bi bi-calculator-fill text-warning"></i> F. Calculator',
+                navFeatures: '<i class="bi bi-shield-check text-info"></i> Why Oi Toto?',
+                navFareChart: '<i class="bi bi-pin-map-fill text-danger"></i> Fare',
+                navCoverage: '<i class="bi bi-geo-alt-fill text-primary"></i> Zone',
+                navTeam: '<i class="bi bi-people-fill text-success"></i> Team',
+                btnNavSimulatorText: 'Simulator',
+                btnNavLoginText: 'Admin Login',
+                heroBadgeText: 'West Bengal\'s #1 Smart E-Rickshaw Network',
+                heroTitle: 'Tap. Book. <span class="gold-text">Chalo!</span>',
+                heroDesc: 'Fast, eco-friendly, and transparent fixed-fare smart Toto commuting across West Bengal and Bihar. No bargaining, zero surge fees, and 100% verified driver partners at your fingertips.<div class="hero-phone-booking-box mt-3"><span class="phone-box-text"><i class="bi bi-phone-vibrate-fill text-warning me-1"></i> Don\'t know how to use mobile apps? Book Oi Toto by phone:</span><div class="d-inline-flex flex-wrap align-items-center gap-2 mt-1"><span class="phone-state-label">for W.B —</span><a href="tel:9832199977" class="hero-booking-phone-badge"><i class="bi bi-telephone-fill me-1"></i> 9832199977</a><span class="phone-state-label ms-md-2">for Bihar —</span><a href="tel:9572453828" class="hero-booking-phone-badge"><i class="bi bi-telephone-fill me-1"></i> 9572453828</a></div></div>',
+                heroBtnCustomerCareText: 'Customer Care: 7001315215',
+                heroBtnSimulatorText: 'Launch Dual App Simulator',
+                orbTitle0: '100% Fixed Fares',
+                orbSub0: 'No surge pricing • No bargaining • Upfront locked',
+                orbTag0: 'Zero Surge Fee',
+                orbTitle1: 'Green EV Toto',
+                orbSub1: '100% Smoke-free • Smart BMS • Clean Bengal',
+                orbTag1: 'Lithium EV',
+                orbTitle2: 'Verified Drivers & SOS',
+                orbSub2: 'Police KYC • In-app SOS • Aadhaar checked',
+                orbTag2: 'Safety Verified',
+                orbTitle3: 'Cash & UPI QR',
+                orbSub3: 'PhonePe • GPay • Paytm QR • Exact cash accepted',
+                orbTag3: 'UPI & Cash',
+                orbPromptText: 'Explore Features',
+                featFixedFare: 'Fixed ₹15.00 Base Fare',
+                featCashQr: 'Cash & UPI QR Accepted',
+                featVerified: '100% KYC Verified Drivers',
+                badgeEngineActive: '<i class="bi bi-broadcast me-1"></i> Live Dispatch Radar Active',
+                mockPickup: 'Shyambazar Five-Point Crossing',
+                mockDrop: 'Hatibagan Market Crossing',
+                statLabelFleet: 'Active E-Rickshaws',
+                statLabelFare: 'Starting Base Fare',
+                statLabelRating: 'Rider Satisfaction',
+                statLabelSurge: 'Surge Fee Always',
+                badgeSystemPortals: 'Access Portals',
+                titleEcosystem: 'Oi Toto Platform Gateways',
+                subEcosystem: 'Three purpose-built interfaces powering everyday urban mobility for passengers, driver partners, and dispatch controllers.',
+                cardCustTitle: '1. Passenger App',
+                cardCustDesc: 'Book on demand with instant GPS pickup, live nearby Toto tracking, zero surge fixed pricing, and cash or UPI QR fare payments.',
+                cardCustF1: 'Live map pin drop & GPS auto-detection',
+                cardCustF2: 'Zero surge pricing — 100% upfront fares',
+                cardCustF3: '4-digit OTP boarding security code',
+                btnPreviewCustText: 'Download App',
+                cardDriverTitle: '2. Driver Partner App',
+                cardDriverDesc: 'Duty radar mode, instant booking requests with passenger drop points, OTP trip start, and daily earnings ledger with instant settlement.',
+                cardDriverF1: 'Low 5% platform fee — 95% driver net earnings',
+                cardDriverF2: 'Daily automated bank transfers via ICICI',
+                cardDriverF3: 'Digital passbook, trip history & rating score',
+                btnPreviewDriverText: 'Download Partner App',
+                cardAdminTitle: '3. Fleet Admin Portal',
+                badgeActive: 'PROD LIVE',
+                cardAdminDesc: 'Unified central telemetry, live GPS vehicle radar, driver KYC approval audits, manual dispatch desk, and corporate escrow payout vouchers.',
+                cardAdminF1: 'Live Leaflet & GPS radar map with geofencing',
+                cardAdminF2: 'DPDP Act 2023 compliant audit logs & exit slip',
+                cardAdminF3: 'ICICI corporate escrow ledger & settlement slips',
+                btnCardAdminLoginText: 'Sign in to Admin Portal',
+                badgeCalc: 'Transparent Estimation',
+                titleCalc: 'Calculate Your Fixed Fare Instantly',
+                descCalc: 'No bargaining and no surge pricing. First 1 km base fare is fixed at ₹15.00, followed by ₹10.00/km onwards. Use the slider or select standard Kolkata commuter routes below.',
+                lblQuickRoute: 'Select Popular Route Preset:',
+                lblSliderDist: 'Trip Distance:',
+                lblEstFare: 'Total Fixed Upfront Fare',
+                badgeZeroSurge: '<i class="bi bi-shield-check me-1"></i> Zero Surge Guaranteed',
+                lblEstTime: 'Est. Commute',
+                lblCo2: 'CO₂ Prevented',
+                btnCalcSimulatorText: 'Book This Route in Simulator',
+                badgeTechAdv: 'Core Advantages',
+                titleWhyOiToto: 'Why Bengal Commuters Choose Oi Toto',
+                subWhyOiToto: 'Designed ground-up to solve the daily challenges of short-distance urban commuting with safety, dignity, and technological ease.',
+                featBox1Title: '100% Fixed Fares',
+                featBox1Desc: 'No bargaining, no rain surge, and no peak hour spikes. The fare on screen is the final fare you pay.',
+                featBox2Title: 'Zero Emission Green EV',
+                featBox2Desc: 'Fleet of modern Lithium-ion electric rickshaws providing quiet, smoke-free rides that keep Bengal clean.',
+                featBox3Title: 'Verified Drivers & SOS',
+                featBox3Desc: 'Aadhaar and police KYC authenticated driver partners. In-app SOS button sends live coordinates to family.',
+                featBox4Title: 'Cash or UPI QR Codes',
+                featBox4Desc: 'No change hassles. Scan PhonePe, GPay, Paytm QR code on driver dashboard or pay in cash as preferred.',
+                featPill1Text: 'Upfront Locked Fare',
+                featPill2Text: '100% Smoke-Free',
+                featPill3Text: 'Police & Aadhaar KYC',
+                featPill4Text: 'Cash or Any UPI QR',
+                badgeFareChart: 'Transparent Price Table',
+                titleRoutes: 'Popular Kolkata Commute Routes',
+                descRoutes: 'Oi Toto follows a transparent kilometer-based price structure approved for e-rickshaws. Base fare covers the first kilometer at ₹15.00, and subsequent distance is ₹10.00/km.',
+                lblBaseFareRow: 'Base Fare (First 1 km):',
+                lblPerKmRow: 'Subsequent Rate:',
+                lblDiscountRow: 'Surge Pricing Policy:',
+                valDiscountRow: 'Zero Surge Fees',
+                tableHeaderTitle: '<i class="bi bi-pin-map text-danger me-2"></i> Kolkata Live Commute Rate Chart',
+                tableHeaderSub: 'Click any route to load into fare calculator & test',
+                btnFilterAllRoutes: 'All Routes (6)',
+                btnFilterNorthRoutes: 'North Kolkata (4)',
+                btnFilterCentralRoutes: 'Central Kolkata (2)',
+                btnFilterCheapRoutes: 'Under ₹20 (2)',
+                thPickup: 'Pickup Point',
+                thDrop: 'Destination',
+                thDist: 'Distance',
+                thTime: 'Avg Time',
+                thFare: 'Fixed Fare',
+                thAction: 'Action',
+                badgeDriverPartner: 'Partner with Dignity',
+                titleDriveEarn: 'Drive Your Own Toto, Earn ₹25,000+ per Month!',
+                descDriveEarn: 'Join West Bengal\'s fastest growing EV aggregator. Enjoy flexible working hours, respect from commuters, low 5% platform commission, and daily automated bank settlements.',
+                kpi1Title: 'Daily Settlement',
+                kpi1Sub: 'ICICI Auto-Transfer',
+                kpi2Title: 'Flexible Hours',
+                kpi2Sub: 'Go on/off duty anytime',
+                kpi3Title: '24x7 Help Desk',
+                kpi3Sub: 'Control Room Backup',
+                btnAdminAccessOnlyText: 'Admin Portal Login',
+                badgeCoverage: 'Operational Corridors',
+                titleCoverage: 'Current Service Hubs Across Bengal',
+                hubNorthTitle: 'Kolkata North',
+                hubNorthSub: 'Shyambazar, Hatibagan, Bagbazar, Sovabazar',
+                hubCentralTitle: 'Kolkata Central',
+                hubCentralSub: 'Sealdah, College Street, MG Road, Moulali',
+                hubHowrahTitle: 'Howrah Corridor',
+                hubHowrahSub: 'Howrah Station, Kadamtala, Foreshore Road',
+                hubNorthBengalTitle: 'North Bengal Hub',
+                hubNorthBengalSub: 'Siliguri Junction & Hashmi Chowk Corridor',
+                badgeTeam: '<i class="bi bi-stars text-warning me-1"></i> Leadership & Builders',
+                titleTeam: 'Oi Toto Member & Team',
+                subTeam: 'The visionary leaders, automotive engineers, and software architects pioneering West Bengal\'s smartest electric transit network.',
+                teamRoleFounder: '<i class="bi bi-award-fill text-warning"></i> Founder & Visionary',
+                teamNameFounder: 'Mr. Zohirul Islam',
+                teamDegFounder: 'M.A, M.Ed',
+                teamBioFounder: 'Academic visionary and pioneer of clean urban transit in Bengal. Dedicated to bridging socio-economic empowerment for grassroots e-rickshaw drivers while delivering fixed, dignified, and safe daily mobility for passengers.',
+                teamRoleCeo: '<i class="bi bi-cpu-fill text-primary"></i> Chief Executive Officer (CEO)',
+                teamNameCeo: 'Mr. Monirul Islam',
+                teamDegCeo: 'Electrical Engineer',
+                teamBioCeo: 'Electrical Engineer directing Oi Toto\'s technological hardware, smart lithium battery safety, and operational fleet scaling. Driving reliable green energy mobility across Kolkata and Bengal corridors.',
+                teamRoleDev: '<i class="bi bi-terminal-fill" style="color: #6366F1;"></i> Lead Developer & Architect',
+                teamNameDev: 'Mr. Nasirul Islam_Shakil',
+                teamDegDev: 'M.A, M.Ed & Computer Science',
+                teamBioDev: 'Bridging education pedagogy and high-performance software engineering. Chief architect of Oi Toto\'s real-time matching algorithms, offline QR payments, concurrency-safe dispatch engine, and mobile apps.',
+                footerAbout: 'West Bengal\'s premier smart and secure electric rickshaw aggregator platform. Making daily urban last-mile travel eco-friendly, predictable, and dignified.',
+                footerPortalsTitle: 'System Portals',
+                footerCustApp: 'Passenger App',
+                footerDriverApp: 'Driver Partner App',
+                footerAdminLink: '<i class="bi bi-shield-lock-fill"></i> Admin Portal',
+                footerCompanyTitle: 'Company',
+                footerContactTitle: 'Support & Emergency',
+                footerCopy: '© 2026 Oi Toto Mobility Private Limited. All rights reserved.',
+                footerTech: 'Technology & Banking Partner: ICICI Corporate Banking & UPI'
+            },
+            bn: {
+                siteTitle: 'Oi Toto! — Tap. Book. Chalo! | স্মার্ট ই-রিকশা নেটওয়ার্ক ও ফ্লিট পোর্টাল',
+                navPortals: '<i class="bi bi-grid-fill text-success"></i> অ্যাপস',
+                navFareCalc: '<i class="bi bi-calculator-fill text-warning"></i> এফ. ক্যালকুলেটর',
+                navFeatures: '<i class="bi bi-shield-check text-info"></i> কেন Oi Toto?',
+                navFareChart: '<i class="bi bi-pin-map-fill text-danger"></i> ভাড়া',
+                navCoverage: '<i class="bi bi-geo-alt-fill text-primary"></i> জোন',
+                navTeam: '<i class="bi bi-people-fill text-success"></i> টিম',
+                btnNavSimulatorText: 'সিমুলেটর',
+                btnNavLoginText: 'অ্যাডমিন লগইন',
+                heroBadgeText: 'পশ্চিমবঙ্গের 1 নম্বর স্মার্ট ই-রিকশা প্ল্যাটফর্ম',
+                heroTitle: 'ট্যাপ করুন। বুক করুন। <span class="gold-text">চলো!</span>',
+                heroDesc: 'পশ্চিমবঙ্গ ও বিহার জুড়ে দ্রুত, পরিবেশবান্ধব ও স্থির ভাড়ায় স্মার্ট টোটো ভ্রমণের আধুনিক প্ল্যাটফর্ম। কোনো দরদাম নেই, জিরো সার্জ ফি এবং ১০০% ভেরিফাইড চালক।<div class="hero-phone-booking-box mt-3"><span class="phone-box-text"><i class="bi bi-phone-vibrate-fill text-warning me-1"></i> মোবাইল অ্যাপ চালাতে জানেন না? ফোন করে \'ওই টোটো\' বুক করুন:</span><div class="d-inline-flex flex-wrap align-items-center gap-2 mt-1"><span class="phone-state-label">for W.B —</span><a href="tel:9832199977" class="hero-booking-phone-badge"><i class="bi bi-telephone-fill me-1"></i> 9832199977</a><span class="phone-state-label ms-md-2">for Bihar —</span><a href="tel:9572453828" class="hero-booking-phone-badge"><i class="bi bi-telephone-fill me-1"></i> 9572453828</a></div></div>',
+                heroBtnCustomerCareText: 'কাস্টমার কেয়ার: 7001315215',
+                heroBtnSimulatorText: 'ডুয়াল অ্যাপ সিমুলেটর দেখুন',
+                orbTitle0: '100% স্থির ভাড়া',
+                orbSub0: 'কোনো দরদাম নেই • জিরো সার্জ ফি • লকড ন্যায্য ভাড়া',
+                orbTag0: 'জিরো সার্জ ফি',
+                orbTitle1: 'ধোঁয়ামুক্ত গ্রিন টোটো',
+                orbSub1: '100% ধোঁয়ামুক্ত • উন্নত লিথিয়াম ব্যাটারি • দূষণহীন',
+                orbTag1: 'পরিবেশবান্ধব ইভি',
+                orbTitle2: 'ভেরিফাইড চালক ও SOS',
+                orbSub2: 'পুলিশ কেওয়াইসি • ইন-অ্যাপ SOS • সুরক্ষিত ভ্রমণ',
+                orbTag2: '100% সুরক্ষিত',
+                orbTitle3: 'ক্যাশ ও ইউপিআই কিউআর',
+                orbSub3: 'PhonePe • GPay • Paytm QR • নগদ ও ডিজিটাল পেমেন্ট',
+                orbTag3: 'ইউপিআই ও ক্যাশ',
+                orbPromptText: 'সকল সুবিধা দেখুন',
+                featFixedFare: 'নির্দিষ্ট ₹15.00 বেস ফেয়ার',
+                featCashQr: 'নগদ ও ইউপিআই কিউআর গ্রাহ্য',
+                featVerified: '100% কেওয়াইসি ভেরিফাইড চালক',
+                badgeEngineActive: '<i class="bi bi-broadcast me-1"></i> লাইভ ডিসপ্যাচ রাডার সক্রিয়',
+                mockPickup: 'শ্যামবাজার পাঁচ মাথার মোড়',
+                mockDrop: 'হাতিবাগান বাজার মোড়',
+                statLabelFleet: 'সক্রিয় ই-টোটো বহর',
+                statLabelFare: 'প্রারম্ভিক বেস ফেয়ার',
+                statLabelRating: 'যাত্রী সন্তুষ্টি রেটিং',
+                statLabelSurge: 'জিরো সার্জ চার্জ',
+                badgeSystemPortals: 'প্রবেশদ্বার',
+                titleEcosystem: 'Oi Toto প্ল্যাটফর্ম ইকোসিস্টেম',
+                subEcosystem: 'যাত্রী, চালক পার্টনার ও ডিসপ্যাচ কন্ট্রোলারদের সুবিধার্থে তিনটি স্বতন্ত্র ও আধুনিক ইন্টারফেস।',
+                cardCustTitle: '1. যাত্রী অ্যাপ',
+                cardCustDesc: 'জিপিএস পিকআপ লোকেশন, নিকটস্থ টোটো ট্র্যাকিং, নির্দিষ্ট ন্যায্য ভাড়া ও কিউআর স্ক্যান বা ক্যাশে পেমেন্ট।',
+                cardCustF1: 'লাইভ ম্যাপ পিন ড্রপ ও অটো জিপিএস লোকেশন',
+                cardCustF2: 'কোনো সার্জ ফি নেই — 100% স্থির ভাড়া',
+                cardCustF3: '4 ডিজিট ওটিপি ভিত্তিক নিরাপদ ভ্রমণ',
+                btnPreviewCustText: 'ডাউনলোড অ্যাপ',
+                cardDriverTitle: '2. চালক পার্টনার অ্যাপ',
+                cardDriverDesc: 'অন-ডিউটি রাডার মোড, নিকটস্থ বুকিং রিকোয়েস্ট গ্রহণ, ওটিপি ভেরিফিকেশন ও প্রতিদিনের আয়ের ডিজিটাল হিসাব।',
+                cardDriverF1: 'মাত্র 5% প্ল্যাটফর্ম ফি — 95% নিট আয় চালকের',
+                cardDriverF2: 'দৈনিক ICICI স্বয়ংক্রিয় ব্যাংক ট্রান্সফার',
+                cardDriverF3: 'ডিজিটাল পাসবুক, ট্রিপ হিস্ট্রি ও রেটিং',
+                btnPreviewDriverText: 'ডাউনলোড পার্টনার অ্যাপ',
+                cardAdminTitle: '3. ফ্লিট কন্ট্রোল পোর্টাল',
+                badgeActive: 'লাইভ চালু',
+                cardAdminDesc: 'কেন্দ্রীয় ফ্লিট টেলিমেট্রি, লাইভ জিপিএস রাডার মানচিত্র, চালক কেওয়াইসি অডিট ও পে-আউট ভাউচার।',
+                cardAdminF1: 'লাইভ লিফলেট ও জিপিএস রাডার ম্যাপ',
+                cardAdminF2: 'DPDP আইন 2023 সমর্থিত অডিট ট্রেইল',
+                cardAdminF3: 'ICICI কর্পোরেট এসক্রো ও সেটেলমেন্ট ভাউচার',
+                btnCardAdminLoginText: 'অ্যাডমিন পোর্টালে লগইন',
+                badgeCalc: 'স্বচ্ছ হিসাব',
+                titleCalc: 'তাৎক্ষণিক স্থির ভাড়া গণনা করুন',
+                descCalc: 'কোনো দরদাম বা অতিরিক্ত সার্জ নেই। প্রথম 1 কিমি ₹15.00, এরপর প্রতি কিমি মাত্র ₹10.00। নিচের স্লাইডার ব্যবহার করুন।',
+                lblQuickRoute: 'জনপ্রিয় রুট নির্বাচন করুন:',
+                lblSliderDist: 'ভ্রমণ দূরত্ব:',
+                lblEstFare: 'মোট নিশ্চিত স্থির ভাড়া',
+                badgeZeroSurge: '<i class="bi bi-shield-check me-1"></i> জিরো সার্জ গ্যারান্টি',
+                lblEstTime: 'আনুমানিক সময়',
+                lblCo2: 'পরিবেশে CO₂ সাশ্রয়',
+                btnCalcSimulatorText: 'সিমুলেটরে এই রুট বুক করুন',
+                badgeTechAdv: 'প্রধান বৈশিষ্ট্য',
+                titleWhyOiToto: 'কেন বাংলার মানুষ Oi Toto বেছে নিচ্ছেন?',
+                subWhyOiToto: 'শহরের যানজটে পরিবেশবান্ধব, সাশ্রয়ী, নিরাপদ ও দ্রুততম শেষ মাইলের যাতায়াত সমাধান।',
+                featBox1Title: '100% স্থির ভাড়া',
+                featBox1Desc: 'বৃষ্টি হোক বা পিক আওয়ার — কোনো দরদাম বা অতিরিক্ত চার্জ নেই। স্ক্রিনে যা দেখছেন সেটাই চূড়ান্ত।',
+                featBox2Title: 'ধোঁয়ামুক্ত গ্রিন ইভি',
+                featBox2Desc: 'উন্নত লিথিয়াম-আয়ন প্রযুক্তির পরিবেশবান্ধব ই-রিকশা, যা বাতাসকে রাখে সম্পূর্ণ দূষণমুক্ত।',
+                featBox3Title: 'ভেরিফাইড চালক ও SOS',
+                featBox3Desc: 'আধার ও পুলিশ ভেরিফাইড চালক পার্টনার। তাৎক্ষণিক ইমার্জেন্সি এসওএস অ্যালার্ট বাটন।',
+                featBox4Title: 'ক্যাশ বা ইউপিআই কিউআর',
+                featBox4Desc: 'খুচরো পয়সার ঝামেলা এড়াতে PhonePe, GPay, Paytm দিয়ে সরাসরি স্ক্যান করে পেমেন্ট করুন।',
+                featPill1Text: 'লকড নির্দিষ্ট ভাড়া',
+                featPill2Text: 'ধোঁয়ামুক্ত পরিবেশ',
+                featPill3Text: 'পুলিশ ও আধার কেওয়াইসি',
+                featPill4Text: 'ক্যাশ বা যেকোনো ইউপিআই',
+                badgeFareChart: 'ন্যায্য মূল্য তালিকা',
+                titleRoutes: 'কলকাতার জনপ্রিয় রুট ও স্থির ভাড়া',
+                descRoutes: 'ই-রিকশার জন্য সরকারি অনুমোদন প্রাপ্ত স্বচ্ছ কিলোমিটার ভিত্তিক কাঠামো। প্রথম কিলোমিটার ₹15.00, পরবর্তী প্রতি কিমি ₹10.00।',
+                lblBaseFareRow: 'বেস ফেয়ার (প্রথম 1 কিমি):',
+                lblPerKmRow: 'পরবর্তী প্রতি কিমি রেট:',
+                lblDiscountRow: 'সার্জ প্রাইসিং নীতি:',
+                valDiscountRow: 'জিরো সার্জ ফি',
+                tableHeaderTitle: '<i class="bi bi-pin-map text-danger me-2"></i> কলকাতা লাইভ কমিউট রেট চার্ট',
+                tableHeaderSub: 'যেকোনো রুটে ক্লিক করে ভাড়া ক্যালকুলেটরে সরাসরি লোড করুন',
+                btnFilterAllRoutes: 'সকল রুট (6)',
+                btnFilterNorthRoutes: 'উত্তর কলকাতা (4)',
+                btnFilterCentralRoutes: 'মধ্য কলকাতা (2)',
+                btnFilterCheapRoutes: '₹20 এর নিচে (2)',
+                thPickup: 'পিকআপ পয়েন্ট',
+                thDrop: 'গন্তব্যস্থল',
+                thDist: 'দূরত্ব',
+                thTime: 'গড় সময়',
+                thFare: 'স্থির ভাড়া',
+                thAction: 'অ্যাকশন',
+                badgeDriverPartner: 'মর্যাদার পার্টনারশিপ',
+                titleDriveEarn: 'নিজের টোটো চালান, মাসে ₹25,000+ আয় করুন!',
+                descDriveEarn: 'পশ্চিমবঙ্গের দ্রুততম বর্ধনশীল ইভি প্ল্যাটফর্মে যুক্ত হোন। স্বাধীন কাজের সময়, মাত্র 5% কমিশন ও দৈনিক ব্যাংক পেমেন্ট।',
+                kpi1Title: 'দৈনিক পেমেন্ট',
+                kpi1Sub: 'ICICI অটো-সেটেলমেন্ট',
+                kpi2Title: 'স্বাধীন সময়',
+                kpi2Sub: 'যখন খুশি অন/অফ ডিউটি',
+                kpi3Title: '24x7 হেল্পলাইন',
+                kpi3Sub: 'কন্ট্রোল রুম ব্যাকআপ',
+                btnAdminAccessOnlyText: 'অ্যাডমিন পোর্টাল লগইন',
+                badgeCoverage: 'সার্ভিস জোন',
+                titleCoverage: 'যেসব অঞ্চলে Oi Toto সক্রিয়',
+                hubNorthTitle: 'উত্তর কলকাতা',
+                hubNorthSub: 'শ্যামবাজার, হাতিবাগান, বাগবাজার, শোভাবাজার',
+                hubCentralTitle: 'মধ্য কলকাতা',
+                hubCentralSub: 'শিয়ালদহ, কলেজ স্ট্রিট, এমজি রোড, মৌলালি',
+                hubHowrahTitle: 'হাওড়া করিডোর',
+                hubHowrahSub: 'হাওড়া স্টেশন, কদমতলা, ফোরশোর রোড',
+                hubNorthBengalTitle: 'উত্তরবঙ্গ হাব',
+                hubNorthBengalSub: 'শিলিগুড়ি জংশন ও হাসমি চক করিডোর',
+                badgeTeam: '<i class="bi bi-stars text-warning me-1"></i> নেতৃত্ব ও নির্মাতা দল',
+                titleTeam: 'Oi Toto Member & Team',
+                subTeam: 'পশ্চিমবঙ্গের ইকো-ফ্রেন্ডলি স্মার্ট ই-রিকশা নেটওয়ার্কের নেপথ্যের স্বপ্নদ্রষ্টা, প্রকৌশলী ও প্রযুক্তি স্থপতিবৃন্দ।',
+                teamRoleFounder: '<i class="bi bi-award-fill text-warning"></i> প্রতিষ্ঠাতা ও দূরদর্শী নেতা',
+                teamNameFounder: 'Mr. Zohirul Islam',
+                teamDegFounder: 'M.A, M.Ed',
+                teamBioFounder: 'শিক্ষা ও সামাজিক অগ্রগতির দূরদর্শী প্রবক্তা। তৃণমূল টোটো চালকদের অর্থনৈতিক ক্ষমতায়ন এবং যাত্রীদের জন্য সম্মানজনক, নির্ধারিত ভাড়ার নিরাপদ নগর পরিবহনের স্বপ্ন নিয়ে ওই টোটো প্রতিষ্ঠা করেছেন।',
+                teamRoleCeo: '<i class="bi bi-cpu-fill text-primary"></i> প্রধান নির্বাহী কর্মকর্তা (CEO)',
+                teamNameCeo: 'Mr. Monirul Islam',
+                teamDegCeo: 'ইলেকট্রিক্যাল ইঞ্জিনিয়ার',
+                teamBioCeo: 'ইলেকট্রিক্যাল ইঞ্জিনিয়ার হিসেবে ওই টোটোর ইভি ফ্লিট রূপান্তর, স্মার্ট লিথিয়াম ব্যাটারি নিরাপত্তা ও পরিচালনা ব্যবস্থার নেতৃত্ব দিচ্ছেন। বাংলাজুড়ে পরিবেশবান্ধব গ্রিন ট্রানজিট প্রসারে নিবেদিত।',
+                teamRoleDev: '<i class="bi bi-terminal-fill" style="color: #6366F1;"></i> লিড ডেভেলপার ও প্রধান স্থপতি',
+                teamNameDev: 'Mr. Nasirul Islam_Shakil',
+                teamDegDev: 'M.A, M.Ed & Computer Science',
+                teamBioDev: 'শিক্ষাবিজ্ঞান ও আধুনিক কম্পিউটার সায়েন্সের এক অনন্য সমন্বয়। ওই টোটোর রিয়েল-টাইম রাইড ম্যাচিং, দ্রুত QR পেমেন্ট ও কনকারেন্সি-সেফ আধুনিক মোবাইল অ্যাপের প্রধান স্থপতি।',
+                footerAbout: 'পশ্চিমবঙ্গের প্রথম স্মার্ট ও সম্পূর্ণ সুরক্ষিত ইলেকট্রিক রিকশা এগ্রিগেটর প্ল্যাটফর্ম।',
+                footerPortalsTitle: 'সিস্টেম পোর্টাল',
+                footerCustApp: 'যাত্রী অ্যাপ',
+                footerDriverApp: 'চালক পার্টনার অ্যাপ',
+                footerAdminLink: '<i class="bi bi-shield-lock-fill"></i> অ্যাডমিন পোর্টাল',
+                footerCompanyTitle: 'কোম্পানি',
+                footerContactTitle: 'জরুরি যোগাযোগ ও সাপোর্ট',
+                footerCopy: '© 2026 Oi Toto Mobility Private Limited. সর্বস্বত্ব সংরক্ষিত।',
+                footerTech: 'কারিগরি সহায়তা ও ব্যাংকিং পার্টনার: ICICI Corporate Banking & UPI'
+            },
+            hi: {
+                siteTitle: 'Oi Toto! — Tap. Book. Chalo! | स्मार्ट ई-रिक्शा नेटवर्क और फ्लीट पोर्टल',
+                navPortals: '<i class="bi bi-grid-fill text-success"></i> ऐप्स',
+                navFareCalc: '<i class="bi bi-calculator-fill text-warning"></i> एफ. कैलकुलेटर',
+                navFeatures: '<i class="bi bi-shield-check text-info"></i> क्यों Oi Toto?',
+                navFareChart: '<i class="bi bi-pin-map-fill text-danger"></i> किराया',
+                navCoverage: '<i class="bi bi-geo-alt-fill text-primary"></i> ज़ोन',
+                navTeam: '<i class="bi bi-people-fill text-success"></i> टीम',
+                btnNavSimulatorText: 'सिम्युलेटर',
+                btnNavLoginText: 'व्यवस्थापक लॉगिन',
+                heroBadgeText: 'पश्चिम बंगाल का नं. 1 स्मार्ट ई-रिक्शा नेटवर्क',
+                heroTitle: 'टैप करें। बुक करें। <span class="gold-text">चलो!</span>',
+                heroDesc: 'पश्चिम बंगाल और बिहार में तेज़, पर्यावरण-अनुकूल और निश्चित किराए पर स्मार्ट टोटो यात्रा। कोई मोलभाव नहीं, शून्य सर्ज शुल्क और 100% सत्यापित चालक।<div class="hero-phone-booking-box mt-3"><span class="phone-box-text"><i class="bi bi-phone-vibrate-fill text-warning me-1"></i> मोबाइल ऐप चलाना नहीं जानते? सीधे फोन करके \'ओई टोटो\' बुक करें:</span><div class="d-inline-flex flex-wrap align-items-center gap-2 mt-1"><span class="phone-state-label">for W.B —</span><a href="tel:9832199977" class="hero-booking-phone-badge"><i class="bi bi-telephone-fill me-1"></i> 9832199977</a><span class="phone-state-label ms-md-2">for Bihar —</span><a href="tel:9572453828" class="hero-booking-phone-badge"><i class="bi bi-telephone-fill me-1"></i> 9572453828</a></div></div>',
+                heroBtnCustomerCareText: 'कस्टमर केयर: 7001315215',
+                heroBtnSimulatorText: 'ड्यूल ऐप सिम्युलेटर देखें',
+                orbTitle0: '100% निश्चित किराया',
+                orbSub0: 'कोई मोलभाव नहीं • शून्य सर्ज • अग्रिम लॉक किराया',
+                orbTag0: 'शून्य सर्ज शुल्क',
+                orbTitle1: 'ग्रीन ई-रिक्शा',
+                orbSub1: 'धुआं-मुक्त • स्मार्ट लीथियम बैटरी • स्वच्छ बंगाल',
+                orbTag1: 'पर्यावरण-अनुकूल',
+                orbTitle2: 'सत्यापित चालक और SOS',
+                orbSub2: 'पुलिस सत्यापन • इन-ऐप SOS • 100% सुरक्षित सफर',
+                orbTag2: 'सत्यापित सुरक्षा',
+                orbTitle3: 'नकद और यूपीआई क्यूआर',
+                orbSub3: 'PhonePe • GPay • Paytm QR • आसान व त्वरित भुगतान',
+                orbTag3: 'यूपीआई व नकद',
+                orbPromptText: 'सुविधाएं देखें',
+                featFixedFare: 'निश्चित ₹15.00 बेस किराया',
+                featCashQr: 'नकद और यूपीआई क्यूआर मान्य',
+                featVerified: '100% केवाईसी सत्यापित चालक',
+                badgeEngineActive: '<i class="bi bi-broadcast me-1"></i> लाइव डिस्पैच रडार सक्रिय',
+                mockPickup: 'श्यामबाजार फाइव-पॉइंट क्रॉसिंग',
+                mockDrop: 'हाथीबागान मार्केट क्रॉसिंग',
+                statLabelFleet: 'सक्रिय ई-टोटो वाहन',
+                statLabelFare: 'शुरुआती बेस किराया',
+                statLabelRating: 'सवारी संतुष्टि रेटिंग',
+                statLabelSurge: 'हमेशा शून्य सर्ज शुल्क',
+                badgeSystemPortals: 'एक्सेस पोर्टल',
+                titleEcosystem: 'Oi Toto प्लेटफॉर्म गेटवे',
+                subEcosystem: 'यात्रियों, चालक भागीदारों और डिस्पैच नियंत्रकों के लिए तीन आधुनिक और समर्पित इंटरफेस।',
+                cardCustTitle: '1. यात्री ऐप',
+                cardCustDesc: 'जीपीएस पिकअप लोकेशन, टोटो लाइव ट्रैकिंग, निश्चित अग्रिम किराया और क्यूआर या नकद भुगतान।',
+                cardCustF1: 'लाइव मैप पिन ड्रॉप और ऑटो जीपीएस लोकेशन',
+                cardCustF2: 'कोई सर्ज शुल्क नहीं — 100% निश्चित किराया',
+                cardCustF3: '4 अंकों का सुरक्षित ओटीपी बोर्डिंग कोड',
+                btnPreviewCustText: 'ऐप डाउनलोड करें',
+                cardDriverTitle: '2. चालक पार्टनर ऐप',
+                cardDriverDesc: 'ऑन-ड्यूटी रडार मोड, त्वरित बुकिंग अनुरोध, ओटीपी सत्यापन और दैनिक आय का पारदर्शी हिसाब।',
+                cardDriverF1: 'मात्र 5% प्लेटफॉर्म शुल्क — 95% चालक की शुद्ध आय',
+                cardDriverF2: 'दैनिक ICICI बैंक में स्वतः ट्रांसफर',
+                cardDriverF3: 'डिजिटल पासबुक, ट्रिप हिस्ट्री और रेटिंग',
+                btnPreviewDriverText: 'पार्टनर ऐप डाउनलोड करें',
+                cardAdminTitle: '3. फ्लीट एडमिन पोर्टल',
+                badgeActive: 'सक्रिय लाइव',
+                cardAdminDesc: 'केंद्रीय फ्लीट टेलीमेट्री, लाइव जीपीएस रडार मैप, चालक केवाईसी ऑडिट और पे-आउट वाउचर।',
+                cardAdminF1: 'लाइव लीफलेट और जीपीएस रडार मैप',
+                cardAdminF2: 'DPDP अधिनियम 2023 अनुरूप ऑडिट ट्रेल',
+                cardAdminF3: 'ICICI कॉर्पोरेट एस्क्रो और सेटलमेंट वाउचर',
+                btnCardAdminLoginText: 'एडमिन पोर्टल में लॉगिन करें',
+                badgeCalc: 'पारदर्शी गणना',
+                titleCalc: 'तुरंत अपने निश्चित किराए की गणना करें',
+                descCalc: 'कोई मोलभाव या अतिरिक्त सर्ज नहीं। पहले 1 किमी का किराया ₹15.00, उसके बाद प्रति किमी मात्र ₹10.00। नीचे स्लाइडर का उपयोग करें।',
+                lblQuickRoute: 'लोकप्रिय रूट चुनें:',
+                lblSliderDist: 'यात्रा दूरी:',
+                lblEstFare: 'कुल निश्चित अग्रिम किराया',
+                badgeZeroSurge: '<i class="bi bi-shield-check me-1"></i> शून्य सर्ज गारंटी',
+                lblEstTime: 'अनुमानित समय',
+                lblCo2: 'पर्यावरण में CO₂ बचत',
+                btnCalcSimulatorText: 'सिम्युलेटर में यह रूट बुक करें',
+                badgeTechAdv: 'प्रमुख लाभ',
+                titleWhyOiToto: 'बंगाल के यात्री क्यों चुनते हैं Oi Toto?',
+                subWhyOiToto: 'शहरी ट्रैफिक में पर्यावरण-अनुकूल, किफायती, सुरक्षित और सबसे तेज लास्ट-माइल समाधान।',
+                featBox1Title: '100% निश्चित किराया',
+                featBox1Desc: 'बारिश हो या पीक ऑवर — कोई मोलभाव या अतिरिक्त शुल्क नहीं। जो स्क्रीन पर दिखेगा, वही देय होगा।',
+                featBox2Title: 'शून्य प्रदूषण ग्रीन ईवी',
+                featBox2Desc: 'आधुनिक लिथियम-आयन तकनीक वाले पर्यावरण-अनुकूल ई-रिक्शा, जो शहर को धुआं-मुक्त रखते हैं।',
+                featBox3Title: 'सत्यापित चालक और SOS',
+                featBox3Desc: 'आधार और पुलिस सत्यापित चालक पार्टनर। आपात स्थिति में तुरंत एसओएस अलर्ट बटन।',
+                featBox4Title: 'नकद या यूपीआई क्यूआर',
+                featBox4Desc: 'छुट्टे पैसों की झंझट खत्म। PhonePe, GPay, Paytm से सीधे स्कैन करें या नकद भुगतान करें।',
+                featPill1Text: 'निश्चित लॉक किराया',
+                featPill2Text: '100% धुआं-मुक्त',
+                featPill3Text: 'पुलिस व आधार सत्यापन',
+                featPill4Text: 'नकद या कोई भी यूपीआई',
+                badgeFareChart: 'पारदर्शी किराया तालिका',
+                titleRoutes: 'कोलकाता के लोकप्रिय रूट और निश्चित दरें',
+                descRoutes: 'ई-रिक्शा हेतु सरकार द्वारा अनुमोदित पारदर्शी किलोमीटर आधारित किराया प्रणाली। पहला 1 किमी ₹15.00, उसके बाद ₹10.00/किमी।',
+                lblBaseFareRow: 'बेस किराया (पहला 1 किमी):',
+                lblPerKmRow: 'बाद की प्रति किमी दर:',
+                lblDiscountRow: 'सर्ज प्राइसिंग नीति:',
+                valDiscountRow: 'शून्य सर्ज शुल्क',
+                tableHeaderTitle: '<i class="bi bi-pin-map text-danger me-2"></i> कोलकाता लाइव कम्यूट रेट चार्ट',
+                tableHeaderSub: 'किसी भी रूट पर क्लिक करके सीधे किराया कैलकुलेटर में लोड करें',
+                btnFilterAllRoutes: 'सभी रूट (6)',
+                btnFilterNorthRoutes: 'उत्तर कोलकाता (4)',
+                btnFilterCentralRoutes: 'मध्य कोलकाता (2)',
+                btnFilterCheapRoutes: '₹20 से कम (2)',
+                thPickup: 'पिकअप पॉइंट',
+                thDrop: 'गंतव्य स्थल',
+                thDist: 'दूरी',
+                thTime: 'औसत समय',
+                thFare: 'निश्चित किराया',
+                thAction: 'एक्शन',
+                badgeDriverPartner: 'सम्मानजनक साझेदारी',
+                titleDriveEarn: 'अपना टोटो चलाएं, प्रति माह ₹25,000+ कमाएं!',
+                descDriveEarn: 'पश्चिम बंगाल के सबसे तेजी से बढ़ते ईवी एग्रीगेटर से जुड़ें। काम के स्वतंत्र घंटे, कम 5% कमीशन और दैनिक बैंक भुगतान।',
+                kpi1Title: 'दैनिक भुगतान',
+                kpi1Sub: 'ICICI ऑटो-सेटलमेंट',
+                kpi2Title: 'लचीला समय',
+                kpi2Sub: 'जब चाहें ड्यूटी शुरू/बंद करें',
+                kpi3Title: '24x7 हेल्पलाइन',
+                kpi3Sub: 'कंट्रोल रूम बैकअप',
+                btnAdminAccessOnlyText: 'एडमिन पोर्टल लॉगिन',
+                badgeCoverage: 'सर्विस ज़ोन',
+                titleCoverage: 'वर्तमान परिचालन केंद्र',
+                hubNorthTitle: 'उत्तर कोलकाता',
+                hubNorthSub: 'श्यामबाजार, हाथीबागान, बागबाजार, शोभाबाजार',
+                hubCentralTitle: 'मध्य कोलकाता',
+                hubCentralSub: 'सियालदह, कॉलेज स्ट्रीट, एमजी रोड, मौलाली',
+                hubHowrahTitle: 'हावड़ा कॉरिडोर',
+                hubHowrahSub: 'हावड़ा स्टेशन, कदमताला, फोरशोर रोड',
+                hubNorthBengalTitle: 'उत्तर बंगाल हब',
+                hubNorthBengalSub: 'सिलीगुड़ी जंक्शन और हाशमी चौक कॉरिडोर',
+                badgeTeam: '<i class="bi bi-stars text-warning me-1"></i> नेतृत्व एवं निर्माता टीम',
+                titleTeam: 'Oi Toto Member & Team',
+                subTeam: 'पश्चिम बंगाल के सबसे स्मार्ट इलेक्ट्रिक रिक्शा नेटवर्क के निर्माता, दूरदर्शी नेता और सॉफ्टवेयर वास्तुकार।',
+                teamRoleFounder: '<i class="bi bi-award-fill text-warning"></i> संस्थापक एवं दूरदर्शी',
+                teamNameFounder: 'Mr. Zohirul Islam',
+                teamDegFounder: 'M.A, M.Ed',
+                teamBioFounder: 'शिक्षा और सामाजिक विकास के दूरदर्शी प्रणेता। जमीनी स्तर के टोटो चालकों के सशक्तीकरण और यात्रियों के लिए तय किराए पर सुरक्षित ई-रिक्शा सेवा की नींव रखी।',
+                teamRoleCeo: '<i class="bi bi-cpu-fill text-primary"></i> मुख्य कार्यकारी अधिकारी (CEO)',
+                teamNameCeo: 'Mr. Monirul Islam',
+                teamDegCeo: 'Electrical Engineer',
+                teamBioCeo: 'इलेक्ट्रिकल इंजीनियर के रूप में ईवी फ्लीट सुरक्षा, स्मार्ट लिथियम बैटरी प्रबंधन और परिचालन विकास का नेतृत्व कर रहे हैं।',
+                teamRoleDev: '<i class="bi bi-terminal-fill" style="color: #6366F1;"></i> प्रमुख डेवलपर एवं मुख्य वास्तुकार',
+                teamNameDev: 'Mr. Nasirul Islam_Shakil',
+                teamDegDev: 'M.A, M.Ed & Computer Science',
+                teamBioDev: 'शिक्षा और कंप्यूटर विज्ञान के अनूठे मेल के साथ, वे ओई टोटो के रियल-टाइम एल्गोरिदम, त्वरित क्यूआर भुगतान और मोबाइल ऐप्स के मुख्य निर्माता हैं।',
+                footerAbout: 'पश्चिम बंगाल का प्रमुख स्मार्ट और सुरक्षित इलेक्ट्रिक रिक्शा एग्रीगेटर प्लेटफॉर्म।',
+                footerPortalsTitle: 'सिस्टम पोर्टल',
+                footerCustApp: 'यात्री ऐप',
+                footerDriverApp: 'चालक पार्टनर ऐप',
+                footerAdminLink: '<i class="bi bi-shield-lock-fill"></i> एडमिन पोर्टल',
+                footerCompanyTitle: 'कंपनी',
+                footerContactTitle: 'समर्थन और आपातकालीन',
+                footerCopy: '© 2026 Oi Toto Mobility Private Limited. सर्वाधिकार सुरक्षित।',
+                footerTech: 'तकनीकी और बैंकिंग भागीदार: ICICI Corporate Banking & UPI'
+            }
+        };
+
+        const ROUTES_DATA = [
+            {
+                id: 'r1', corridor: 'north', distKm: 1.8,
+                pickup_en: 'Shyambazar Five-Point Crossing', pickup_bn: 'শ্যামবাজার পাঁচ মাথার মোড়', pickup_hi: 'श्यामबाजार फाइव-पॉइंट क्रॉसिंग',
+                drop_en: 'Hatibagan Market Crossing', drop_bn: 'হাতিবাগান বাজার মোড়', drop_hi: 'हाथीबागान बाजार क्रॉसिंग',
+                dist: '1.8 km', time_en: '~8 mins', time_bn: '~8 মিনিট', time_hi: '~8 मिनट', fare: '₹23.00'
+            },
+            {
+                id: 'r2', corridor: 'north', distKm: 2.3,
+                pickup_en: 'Hatibagan Market Crossing', pickup_bn: 'হাতিবাগান বাজার মোড়', pickup_hi: 'हाथीबागान बाजार क्रॉसिंग',
+                drop_en: 'College Street Boi Para', drop_bn: 'কলেজ স্ট্রিট বইপাড়া', drop_hi: 'कॉलेज स्ट्रीट बोई पाड़ा',
+                dist: '2.3 km', time_en: '~10 mins', time_bn: '~10 মিনিট', time_hi: '~10 मिनट', fare: '₹28.00'
+            },
+            {
+                id: 'r3', corridor: 'central', distKm: 1.5,
+                pickup_en: 'Sealdah Station North Gate', pickup_bn: 'শিয়ালদহ স্টেশন উত্তর গেট', pickup_hi: 'सियालदह स्टेशन नॉर्थ गेट',
+                drop_en: 'Moulali Crossing', drop_bn: 'মৌলালি মোড় ক্রসিং', drop_hi: 'मौलाली क्रॉसिंग',
+                dist: '1.5 km', time_en: '~7 mins', time_bn: '~7 মিনিট', time_hi: '~7 मिनट', fare: '₹20.00'
+            },
+            {
+                id: 'r4', corridor: 'north', distKm: 1.2,
+                pickup_en: 'Baghbazar Launch Ghat', pickup_bn: 'বাগবাজার লঞ্চঘাট', pickup_hi: 'बागबाजार लॉन्च घाट',
+                drop_en: 'Shyambazar Metro Gate 1', drop_bn: 'শ্যামবাজার মেট্রো 1নং গেট', drop_hi: 'श्यामबाजार मेट्रो गेट 1',
+                dist: '1.2 km', time_en: '~5 mins', time_bn: '~5 মিনিট', time_hi: '~5 मिनट', fare: '₹15.00'
+            },
+            {
+                id: 'r5', corridor: 'central', distKm: 0.9,
+                pickup_en: 'MG Road Metro Station', pickup_bn: 'মহাত্মা গান্ধী রোড মেট্রো', pickup_hi: 'एमजी रोड मेट्रो स्टेशन',
+                drop_en: 'College Square Swimming Pool', drop_bn: 'কলেজ স্কয়ার সুইমিং পুল', drop_hi: 'कॉलेज स्क्वायर स्विमिंग पूल',
+                dist: '0.9 km', time_en: '~4 mins', time_bn: '~4 মিনিট', time_hi: '~4 मिनट', fare: '₹15.00'
+            },
+            {
+                id: 'r6', corridor: 'north', distKm: 2.1,
+                pickup_en: 'Sovabazar Sutanuti Ghat', pickup_bn: 'শোভাবাজার সুতানুটি ঘাট', pickup_hi: 'शोभाबाजार सुतानुटी घाट',
+                drop_en: 'Girish Park Metro Station', drop_bn: 'গিরিশ পার্ক মেট্রো স্টেশন', drop_hi: 'गिरीश पार्क मेट्रो स्टेशन',
+                dist: '2.1 km', time_en: '~9 mins', time_bn: '~9 মিনিট', time_hi: '~9 मिनट', fare: '₹26.00'
+            }
+        ];
+
+        // Fare Calculation formula
+        function calculateFare(distKm) {
+            const d = parseFloat(distKm);
+            if (isNaN(d) || d <= 1.0) return 15.00;
+            return +(15 + (d - 1) * 10).toFixed(2);
+        }
+
+        function updateFareFromSlider(distVal) {
+            const d = parseFloat(distVal);
+            const distEl = document.getElementById('calcDistVal');
+            if (distEl) distEl.textContent = d.toFixed(1);
+            const fare = calculateFare(d);
+            const fareEl = document.getElementById('calcFareBig');
+            if (fareEl) fareEl.textContent = '₹' + fare.toFixed(2);
+
+            const estMinutes = Math.max(3, Math.round(d * 4.2));
+            const timeUnit = currentSiteLang === 'bn' ? 'মিনিট' : (currentSiteLang === 'hi' ? 'मिनट' : 'mins');
+            const timeEl = document.getElementById('calcTimeVal');
+            if (timeEl) timeEl.textContent = '~' + estMinutes + ' ' + timeUnit;
+
+            const co2Saved = (d * 0.20).toFixed(2);
+            const co2El = document.getElementById('calcCo2Val');
+            if (co2El) co2El.textContent = co2Saved + ' kg';
+        }
+
+        function onSelectRoutePreset(val) {
+            if (val === 'custom') return;
+            const dist = parseFloat(val);
+            const slider = document.getElementById('calcSlider');
+            if (slider) slider.value = dist;
+            updateFareFromSlider(dist);
+        }
+
+        // Render Routes Table with corridor filtering and interactive rows
+        function renderRouteTable(filter) {
+            if (!filter) filter = currentRouteFilter || 'all';
+            currentRouteFilter = filter;
+            const tbody = document.getElementById('fareTableBody');
+            if (!tbody) return;
+
+            let filtered = ROUTES_DATA;
+            if (filter === 'north') {
+                filtered = ROUTES_DATA.filter(r => r.corridor === 'north');
+            } else if (filter === 'central') {
+                filtered = ROUTES_DATA.filter(r => r.corridor === 'central');
+            } else if (filter === 'under20') {
+                filtered = ROUTES_DATA.filter(r => parseFloat(r.fare.replace(/[^\d.]/g, '')) <= 20);
+            }
+
+            const lang = currentSiteLang;
+            const btnTestText = lang === 'bn' ? 'টেস্ট' : (lang === 'hi' ? 'टेस्ट' : 'Test');
+
+            tbody.innerHTML = filtered.map(r => {
+                const pName = lang === 'bn' ? r.pickup_bn : (lang === 'hi' ? r.pickup_hi : r.pickup_en);
+                const dName = lang === 'bn' ? r.drop_bn : (lang === 'hi' ? r.drop_hi : r.drop_en);
+                const tName = lang === 'bn' ? r.time_bn : (lang === 'hi' ? r.time_hi : r.time_en);
+                const isSelected = selectedRouteId === r.id;
+
+                return `
+                <tr class="rate-row-item ${isSelected ? 'selected-rate-row' : ''}" 
+                    id="routeRow_${r.id}"
+                    onclick="selectRouteRow('${r.id}', ${r.distKm}, '${r.fare}', '${pName.replace(/'/g, "\\'")}', '${dName.replace(/'/g, "\\'")}')"
+                    title="Click to calculate fare for this route">
+                    <td class="col-pickup">
+                        <div class="d-flex align-items-center">
+                            <span class="loc-pin-origin"></span>
+                            <span class="fw-bold text-dark">${pName}</span>
+                        </div>
+                    </td>
+                    <td class="col-drop">
+                        <div class="d-flex align-items-center">
+                            <span class="loc-pin-dest"></span>
+                            <span class="fw-semibold text-secondary">${dName}</span>
+                        </div>
+                    </td>
+                    <td class="col-dist">
+                        <span class="dist-badge"><i class="bi bi-pin-map text-primary me-1"></i>${r.dist}</span>
+                    </td>
+                    <td class="col-time">
+                        <span class="time-badge"><i class="bi bi-clock me-1 text-muted"></i>${tName}</span>
+                    </td>
+                    <td class="col-fare">
+                        <span class="fare-badge-pill"><i class="bi bi-lock-fill"></i>${r.fare}</span>
+                    </td>
+                    <td class="col-action text-md-end text-start">
+                        <button type="button" class="btn-route-action ${isSelected ? 'active' : ''}"
+                            onclick="event.stopPropagation(); selectRouteRow('${r.id}', ${r.distKm}, '${r.fare}', '${pName.replace(/'/g, "\\'")}', '${dName.replace(/'/g, "\\'")}', true)">
+                            <i class="bi bi-calculator"></i> <span>${btnTestText}</span>
+                        </button>
+                    </td>
+                </tr>
+                `;
+            }).join('');
+        }
+
+        // Corridor Filter Trigger
+        function filterRouteRates(filter) {
+            currentRouteFilter = filter;
+            ['btnFilterAllRoutes', 'btnFilterNorthRoutes', 'btnFilterCentralRoutes', 'btnFilterCheapRoutes'].forEach(btnId => {
+                const b = document.getElementById(btnId);
+                if (b) b.classList.remove('active');
+            });
+
+            if (filter === 'all') document.getElementById('btnFilterAllRoutes')?.classList.add('active');
+            if (filter === 'north') document.getElementById('btnFilterNorthRoutes')?.classList.add('active');
+            if (filter === 'central') document.getElementById('btnFilterCentralRoutes')?.classList.add('active');
+            if (filter === 'under20') document.getElementById('btnFilterCheapRoutes')?.classList.add('active');
+
+            renderRouteTable(filter);
+        }
+
+        // Interactive Route Row Selection & Fare Slider Sync
+        function selectRouteRow(routeId, distKm, fareStr, pickup, drop, scrollToCalc = false) {
+            selectedRouteId = routeId;
+
+            // Highlight selected row in table
+            document.querySelectorAll('.rate-row-item').forEach(el => el.classList.remove('selected-rate-row'));
+            const activeRow = document.getElementById('routeRow_' + routeId);
+            if (activeRow) activeRow.classList.add('selected-rate-row');
+
+            // Sync with slider and live fare calculator
+            const slider = document.getElementById('calcSlider');
+            if (slider) {
+                slider.value = distKm;
+                updateFareFromSlider(distKm);
+            }
+
+            // Sync preset dropdown
+            const presetSel = document.getElementById('quickRouteSelect');
+            if (presetSel) {
+                let found = false;
+                for (let i = 0; i < presetSel.options.length; i++) {
+                    if (Math.abs(parseFloat(presetSel.options[i].value) - distKm) < 0.05) {
+                        presetSel.selectedIndex = i;
+                        found = true;
+                        break;
+                    }
+                }
+                if (!found) presetSel.value = 'custom';
+            }
+
+            // Highlight calculator box
+            const calcBox = document.querySelector('.calculator-card');
+            if (calcBox) {
+                calcBox.classList.add('glow-pulse');
+                setTimeout(() => calcBox.classList.remove('glow-pulse'), 1200);
+            }
+
+            // Display Toast notification
+            const toast = document.getElementById('routeSyncToast');
+            const toastTxt = document.getElementById('routeSyncToastText');
+            if (toast && toastTxt) {
+                const labelSync = currentSiteLang === 'bn' 
+                    ? `রুট সিঙ্ক: ${pickup} ➔ ${drop} (${fareStr})`
+                    : (currentSiteLang === 'hi' 
+                        ? `रूट सिंक: ${pickup} ➔ ${drop} (${fareStr})` 
+                        : `Synced: ${pickup} ➔ ${drop} (${fareStr})`);
+                toastTxt.textContent = labelSync;
+                toast.style.display = 'flex';
+
+                if (toastTimeout) clearTimeout(toastTimeout);
+                toastTimeout = setTimeout(() => {
+                    toast.style.display = 'none';
+                }, 4000);
+            }
+
+            if (scrollToCalc) {
+                const calcSec = document.getElementById('fareCalculator');
+                if (calcSec) calcSec.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        // Why Oi Toto Card Reactivity
+        function togglePillarReactive(cardIdx) {
+            const card = document.getElementById('pillarCard' + cardIdx);
+            if (!card) return;
+            const wasActive = card.classList.contains('active-card');
+            document.querySelectorAll('.pillar-card').forEach(c => c.classList.remove('active-card'));
+            if (!wasActive) {
+                card.classList.add('active-card');
+                card.classList.remove('glow-pulse');
+                void card.offsetWidth;
+                card.classList.add('glow-pulse');
+            }
+        }
+
+        function highlightPillarCard(idx) {
+            const sec = document.getElementById('features');
+            if (sec) sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+            if (idx >= 1 && idx <= 4) {
+                setTimeout(() => {
+                    togglePillarReactive(idx);
+                }, 350);
+            } else {
+                // Wave pulse all 4 cards
+                setTimeout(() => {
+                    [1, 2, 3, 4].forEach((n, i) => {
+                        setTimeout(() => {
+                            const c = document.getElementById('pillarCard' + n);
+                            if (c) {
+                                c.classList.remove('glow-pulse');
+                                void c.offsetWidth;
+                                c.classList.add('glow-pulse');
+                            }
+                        }, i * 160);
+                    });
+                }, 350);
+            }
+        }
+
+        function setSiteLanguage(lang) {
+            currentSiteLang = lang;
+            try {
+                localStorage.setItem('oitoto_site_lang', lang);
+            } catch(e) {}
+
+            ['En', 'Bn', 'Hi'].forEach(k => {
+                const btn = document.getElementById('btnLang' + k);
+                if (btn) btn.classList.toggle('active', k.toLowerCase() === lang.toLowerCase());
+            });
+
+            document.documentElement.lang = lang;
+
+            const dict = SITE_I18N[lang] || SITE_I18N.en;
+
+            Object.keys(dict).forEach(key => {
+                const el = document.getElementById(key);
+                if (el) {
+                    if (dict[key].includes('<')) {
+                        el.innerHTML = dict[key];
+                    } else {
+                        el.textContent = dict[key];
+                    }
+                }
+            });
+
+            // Re-render routes table with current filter & new language
+            renderRouteTable(currentRouteFilter);
+
+            // Refresh calculator dynamic units
+            const slider = document.getElementById('calcSlider');
+            if (slider) updateFareFromSlider(slider.value);
+        }
+
+        // Hero Unique Visual Feature Orb Ticker (2-second interval, alternating backgrounds)
+        let orbCurrentIndex = 0;
+        let orbTimer = null;
+        const ORB_DURATION = 2000;
+
+        function setOrbSlide(idx) {
+            orbCurrentIndex = idx % 4;
+            const orb = document.getElementById('heroFeatureOrb');
+            if (orb) {
+                orb.classList.remove('theme-0', 'theme-1', 'theme-2', 'theme-3');
+                orb.classList.add('theme-' + orbCurrentIndex);
+            }
+
+            for (let i = 0; i < 4; i++) {
+                const s = document.getElementById('orbSlide' + i);
+                const d = document.getElementById('orbDot' + i);
+                if (s) s.classList.toggle('active', i === orbCurrentIndex);
+                if (d) d.classList.toggle('active', i === orbCurrentIndex);
+            }
+        }
+
+        function startOrbTimer() {
+            if (orbTimer) clearInterval(orbTimer);
+            orbTimer = setInterval(() => {
+                setOrbSlide((orbCurrentIndex + 1) % 4);
+            }, ORB_DURATION);
+        }
+
+        function stopOrbTimer() {
+            if (orbTimer) {
+                clearInterval(orbTimer);
+                orbTimer = null;
+            }
+        }
+
+        function onHeroOrbClick() {
+            highlightPillarCard(orbCurrentIndex + 1);
+        }
+
+        // Hero Stats Counter Animation (requestAnimationFrame)
+        let statsAnimated = false;
+        function runStatsCounter() {
+            const counters = document.querySelectorAll('.stat-counter');
+            if (!counters.length) return;
+
+            // Reset to starting values before animating
+            counters.forEach(counter => {
+                const start = parseFloat(counter.getAttribute('data-start') || '0');
+                const decimals = parseInt(counter.getAttribute('data-decimals') || '0', 10);
+                const prefix = counter.getAttribute('data-prefix') || '';
+                const suffix = counter.getAttribute('data-suffix') || '';
+                const startFormatted = decimals > 0 
+                    ? start.toFixed(decimals) 
+                    : Math.round(start).toString();
+                counter.textContent = prefix + startFormatted + suffix;
+            });
+
+            // Smooth cubic ease-out decelerating curve
+            function easeOutCubic(t) {
+                return (--t) * t * t + 1;
+            }
+
+            const duration = 1800; // 1.8 seconds duration
+            let startTime = null;
+
+            function step(currentTime) {
+                if (!startTime) startTime = currentTime;
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const eased = easeOutCubic(progress);
+
+                counters.forEach(counter => {
+                    const start = parseFloat(counter.getAttribute('data-start') || '0');
+                    const target = parseFloat(counter.getAttribute('data-target') || '0');
+                    const decimals = parseInt(counter.getAttribute('data-decimals') || '0', 10);
+                    const prefix = counter.getAttribute('data-prefix') || '';
+                    const suffix = counter.getAttribute('data-suffix') || '';
+
+                    const currentVal = start + (target - start) * eased;
+                    const formatted = decimals > 0 
+                        ? currentVal.toFixed(decimals) 
+                        : Math.round(currentVal).toString();
+
+                    counter.textContent = prefix + formatted + suffix;
+                });
+
+                if (progress < 1) {
+                    requestAnimationFrame(step);
+                } else {
+                    // Snap precisely to target values at the end
+                    counters.forEach(counter => {
+                        const target = parseFloat(counter.getAttribute('data-target') || '0');
+                        const decimals = parseInt(counter.getAttribute('data-decimals') || '0', 10);
+                        const prefix = counter.getAttribute('data-prefix') || '';
+                        const suffix = counter.getAttribute('data-suffix') || '';
+                        const finalFormatted = decimals > 0 
+                            ? target.toFixed(decimals) 
+                            : Math.round(target).toString();
+                        counter.textContent = prefix + finalFormatted + suffix;
+                    });
+                }
+            }
+
+            // 200ms initial pause so user notices the counter rolling on load
+            setTimeout(() => {
+                requestAnimationFrame(step);
+            }, 200);
+        }
+
+        function initStatsCounterAnimation() {
+            const ribbon = document.getElementById('heroStatsRibbon') || document.querySelector('.stats-ribbon');
+            if (!ribbon) return;
+
+            // Trigger immediately if already visible in viewport, or observe on scroll
+            if ('IntersectionObserver' in window) {
+                const observer = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting && !statsAnimated) {
+                            statsAnimated = true;
+                            runStatsCounter();
+                            observer.disconnect();
+                        }
+                    });
+                }, { threshold: 0.1 });
+                observer.observe(ribbon);
+            } else {
+                if (!statsAnimated) {
+                    statsAnimated = true;
+                    runStatsCounter();
+                }
+            }
+
+            // Click ribbon to replay animation
+            ribbon.style.cursor = 'pointer';
+            ribbon.setAttribute('title', 'Click to replay counter animation');
+            ribbon.addEventListener('click', () => {
+                runStatsCounter();
+            });
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            let savedLang = 'en';
+            try {
+                savedLang = localStorage.getItem('oitoto_site_lang') || 'en';
+            } catch(e) {}
+            setSiteLanguage(savedLang);
+
+            // Initialize Stats Numbers Count-up Animation
+            initStatsCounterAnimation();
+
+            // Start 2-second animated feature ticker with pause-on-hover
+            startOrbTimer();
+            const orbEl = document.getElementById('heroFeatureOrb');
+            if (orbEl) {
+                orbEl.addEventListener('mouseenter', stopOrbTimer);
+                orbEl.addEventListener('mouseleave', startOrbTimer);
+            }
+
+            // Header navigation reactive enhancements
+            document.getElementById('navFeatures')?.addEventListener('click', () => {
+                highlightPillarCard(0);
+            });
+
+            document.getElementById('navFareChart')?.addEventListener('click', () => {
+                setTimeout(() => {
+                    const tableCard = document.getElementById('mainRateTableCard');
+                    if (tableCard) {
+                        tableCard.classList.add('rate-highlight-active');
+                        setTimeout(() => tableCard.classList.remove('rate-highlight-active'), 2000);
+                    }
+                }, 400);
+            });
+
+            // Header & Footer Team link smooth centering so all cards are visible at a glance
+            document.querySelectorAll('a[href="#team"]').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const teamSec = document.getElementById('team');
+                    if (teamSec) {
+                        const navH = document.querySelector('.navbar-custom')?.offsetHeight || 65;
+                        const targetPos = teamSec.getBoundingClientRect().top + window.pageYOffset - navH + 2;
+                        window.scrollTo({ top: targetPos, behavior: 'smooth' });
+                    }
+                });
+            });
+
+            // Team Cards Interactive Mouse Dynamic Spotlight Reaction
+            document.querySelectorAll('.team-card').forEach(card => {
+                card.addEventListener('mousemove', e => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    card.style.setProperty('--mouse-x', `${x}px`);
+                    card.style.setProperty('--mouse-y', `${y}px`);
+                });
+            });
+        });
+    </script>
+</body>
+</html>

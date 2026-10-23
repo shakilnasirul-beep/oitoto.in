@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGradFounder" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#06261E" />
+      <stop offset="60%" stop-color="#0A5C36" />
+      <stop offset="100%" stop-color="#0A8B42" />
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FDE68A" />
+      <stop offset="50%" stop-color="#F59E0B" />
+      <stop offset="100%" stop-color="#D97706" />
+    </linearGradient>
+    <radialGradient id="auraFounder" cx="50%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="#34D399" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="#06261E" stop-opacity="0" />
+    </radialGradient>
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="400" height="400" rx="200" fill="url(#bgGradFounder)" />
+  <rect width="400" height="400" rx="200" fill="url(#auraFounder)" />
+
+  <!-- Outer Ring Accent -->
+  <circle cx="200" cy="200" r="190" fill="none" stroke="url(#goldGrad)" stroke-width="4" stroke-dasharray="10 6" opacity="0.7" />
+  <circle cx="200" cy="200" r="182" fill="none" stroke="#34D399" stroke-width="1.5" opacity="0.4" />
+
+  <!-- Executive Silhouette Graphic -->
+  <g fill="#FFFFFF" opacity="0.95">
+    <!-- Head -->
+    <circle cx="200" cy="140" r="54" fill="#FFFFFF" />
+    <!-- Academic / Leadership Laurels Arc -->
+    <path d="M125 150 C125 210, 150 230, 200 232 C250 230, 275 210, 275 150" fill="none" stroke="url(#goldGrad)" stroke-width="5" stroke-linecap="round" />
+    <polygon points="200,90 220,110 200,105 180,110" fill="url(#goldGrad)" />
+    <!-- Suit & Shoulders -->
+    <path d="M100 340 C100 250, 140 220, 200 220 C260 220, 300 250, 300 340 Z" fill="#E2E8F0" />
+    <!-- Tie / Lapel -->
+    <polygon points="200,220 180,260 200,320 220,260" fill="url(#goldGrad)" />
+    <polygon points="175,220 200,310 185,340 160,260" fill="#CBD5E1" opacity="0.6" />
+    <polygon points="225,220 200,310 215,340 240,260" fill="#94A3B8" opacity="0.6" />
+  </g>
+
+  <!-- Monogram Badge -->
+  <g transform="translate(200, 345)">
+    <rect x="-70" y="-22" width="140" height="40" rx="20" fill="#06261E" stroke="url(#goldGrad)" stroke-width="2.5" />
+    <text x="0" y="5" font-family="'Plus Jakarta Sans', sans-serif" font-size="16" font-weight="800" fill="#FDE68A" text-anchor="middle" letter-spacing="1">FOUNDER</text>
+  </g>
+</svg>

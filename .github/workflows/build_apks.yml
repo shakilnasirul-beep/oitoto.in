@@ -1,0 +1,53 @@
+name: Build Oi Toto APKs
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build-apks:
+    name: Build Customer & Driver APKs
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.6'
+          channel: 'stable'
+          cache: true
+
+      - name: Generate Android Platform & Build Customer App APK
+        run: |
+          cd apps/customer_app
+          flutter create . --org in.oitoto --platforms=android
+          flutter pub get
+          flutter build apk --release
+
+      - name: Generate Android Platform & Build Driver App APK
+        run: |
+          cd apps/driver_app
+          flutter create . --org in.oitoto --platforms=android
+          flutter pub get
+          flutter build apk --release
+
+      - name: Upload Passenger Customer APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: oi_toto_customer
+          path: apps/customer_app/build/app/outputs/flutter-apk/app-release.apk
+
+      - name: Upload Driver Partner APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: oi_toto_driver
+          path: apps/driver_app/build/app/outputs/flutter-apk/app-release.apk

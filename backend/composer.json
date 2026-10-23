@@ -1,0 +1,19 @@
+{
+    "name": "oitoto/backend",
+    "description": "Oi Toto! — Pan-India E-Rickshaw Booking Platform Backend REST API",
+    "type": "project",
+    "license": "Proprietary",
+    "require": {
+        "php": ">=8.2.0",
+        "ext-pdo": "*",
+        "ext-pdo_mysql": "*",
+        "ext-json": "*",
+        "ext-mbstring": "*",
+        "ext-openssl": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "OiToto\\": "src/"
+        }
+    }
+}

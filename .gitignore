@@ -1,0 +1,26 @@
+# Git Ignore for Oi Toto Project
+
+# Archives and Large Artifacts
+*.zip
+*.tar.gz
+downloads/*.apk
+
+# Flutter Build Artifacts
+**/build/
+**/.dart_tool/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/.packages
+**/.pub-cache/
+**/.pub/
+
+# Logs
+*.log
+backend/storage/logs/*.log
+
+# Environment Overrides
+backend/.env.local
+
+# OS Generated
+.DS_Store
+Thumbs.db

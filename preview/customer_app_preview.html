@@ -1,0 +1,1165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oi Toto! — Customer Mobile App Full Screen Walkthrough</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <style>
+        :root {
+            --oi-green: #0A8B42;
+            --oi-green-dark: #076831;
+            --oi-green-light: #E8F5E9;
+            --oi-yellow: #FFB703;
+            --oi-yellow-hover: #E5A500;
+            --oi-navy: #0B3C35;
+            --oi-dark-teal: #082823;
+            --oi-bg: #0F172A;
+            --oi-phone-bg: #FFFFFF;
+            --oi-text: #1E293B;
+            --oi-muted: #64748B;
+            --oi-border: #E2E8F0;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: linear-gradient(135deg, #061A14 0%, #0F172A 100%);
+            min-height: 100vh;
+            color: #FFFFFF;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* Header Navigation */
+        .header-bar {
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 16px;
+            padding: 12px 20px;
+            margin-bottom: 24px;
+        }
+
+        .screen-tabs {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-bottom: 20px;
+            max-width: 900px;
+        }
+
+        .screen-tab-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: #FFFFFF;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .screen-tab-btn.active, .screen-tab-btn:hover {
+            background: var(--oi-green);
+            border-color: var(--oi-green);
+        }
+
+        /* Phone Mockup Frame */
+        .phone-frame {
+            width: 400px;
+            height: 800px;
+            background: #000000;
+            border-radius: 50px;
+            padding: 14px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.8), 0 0 0 2px rgba(255, 255, 255, 0.2);
+            position: relative;
+        }
+
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: #FFFFFF;
+            border-radius: 38px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            color: var(--oi-text);
+        }
+
+        /* Top Android Status Bar */
+        .phone-status-bar {
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #1E293B;
+            background: transparent;
+            z-index: 100;
+        }
+
+        .phone-notch {
+            position: absolute;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 24px;
+            background: #000000;
+            border-radius: 14px;
+            z-index: 200;
+        }
+
+        /* App Screens Container */
+        .screen-view {
+            display: none;
+            flex-direction: column;
+            flex-grow: 1;
+            height: calc(100% - 28px);
+            overflow-y: auto;
+            position: relative;
+        }
+        .screen-view.active { display: flex; }
+
+        /* Common Elements */
+        .btn-green {
+            background: var(--oi-green);
+            color: #FFFFFF;
+            border: none;
+            padding: 14px;
+            border-radius: 12px;
+            font-weight: 800;
+            font-size: 0.95rem;
+            cursor: pointer;
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .btn-green:hover { background: var(--oi-green-dark); }
+
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid var(--oi-green);
+            color: var(--oi-green);
+            padding: 12px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        /* Bottom Phone Nav */
+        .bottom-nav {
+            height: 60px;
+            background: #FFFFFF;
+            border-top: 1px solid var(--oi-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 0 10px;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-size: 0.68rem;
+            font-weight: 700;
+            color: var(--oi-muted);
+            cursor: pointer;
+            gap: 2px;
+        }
+        .nav-item.active { color: var(--oi-green); }
+        .nav-item i { font-size: 1.15rem; }
+
+        #customerMapLive {
+            height: 320px;
+            width: 100%;
+            background: #e5e3df;
+            position: relative;
+        }
+
+        .leaflet-container {
+            font-family: 'Plus Jakarta Sans', sans-serif !important;
+            background: #e5e3df !important;
+        }
+        .pin-marker {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            color: white;
+            font-size: 15px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.35);
+            border: 2px solid white;
+        }
+        .pin-pickup { background: #0A8B42; }
+        .pin-drop { background: #EF4444; }
+        .pin-toto {
+            background: #FFB703;
+            color: #0B3C35;
+            font-size: 17px;
+            border: 2.5px solid #0B3C35;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            animation: pulse-toto 2s infinite ease-in-out;
+        }
+        @keyframes pulse-toto {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 183, 3, 0.7); }
+            70% { transform: scale(1.08); box-shadow: 0 0 0 8px rgba(255, 183, 3, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 183, 3, 0); }
+        }
+        .custom-leaflet-marker {
+            background: none !important;
+            border: none !important;
+        }
+
+        .chip {
+            background: #F1F5F9;
+            border: 1px solid var(--oi-border);
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 0.74rem;
+            font-weight: 600;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .chip.active {
+            background: var(--oi-green-light);
+            border-color: var(--oi-green);
+            color: var(--oi-green-dark);
+        }
+        .map-instruction-pill {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(15, 23, 42, 0.88);
+            color: #FFFFFF;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.68rem;
+            font-weight: 700;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            z-index: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            pointer-events: none;
+            backdrop-filter: blur(4px);
+            white-space: nowrap;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+        }
+        .map-instruction-pill i {
+            color: var(--oi-yellow);
+        }
+        .location-input-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+        }
+        .location-text-field {
+            flex-grow: 1;
+            border: none;
+            background: transparent;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: #1E293B;
+            outline: none;
+            font-family: inherit;
+            width: 100%;
+        }
+        .location-text-field::placeholder {
+            color: #94A3B8;
+            font-weight: 500;
+        }
+        .btn-loc-action {
+            background: rgba(10, 139, 66, 0.1);
+            color: var(--oi-green);
+            border: 1px solid rgba(10, 139, 66, 0.25);
+            border-radius: 8px;
+            padding: 3px 8px;
+            font-size: 0.7rem;
+            font-weight: 800;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+        .btn-loc-action:hover, .btn-loc-action.active {
+            background: var(--oi-green);
+            color: #FFFFFF;
+        }
+        .places-dropdown {
+            position: absolute;
+            top: calc(100% + 4px);
+            left: 0;
+            right: 0;
+            background: #FFFFFF;
+            border: 1px solid var(--oi-border);
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.18);
+            z-index: 1000;
+            max-height: 180px;
+            overflow-y: auto;
+            display: none;
+        }
+        .place-item {
+            padding: 8px 12px;
+            font-size: 0.78rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            border-bottom: 1px solid #F1F5F9;
+            color: #1E293B;
+        }
+        .place-item:last-child { border-bottom: none; }
+        .place-item:hover {
+            background: var(--oi-green-light);
+            color: var(--oi-green-dark);
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-bar">
+        <div style="display: flex; align-items: center; gap: 10px;">
+            <img src="logo.png" style="width: 36px; height: 36px; border-radius: 8px;">
+            <div>
+                <h4 style="margin: 0; color: var(--oi-yellow); font-weight: 800;">Oi Toto! Customer Mobile UI</h4>
+                <small style="color: rgba(255,255,255,0.7); font-size: 0.75rem;">Passenger Mobile Screen Walkthrough</small>
+            </div>
+        </div>
+        <div style="display: flex; gap: 8px;">
+            <a href="index.html" class="screen-tab-btn" style="background: rgba(255,255,255,0.1);"><i class="bi bi-phone"></i> Dual Phone View</a>
+            <a href="../admin/index.html" class="screen-tab-btn" style="background: var(--oi-green);"><i class="bi bi-speedometer2"></i> Admin Portal</a>
+        </div>
+    </div>
+
+    <!-- Screen Switcher Tabs -->
+    <div class="screen-tabs">
+        <button class="screen-tab-btn active" onclick="switchCustomerScreen('scrSplash')">1. Splash Screen</button>
+        <button class="screen-tab-btn" onclick="switchCustomerScreen('scrOnboard')">2. Onboarding (Intro)</button>
+        <button class="screen-tab-btn" onclick="switchCustomerScreen('scrLogin')">3. OTP Login (Auth)</button>
+        <button class="screen-tab-btn" onclick="switchCustomerScreen('scrHome')">4. Home Map Booking</button>
+        <button class="screen-tab-btn" onclick="switchCustomerScreen('scrActive')">5. Live Tracking & Start OTP</button>
+        <button class="screen-tab-btn" onclick="switchCustomerScreen('scrReceipt')">6. Digital Receipt & Rating</button>
+        <button class="screen-tab-btn" onclick="switchCustomerScreen('scrProfile')">7. Profile & Safety SOS</button>
+    </div>
+
+    <!-- Phone Frame -->
+    <div class="phone-frame">
+        <div class="phone-notch"></div>
+
+        <div class="phone-screen">
+            <!-- Android Status Bar -->
+            <div class="phone-status-bar">
+                <span>09:41</span>
+                <div style="display: flex; gap: 6px; align-items: center;">
+                    <i class="bi bi-wifi"></i>
+                    <i class="bi bi-reception-4"></i>
+                    <i class="bi bi-battery-full"></i>
+                </div>
+            </div>
+
+            <!-- ============================================== -->
+            <!-- SCREEN 1: SPLASH SCREEN -->
+            <!-- ============================================== -->
+            <div class="screen-view active" id="scrSplash" style="background: #FFFFFF; align-items: center; justify-content: center; text-align: center; padding: 30px;">
+                <img src="logo.png" style="width: 140px; height: 140px; border-radius: 28px; box-shadow: 0 16px 36px rgba(10,139,66,0.22); margin-bottom: 24px;">
+                <h1 style="font-size: 2.2rem; font-weight: 900; letter-spacing: -0.5px; margin-bottom: 6px;">
+                    <span style="color: var(--oi-yellow);">Oi </span><span style="color: var(--oi-navy);">Toto!</span>
+                </h1>
+                <div style="background: var(--oi-green-light); color: var(--oi-green-dark); padding: 5px 16px; border-radius: 20px; font-weight: 800; font-size: 0.85rem; margin-bottom: 16px;">
+                    Tap. Book. Cholo!
+                </div>
+                <p style="color: var(--oi-muted); font-size: 0.86rem; margin-bottom: 40px;">
+                    Eco-Friendly E-Rickshaw Commute Platform
+                </p>
+                <button class="btn-green" onclick="switchCustomerScreen('scrOnboard')">
+                    Get Started <i class="bi bi-arrow-right"></i>
+                </button>
+            </div>
+
+            <!-- ============================================== -->
+            <!-- SCREEN 2: ONBOARDING CAROUSEL -->
+            <!-- ============================================== -->
+            <div class="screen-view" id="scrOnboard" style="padding: 24px; justify-content: space-between;">
+                <div style="text-align: right;">
+                    <span style="color: var(--oi-muted); font-size: 0.8rem; font-weight: 700; cursor: pointer;" onclick="switchCustomerScreen('scrLogin')">Skip</span>
+                </div>
+
+                <div style="text-align: center; padding: 20px 0;">
+                    <div style="width: 120px; height: 120px; border-radius: 50%; background: var(--oi-green-light); color: var(--oi-green); display: flex; align-items: center; justify-content: center; font-size: 3.5rem; margin: 0 auto 28px;">
+                        <i class="bi bi-lightning-charge-fill text-warning"></i>
+                    </div>
+                    <h3 style="font-weight: 900; color: var(--oi-navy); margin-bottom: 12px;">Zero-Emission E-Rickshaws</h3>
+                    <p style="color: var(--oi-muted); font-size: 0.88rem; line-height: 1.5;">
+                        Zero smoke, zero noise! 100% battery-operated smart toto for rapid, comfortable intra-city commute.
+                    </p>
+                </div>
+
+                <div>
+                    <div style="display: flex; justify-content: center; gap: 6px; margin-bottom: 24px;">
+                        <span style="width: 24px; height: 8px; border-radius: 4px; background: var(--oi-green);"></span>
+                        <span style="width: 8px; height: 8px; border-radius: 4px; background: #E2E8F0;"></span>
+                        <span style="width: 8px; height: 8px; border-radius: 4px; background: #E2E8F0;"></span>
+                    </div>
+                    <button class="btn-green" onclick="switchCustomerScreen('scrLogin')">
+                        Next <i class="bi bi-arrow-right"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ============================================== -->
+            <!-- SCREEN 3: MOBILE OTP LOGIN -->
+            <!-- ============================================== -->
+            <div class="screen-view" id="scrLogin" style="padding: 28px 24px; justify-content: space-between;">
+                <div>
+                    <h2 style="font-weight: 900; color: var(--oi-navy); margin-bottom: 6px; font-size: 1.5rem;">Enter Mobile Number</h2>
+                    <p style="color: var(--oi-muted); font-size: 0.84rem; margin-bottom: 28px;">
+                        We will send a 6-digit verification code to your number.
+                    </p>
+
+                    <div style="display: flex; border: 1.5px solid var(--oi-border); border-radius: 12px; overflow: hidden; margin-bottom: 16px;">
+                        <span style="background: #F8FAFC; padding: 14px; font-weight: 800; font-size: 0.95rem; border-right: 1px solid var(--oi-border);">🇮🇳 +91</span>
+                        <input type="tel" value="9870001111" style="flex-grow: 1; border: none; padding: 14px; font-weight: 700; font-size: 1rem; outline: none;">
+                    </div>
+
+                    <!-- Sandbox OTP Auto-fill hint -->
+                    <div style="background: #FEF08A; border: 1px solid #EAB308; border-radius: 10px; padding: 10px; margin-bottom: 20px;">
+                        <small style="color: #854D0E; font-weight: 700; font-size: 0.76rem;">
+                            [SANDBOX DEMO] OTP Code: <strong>123456</strong>
+                        </small>
+                    </div>
+
+                    <input type="text" value="123456" maxlength="6" style="width: 100%; text-align: center; font-size: 1.6rem; font-weight: 900; letter-spacing: 8px; padding: 12px; border: 1.5px solid var(--oi-green); border-radius: 12px; outline: none; margin-bottom: 24px;">
+
+                    <button class="btn-green" onclick="switchCustomerScreen('scrHome')">
+                        Verify & Proceed
+                    </button>
+                </div>
+
+                <small style="text-align: center; color: var(--oi-muted); font-size: 0.72rem;">
+                    Secure 2FA OTP Authentication System
+                </small>
+            </div>
+
+            <!-- ============================================== -->
+            <!-- SCREEN 4: HOME SCREEN & MAP BOOKING -->
+            <!-- ============================================== -->
+            <div class="screen-view" id="scrHome">
+                <!-- App Bar -->
+                <div style="height: 50px; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; border-bottom: 1px solid var(--oi-border);">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <img src="logo.png" style="width: 26px; height: 26px; border-radius: 6px;">
+                        <span style="font-weight: 900; font-size: 1.05rem; color: var(--oi-navy);">Oi Toto!</span>
+                    </div>
+                    <span style="background: var(--oi-green-light); color: var(--oi-green-dark); padding: 3px 8px; border-radius: 12px; font-size: 0.72rem; font-weight: 800;">
+                        🟢 2 Totos Available Nearby
+                    </span>
+                </div>
+
+                <!-- Leaflet Interactive Map -->
+                <div id="customerMapLive">
+                    <div class="map-instruction-pill">
+                        <i class="bi bi-hand-index-thumb-fill"></i> Tap on map or drag pin to choose destination
+                    </div>
+                </div>
+
+                <!-- Bottom Booking Card -->
+                <div style="padding: 14px 16px; background: #FFFFFF; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <!-- Address Inputs -->
+                        <div style="background: #F8FAFC; border: 1px solid var(--oi-border); border-radius: 14px; padding: 10px 12px; margin-bottom: 10px; position: relative;">
+                            
+                            <!-- Pickup Location Row -->
+                            <div class="location-input-row" style="margin-bottom: 8px;">
+                                <i class="bi bi-geo-alt-fill text-success" style="font-size: 1rem; flex-shrink: 0;"></i>
+                                <input type="text" id="cPickupInputLive" class="location-text-field" value="Shyambazar Five-Point Crossing" placeholder="Enter pickup location..." onfocus="showPickupDropdownLive()" oninput="filterPickupDropdownLive(this.value)" autocomplete="off">
+                                <button type="button" class="btn-loc-action" id="cBtnGpsLive" onclick="useDeviceGpsLocationLive()" title="Use Live GPS Location">
+                                    <i class="bi bi-crosshair"></i> <span id="cGpsBtnTextLive">GPS</span>
+                                </button>
+                            </div>
+                            
+                            <!-- Pickup Suggestions Dropdown -->
+                            <div class="places-dropdown" id="cPickupDropdownLive"></div>
+
+                            <div style="border-top: 1px dashed var(--oi-border); margin: 6px 0;"></div>
+
+                            <!-- Destination Location Row -->
+                            <div class="location-input-row">
+                                <i class="bi bi-pin-map-fill text-danger" style="font-size: 1rem; flex-shrink: 0;"></i>
+                                <input type="text" id="cDropInputLive" class="location-text-field" value="Hatibagan Market Crossing" placeholder="Enter destination or drag pin..." onfocus="showDropDropdownLive()" oninput="filterDropDropdownLive(this.value)" autocomplete="off">
+                                <button type="button" class="btn-loc-action" onclick="focusDropOnMapLive()" title="Zoom on map to drop pin">
+                                    <i class="bi bi-geo-fill"></i> Map Pin
+                                </button>
+                            </div>
+
+                            <!-- Destination Suggestions Dropdown -->
+                            <div class="places-dropdown" id="cDropDropdownLive"></div>
+                        </div>
+
+                        <!-- Contextual Nearby Destination Quick Chips (Auto-updates with pickup location!) -->
+                        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px;">
+                            <small style="color: var(--oi-muted); font-size: 0.7rem; font-weight: 700;">
+                                📍 Popular Destinations Near Pickup:
+                            </small>
+                            <small style="color: var(--oi-green); font-size: 0.68rem; font-weight: 800; cursor: pointer;" onclick="useDeviceGpsLocationLive()">
+                                <i class="bi bi-arrow-repeat"></i> GPS Update
+                            </small>
+                        </div>
+                        <div style="display: flex; gap: 6px; overflow-x: auto; margin-bottom: 10px; padding-bottom: 4px;" id="cDynamicChipsLive">
+                            <!-- Generated dynamically by renderNearbyDestinationChipsLive() -->
+                        </div>
+
+                        <!-- Fixed Fare Engine Card -->
+                        <div style="background: var(--oi-green-light); border: 1px solid rgba(10,139,66,0.3); border-radius: 12px; padding: 10px 14px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <div>
+                                <small style="color: var(--oi-green-dark); font-size: 0.72rem; font-weight: 700;">Fixed Toto Fare</small>
+                                <div style="font-size: 1.35rem; font-weight: 900; color: var(--oi-navy);" id="cFareValLive">₹23.00</div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="font-size: 0.78rem; font-weight: 800; color: var(--oi-navy);" id="cDistValLive">1.8 km • ~7 mins</div>
+                                <small style="color: var(--oi-muted); font-size: 0.68rem;">Cash / Online UPI</small>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="btn-green" onclick="switchCustomerScreen('scrActive')">
+                        <i class="bi bi-ev-front"></i> Book Oi Toto!
+                    </button>
+                </div>
+
+                <!-- Bottom Navigation Bar -->
+                <div class="bottom-nav">
+                    <div class="nav-item active"><i class="bi bi-house-door-fill"></i><span>Home</span></div>
+                    <div class="nav-item" onclick="switchCustomerScreen('scrReceipt')"><i class="bi bi-clock-history"></i><span>Rides</span></div>
+                    <div class="nav-item" onclick="switchCustomerScreen('scrProfile')"><i class="bi bi-person-fill"></i><span>Profile</span></div>
+                </div>
+            </div>
+
+            <!-- ============================================== -->
+            <!-- SCREEN 5: ACTIVE TRIP & 4-DIGIT RIDE OTP -->
+            <!-- ============================================== -->
+            <div class="screen-view" id="scrActive">
+                <div style="height: 48px; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; border-bottom: 1px solid var(--oi-border);">
+                    <span style="font-weight: 800; font-size: 0.9rem; color: var(--oi-navy);">Live Ride Tracking</span>
+                    <button style="background: #EF4444; color: #fff; border: none; padding: 4px 10px; border-radius: 14px; font-size: 0.72rem; font-weight: 800;" onclick="alert('🚨 SOS Alert Dispatched: Emergency 100/112 contacted & live GPS location shared with emergency contact!')">
+                        <i class="bi bi-shield-fill"></i> SOS
+                    </button>
+                </div>
+
+                <!-- Map preview -->
+                <div style="height: 200px; background: #e2e8f0; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;">
+                    <div style="text-align: center;">
+                        <span style="font-size: 2.2rem;">🛺</span>
+                        <div style="font-size: 0.75rem; font-weight: 800; color: var(--oi-navy); background: #fff; padding: 2px 8px; border-radius: 10px; margin-top: 4px;">WB-01-E-1001 Arriving (1.5 mins)</div>
+                    </div>
+                </div>
+
+                <div style="padding: 16px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between;">
+                    <div>
+                        <!-- Critical 4-digit Ride Start OTP -->
+                        <div style="background: #FEF08A; border: 2px dashed #CA8A04; border-radius: 14px; padding: 12px; text-align: center; margin-bottom: 14px;">
+                            <small style="color: #854D0E; font-weight: 800; font-size: 0.74rem;">
+                                Share this secret OTP with driver upon boarding:
+                            </small>
+                            <div style="font-size: 2.2rem; font-weight: 900; letter-spacing: 6px; color: var(--oi-navy); margin: 4px 0;">
+                                5544
+                            </div>
+                            <small style="color: #A16207; font-size: 0.68rem;">Secret Ride Start OTP</small>
+                        </div>
+
+                        <!-- Driver Info -->
+                        <div style="border: 1px solid var(--oi-border); border-radius: 14px; padding: 12px; margin-bottom: 12px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <div style="width: 42px; height: 42px; border-radius: 50%; background: var(--oi-green-light); display: flex; align-items: center; justify-content: center; font-size: 1.4rem;">🛺</div>
+                                    <div>
+                                        <div style="font-weight: 800; font-size: 0.95rem;">Subhash Das</div>
+                                        <small style="color: var(--oi-muted); font-size: 0.74rem;">Mayuri EV • ⭐ 4.9 (142 Trips)</small>
+                                    </div>
+                                </div>
+                                <span style="background: #F1F5F9; border: 1px solid var(--oi-border); font-size: 0.74rem; font-weight: 800; padding: 4px 8px; border-radius: 6px;">
+                                    WB-01-E-1001
+                                </span>
+                            </div>
+                            <button class="btn-outline" style="padding: 8px; font-size: 0.8rem;" onclick="alert('Calling driver Subhash Das: +91 9831100001')">
+                                <i class="bi bi-telephone-fill"></i> Call Driver
+                            </button>
+                        </div>
+                    </div>
+
+                    <button class="btn-green" onclick="switchCustomerScreen('scrReceipt')">
+                        Complete Ride & View Receipt
+                    </button>
+                </div>
+            </div>
+
+            <!-- ============================================== -->
+            <!-- SCREEN 6: DIGITAL RECEIPT & RATING -->
+            <!-- ============================================== -->
+            <div class="screen-view" id="scrReceipt" style="padding: 24px; text-align: center;">
+                <div style="width: 60px; height: 60px; border-radius: 50%; background: var(--oi-green-light); color: var(--oi-green); display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 10px auto 14px;">
+                    <i class="bi bi-check-lg"></i>
+                </div>
+                <h3 style="font-weight: 900; color: var(--oi-navy); margin-bottom: 2px;">Ride Completed!</h3>
+                <small style="color: var(--oi-muted); font-size: 0.76rem;">Booking Code: #OT-20261015-8910</small>
+
+                <div style="background: #F8FAFC; border: 1px solid var(--oi-border); border-radius: 14px; padding: 14px; margin: 16px 0; text-align: left;">
+                    <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 6px;">
+                        <span class="text-muted">Base Fare (1.5 km)</span>
+                        <span class="fw-bold">₹20.00</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; font-size: 0.82rem; margin-bottom: 6px;">
+                        <span class="text-muted">Extra Distance (0.35 km)</span>
+                        <span class="fw-bold">₹3.50</span>
+                    </div>
+                    <div style="border-top: 1px dashed var(--oi-border); margin: 8px 0;"></div>
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-weight: 800; font-size: 0.95rem;">Total Fare</span>
+                        <span style="font-weight: 900; font-size: 1.4rem; color: var(--oi-green);">₹23.50</span>
+                    </div>
+                    <small style="color: var(--oi-muted); font-size: 0.7rem;">Payment Mode: Cash Paid</small>
+                </div>
+
+                <div style="font-size: 0.85rem; font-weight: 800; margin-bottom: 8px;">How was your Toto ride?</div>
+                <div style="font-size: 2rem; color: var(--oi-yellow); margin-bottom: 20px;">
+                    ★ ★ ★ ★ ★
+                </div>
+
+                <button class="btn-green" onclick="switchCustomerScreen('scrHome')">
+                    Return to Home
+                </button>
+            </div>
+
+            <!-- ============================================== -->
+            <!-- SCREEN 7: PROFILE & SOS SETTINGS -->
+            <!-- ============================================== -->
+            <div class="screen-view" id="scrProfile" style="padding: 24px;">
+                <h3 style="font-weight: 900; color: var(--oi-navy); margin-bottom: 16px;">Account & Profile</h3>
+
+                <div style="text-align: center; margin-bottom: 24px;">
+                    <div style="width: 70px; height: 70px; border-radius: 50%; background: var(--oi-green-light); color: var(--oi-green); display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 10px;">
+                        <i class="bi bi-person-fill"></i>
+                    </div>
+                    <h4 style="font-weight: 800; margin-bottom: 2px;">Ananya Sen</h4>
+                    <small class="text-muted">+91 9870001111 • ⭐ 4.95 Rating</small>
+                </div>
+
+                <div style="background: #F8FAFC; border: 1px solid var(--oi-border); border-radius: 12px; margin-bottom: 20px;">
+                    <div style="padding: 12px; border-bottom: 1px solid var(--oi-border); display: flex; justify-content: space-between;">
+                        <span style="font-size: 0.82rem; font-weight: 700;">Emergency SOS Contact:</span>
+                        <span style="font-size: 0.82rem; color: var(--oi-green); font-weight: 800;">+91 9870009999</span>
+                    </div>
+                    <div style="padding: 12px; border-bottom: 1px solid var(--oi-border); display: flex; justify-content: space-between;">
+                        <span style="font-size: 0.82rem; font-weight: 700;">Language:</span>
+                        <span style="font-size: 0.82rem; color: var(--oi-navy); font-weight: 800;">English</span>
+                    </div>
+                    <div style="padding: 12px; display: flex; justify-content: space-between;">
+                        <span style="font-size: 0.82rem; font-weight: 700;">Completed Rides:</span>
+                        <span style="font-size: 0.82rem; font-weight: 800;">24</span>
+                    </div>
+                </div>
+
+                <button class="btn-outline" onclick="switchCustomerScreen('scrHome')">
+                    <i class="bi bi-arrow-left"></i> Back to Home
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        let liveMapInstance;
+
+        // Realistic Kolkata landmarks database (WGS84)
+        const KOLKATA_DATABASE = [
+            // North Kolkata / Shyambazar area
+            { id: 'shyambazar', name: 'Shyambazar Five-Point Crossing', area: 'North Kolkata', icon: '🏛️', lat: 22.6028, lng: 88.3718, sub: 'Netaji Statue & Metro' },
+            { id: 'hatibagan', name: 'Hatibagan Market Crossing', area: 'North Kolkata', icon: '🛒', lat: 22.5955, lng: 88.3715, sub: 'Bidhan Sarani Market' },
+            { id: 'rgkar', name: 'R.G. Kar Medical College & Hospital', area: 'North Kolkata', icon: '🏥', lat: 22.6040, lng: 88.3780, sub: 'Belgachia Road' },
+            { id: 'sovabazar', name: 'Sovabazar Rajbari & Metro', area: 'North Kolkata', icon: '🏯', lat: 22.5980, lng: 88.3650, sub: 'Heritage Palace' },
+            { id: 'bagbazar', name: 'Bagbazar Launch Ghat', area: 'North Kolkata', icon: '🚢', lat: 22.6045, lng: 88.3640, sub: 'Ganges River Ferry' },
+            { id: 'girishpark', name: 'Girish Park Crossing', area: 'North Kolkata', icon: '🎭', lat: 22.5860, lng: 88.3615, sub: 'Central Avenue' },
+            { id: 'maniktala', name: 'Maniktala Chaltabagan Crossing', area: 'North Kolkata', icon: '🛒', lat: 22.5880, lng: 88.3740, sub: 'Maniktala Market' },
+
+            // Central Kolkata / Sealdah / College St
+            { id: 'sealdah', name: 'Sealdah Railway Station', area: 'Central Kolkata', icon: '🚆', lat: 22.5670, lng: 88.3710, sub: 'Main Rail Terminal' },
+            { id: 'collegest', name: 'College Street Boi Para & Coffee House', area: 'Central Kolkata', icon: '☕', lat: 22.5744, lng: 88.3629, sub: 'Calcutta University' },
+            { id: 'newmarket', name: 'Esplanade New Market', area: 'Central Kolkata', icon: '🛍️', lat: 22.5605, lng: 88.3525, sub: 'Esplanade Metro' },
+            { id: 'nrs', name: 'NRS Medical College & Hospital', area: 'Central Kolkata', icon: '🏥', lat: 22.5630, lng: 88.3690, sub: 'Hospital Complex' },
+            { id: 'moulali', name: 'Moulali Crossing', area: 'Central Kolkata', icon: '🚦', lat: 22.5600, lng: 88.3685, sub: 'A.J.C. Bose Road' },
+            { id: 'howrahstn', name: 'Howrah Railway Station', area: 'Howrah', icon: '🚆', lat: 22.5855, lng: 88.3425, sub: 'Howrah Bridge Terminal' },
+
+            // Salt Lake & New Town
+            { id: 'saltlake_sec5', name: 'Salt Lake Sector 5 IT Hub', area: 'Salt Lake', icon: '🏢', lat: 22.5735, lng: 88.4331, sub: 'Webel & RDB Boulevard' },
+            { id: 'saltlake_cc1', name: 'City Centre 1 (Salt Lake)', area: 'Salt Lake', icon: '🛍️', lat: 22.5890, lng: 88.4085, sub: 'DC Block Shopping Mall' },
+            { id: 'karunamoyee', name: 'Karunamoyee Bus Terminal', area: 'Salt Lake', icon: '🚇', lat: 22.5820, lng: 88.4190, sub: 'East-West Metro' },
+            { id: 'niccopark', name: 'Nicco Park Amusement Park', area: 'Salt Lake', icon: '🎡', lat: 22.5710, lng: 88.4230, sub: 'Jhilmil Lake' },
+            { id: 'saltlake_stadium', name: 'Salt Lake Stadium (Yuva Bharati)', area: 'Salt Lake', icon: '⚽', lat: 22.5695, lng: 88.4070, sub: 'E.M. Bypass' },
+
+            // South Kolkata
+            { id: 'gariahat', name: 'Gariahat Crossing & Shopping Market', area: 'South Kolkata', icon: '🛍️', lat: 22.5180, lng: 88.3650, sub: 'Gariahat Junction' },
+            { id: 'kalighat', name: 'Kalighat Temple Complex', area: 'South Kolkata', icon: '🛕', lat: 22.5195, lng: 88.3420, sub: 'Pilgrimage Shrine' },
+            { id: 'southcity', name: 'South City Mall (Jodhpur Park)', area: 'South Kolkata', icon: '🏬', lat: 22.5015, lng: 88.3610, sub: 'Prince Anwar Shah Road' },
+            { id: 'deshapriya', name: 'Deshapriya Park Crossing', area: 'South Kolkata', icon: '🌳', lat: 22.5205, lng: 88.3565, sub: 'Rashbehari Avenue' },
+            { id: 'rabindrasarobar', name: 'Rabindra Sarobar Lake & Metro', area: 'South Kolkata', icon: '🚇', lat: 22.5110, lng: 88.3490, sub: 'Lake Gardens' }
+        ];
+
+        let currentPickupCoordLive = [22.6028, 88.3718];
+        let currentPickupNameLive = 'Shyambazar Five-Point Crossing';
+        let currentDropCoordLive = [22.5955, 88.3715];
+        let currentDropNameLive = 'Hatibagan Market';
+        let currentDistanceLive = 1.8;
+        let currentFareLive = 23;
+        let userCustomPinDroppedLive = false;
+
+        let custPickupMarkerLive, custDropMarkerLive, custRoutePolylineLive;
+        let custTotoMarkersLive = [];
+
+        function calculateDistanceKm(lat1, lon1, lat2, lon2) {
+            const R = 6371;
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+                      Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                      Math.sin(dLon/2) * Math.sin(dLon/2);
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+            return Math.max(0.4, Number((R * c * 1.25).toFixed(1)));
+        }
+
+        function calculateTotoFare(km) {
+            if (km <= 1.2) return 15;
+            return Math.round(15 + (km - 1.2) * 7.5);
+        }
+
+        function getNearestLandmarkName(lat, lng) {
+            let closest = null;
+            let minDist = 999;
+            KOLKATA_DATABASE.forEach(place => {
+                const d = calculateDistanceKm(lat, lng, place.lat, place.lng);
+                if (d < minDist) {
+                    minDist = d;
+                    closest = place;
+                }
+            });
+            if (closest && minDist <= 0.6) {
+                return `Near ${closest.name}`;
+            }
+            return `Pinned on Map (${lat.toFixed(4)}, ${lng.toFixed(4)})`;
+        }
+
+        function createDivIcon(iconClass, bgClass, emoji) {
+            return L.divIcon({
+                className: 'custom-leaflet-marker',
+                html: `<div class="pin-marker ${bgClass}">${emoji || `<i class="bi ${iconClass}"></i>`}</div>`,
+                iconSize: [32, 32],
+                iconAnchor: [16, 16],
+                popupAnchor: [0, -18]
+            });
+        }
+
+        function switchCustomerScreen(screenId) {
+            document.querySelectorAll('.screen-view').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.screen-tab-btn').forEach(b => b.classList.remove('active'));
+
+            const target = document.getElementById(screenId);
+            if (target) target.classList.add('active');
+
+            const tabMap = {
+                scrSplash: 0,
+                scrOnboard: 1,
+                scrLogin: 2,
+                scrHome: 3,
+                scrActive: 4,
+                scrReceipt: 5,
+                scrProfile: 6
+            };
+            const btnIdx = tabMap[screenId];
+            if (btnIdx !== undefined) {
+                const btns = document.querySelectorAll('.screen-tabs .screen-tab-btn');
+                if (btns[btnIdx]) btns[btnIdx].classList.add('active');
+            }
+
+            if (screenId === 'scrHome') {
+                setTimeout(initLiveHomeMap, 60);
+                setTimeout(() => { if (liveMapInstance) liveMapInstance.invalidateSize(true); }, 250);
+                setTimeout(() => { if (liveMapInstance) liveMapInstance.invalidateSize(true); }, 500);
+            }
+        }
+
+        function renderNearbyDestinationChipsLive(pickupCoord) {
+            const container = document.getElementById('cDynamicChipsLive');
+            if (!container) return;
+
+            const nearby = KOLKATA_DATABASE
+                .map(place => {
+                    const dist = calculateDistanceKm(pickupCoord[0], pickupCoord[1], place.lat, place.lng);
+                    const fare = calculateTotoFare(dist);
+                    return { ...place, dist, fare };
+                })
+                .filter(p => p.dist > 0.3 && p.dist <= 8.0)
+                .sort((a, b) => a.dist - b.dist)
+                .slice(0, 5);
+
+            container.innerHTML = '';
+            if (nearby.length === 0) {
+                container.innerHTML = '<span style="font-size: 0.72rem; color: #94A3B8; padding: 4px;">Tap map or drag pin to choose destination</span>';
+                return;
+            }
+
+            nearby.forEach((place, idx) => {
+                const chip = document.createElement('div');
+                const isSelected = (!userCustomPinDroppedLive && idx === 0) || (currentDropNameLive.includes(place.name.substring(0, 6)));
+                chip.className = 'chip' + (isSelected ? ' active' : '');
+                chip.innerHTML = `${place.icon} ${place.name.split(' ')[0]} ${place.name.split(' ')[1] || ''} <span style="opacity: 0.8; font-size: 0.68rem; font-weight:800;">₹${place.fare}</span>`;
+                chip.onclick = () => {
+                    document.querySelectorAll('#cDynamicChipsLive .chip').forEach(c => c.classList.remove('active'));
+                    chip.classList.add('active');
+                    userCustomPinDroppedLive = false;
+                    setDestinationSpotLive(place.name, [place.lat, place.lng], place.dist, place.fare);
+                };
+                container.appendChild(chip);
+            });
+
+            if (!userCustomPinDroppedLive && nearby.length > 0) {
+                setDestinationSpotLive(nearby[0].name, [nearby[0].lat, nearby[0].lng], nearby[0].dist, nearby[0].fare);
+            }
+        }
+
+        function updateCustomerRideDetailsLive() {
+            currentDistanceLive = calculateDistanceKm(currentPickupCoordLive[0], currentPickupCoordLive[1], currentDropCoordLive[0], currentDropCoordLive[1]);
+            currentFareLive = calculateTotoFare(currentDistanceLive);
+
+            const fareEl = document.getElementById('cFareValLive');
+            const distEl = document.getElementById('cDistValLive');
+            if (fareEl) fareEl.textContent = '₹' + currentFareLive.toFixed(2);
+            if (distEl) distEl.textContent = currentDistanceLive + ' km • ~' + Math.ceil(currentDistanceLive * 4) + ' mins';
+
+            if (custRoutePolylineLive) {
+                custRoutePolylineLive.setLatLngs([
+                    currentPickupCoordLive,
+                    [(currentPickupCoordLive[0] + currentDropCoordLive[0]) / 2, (currentPickupCoordLive[1] + currentDropCoordLive[1]) / 2],
+                    currentDropCoordLive
+                ]);
+            }
+        }
+
+        function setDestinationSpotLive(name, coord, dist, fare) {
+            currentDropCoordLive = coord;
+            currentDropNameLive = name;
+            const dropInput = document.getElementById('cDropInputLive');
+            if (dropInput) dropInput.value = name;
+
+            if (custDropMarkerLive) {
+                custDropMarkerLive.setLatLng(coord);
+                custDropMarkerLive.bindPopup(`<b>🎯 Destination:</b> ${name}<br>Distance: ${dist} km • Fixed Fare: ₹${fare}`).openPopup();
+            }
+
+            updateCustomerRideDetailsLive();
+
+            if (liveMapInstance) {
+                liveMapInstance.fitBounds([currentPickupCoordLive, currentDropCoordLive], { padding: [40, 40], maxZoom: 16 });
+            }
+        }
+
+        function handleMapPinDropLive(latlng) {
+            userCustomPinDroppedLive = true;
+            document.querySelectorAll('#cDynamicChipsLive .chip').forEach(c => c.classList.remove('active'));
+
+            const lat = latlng.lat;
+            const lng = latlng.lng;
+            const nearestName = getNearestLandmarkName(lat, lng);
+            const dist = calculateDistanceKm(currentPickupCoordLive[0], currentPickupCoordLive[1], lat, lng);
+            const fare = calculateTotoFare(dist);
+
+            setDestinationSpotLive(nearestName, [lat, lng], dist, fare);
+        }
+
+        function focusDropOnMapLive() {
+            if (liveMapInstance) {
+                liveMapInstance.setView(currentDropCoordLive, 16);
+                if (custDropMarkerLive) {
+                    custDropMarkerLive.bindPopup('<b>🎯 Destination Pin:</b><br>Drag me or tap map to set destination!').openPopup();
+                }
+            }
+        }
+
+        function useDeviceGpsLocationLive() {
+            const btn = document.getElementById('cBtnGpsLive');
+            const btnText = document.getElementById('cGpsBtnTextLive');
+            if (btnText) btnText.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span> GPS...';
+            if (btn) btn.classList.add('active');
+
+            if (!navigator.geolocation) {
+                alert('GPS support not found on your browser or device. Please select from the list.');
+                if (btnText) btnText.textContent = 'GPS';
+                if (btn) btn.classList.remove('active');
+                showPickupDropdownLive();
+                return;
+            }
+
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    const lat = pos.coords.latitude;
+                    const lng = pos.coords.longitude;
+                    currentPickupCoordLive = [lat, lng];
+                    const nearest = getNearestLandmarkName(lat, lng);
+                    currentPickupNameLive = `📍 Your Current Location (${nearest})`;
+
+                    const pInput = document.getElementById('cPickupInputLive');
+                    if (pInput) pInput.value = currentPickupNameLive;
+                    if (btnText) btnText.textContent = 'GPS On';
+
+                    if (custPickupMarkerLive) {
+                        custPickupMarkerLive.setLatLng(currentPickupCoordLive);
+                        custPickupMarkerLive.bindPopup(`<b>Pickup (Live Device GPS):</b><br>${nearest}`).openPopup();
+                    }
+                    if (liveMapInstance) {
+                        liveMapInstance.setView(currentPickupCoordLive, 16);
+                    }
+
+                    spawnNearbyTotosLive(lat, lng);
+                    userCustomPinDroppedLive = false;
+                    renderNearbyDestinationChipsLive(currentPickupCoordLive);
+                    updateCustomerRideDetailsLive();
+                },
+                (err) => {
+                    console.warn("GPS error", err);
+                    if (btnText) btnText.textContent = 'GPS';
+                    if (btn) btn.classList.remove('active');
+                    alert('📍 GPS access is denied or off. You can type in the search box or choose from the list.');
+                    showPickupDropdownLive();
+                },
+                { enableHighAccuracy: true, timeout: 8000 }
+            );
+        }
+
+        function spawnNearbyTotosLive(lat, lng) {
+            custTotoMarkersLive.forEach(m => liveMapInstance && liveMapInstance.removeLayer(m));
+            custTotoMarkersLive = [];
+
+            const toto1Pos = [lat + 0.0018, lng + 0.0012];
+            const toto2Pos = [lat - 0.0015, lng - 0.0016];
+
+            const totoIcon1 = createDivIcon('', 'pin-toto', '🛺');
+            const m1 = L.marker(toto1Pos, { icon: totoIcon1 })
+                .bindPopup('🛺 <b>Subhash Das (Mayuri EV)</b><br>WB-01-E-1001 • 1 min away')
+                .addTo(liveMapInstance);
+
+            const totoIcon2 = createDivIcon('', 'pin-toto', '🛺');
+            const m2 = L.marker(toto2Pos, { icon: totoIcon2 })
+                .bindPopup('🛺 <b>Sanjay Paul (Saarthi EV)</b><br>WB-01-E-1002 • 2 mins away')
+                .addTo(liveMapInstance);
+
+            custTotoMarkersLive.push(m1, m2);
+        }
+
+        function showPickupDropdownLive() {
+            const dd = document.getElementById('cPickupDropdownLive');
+            if (!dd) return;
+            filterPickupDropdownLive('');
+            dd.style.display = 'block';
+        }
+
+        function filterPickupDropdownLive(val) {
+            const dd = document.getElementById('cPickupDropdownLive');
+            if (!dd) return;
+            const q = val.trim().toLowerCase();
+            const list = KOLKATA_DATABASE.filter(p => !q || p.name.toLowerCase().includes(q) || p.sub.toLowerCase().includes(q));
+
+            dd.innerHTML = '';
+            list.slice(0, 6).forEach(place => {
+                const item = document.createElement('div');
+                item.className = 'place-item';
+                item.innerHTML = `<div><strong>${place.icon} ${place.name}</strong><br><small style="color:#64748B;">${place.sub} • ${place.area}</small></div><span style="font-size:0.7rem; color:var(--oi-green); font-weight:700;">Pickup</span>`;
+                item.onmousedown = () => selectPickupPlaceLive(place);
+                dd.appendChild(item);
+            });
+            dd.style.display = 'block';
+        }
+
+        function selectPickupPlaceLive(place) {
+            currentPickupCoordLive = [place.lat, place.lng];
+            currentPickupNameLive = place.name;
+            const pInput = document.getElementById('cPickupInputLive');
+            if (pInput) pInput.value = place.name;
+            document.getElementById('cPickupDropdownLive').style.display = 'none';
+
+            if (custPickupMarkerLive) {
+                custPickupMarkerLive.setLatLng(currentPickupCoordLive);
+                custPickupMarkerLive.bindPopup(`<b>Pickup:</b> ${place.name}`).openPopup();
+            }
+            if (liveMapInstance) {
+                liveMapInstance.setView(currentPickupCoordLive, 15);
+            }
+
+            spawnNearbyTotosLive(place.lat, place.lng);
+            userCustomPinDroppedLive = false;
+            renderNearbyDestinationChipsLive(currentPickupCoordLive);
+            updateCustomerRideDetailsLive();
+        }
+
+        function showDropDropdownLive() {
+            const dd = document.getElementById('cDropDropdownLive');
+            if (!dd) return;
+            filterDropDropdownLive('');
+            dd.style.display = 'block';
+        }
+
+        function filterDropDropdownLive(val) {
+            const dd = document.getElementById('cDropDropdownLive');
+            if (!dd) return;
+            const q = val.trim().toLowerCase();
+            const list = KOLKATA_DATABASE.filter(p => !q || p.name.toLowerCase().includes(q) || p.sub.toLowerCase().includes(q));
+
+            dd.innerHTML = '';
+            list.slice(0, 6).forEach(place => {
+                const dist = calculateDistanceKm(currentPickupCoordLive[0], currentPickupCoordLive[1], place.lat, place.lng);
+                const fare = calculateTotoFare(dist);
+                const item = document.createElement('div');
+                item.className = 'place-item';
+                item.innerHTML = `<div><strong>${place.icon} ${place.name}</strong><br><small style="color:#64748B;">${place.sub}</small></div><span style="font-size:0.72rem; color:var(--oi-navy); font-weight:800;">${dist} km • ₹${fare}</span>`;
+                item.onmousedown = () => {
+                    document.getElementById('cDropDropdownLive').style.display = 'none';
+                    userCustomPinDroppedLive = false;
+                    setDestinationSpotLive(place.name, [place.lat, place.lng], dist, fare);
+                };
+                dd.appendChild(item);
+            });
+            dd.style.display = 'block';
+        }
+
+        document.addEventListener('click', function(e) {
+            const pDd = document.getElementById('cPickupDropdownLive');
+            const dDd = document.getElementById('cDropDropdownLive');
+            const pInput = document.getElementById('cPickupInputLive');
+            const dInput = document.getElementById('cDropInputLive');
+            if (pDd && pInput && !pInput.contains(e.target) && !pDd.contains(e.target)) {
+                pDd.style.display = 'none';
+            }
+            if (dDd && dInput && !dInput.contains(e.target) && !dDd.contains(e.target)) {
+                dDd.style.display = 'none';
+            }
+        });
+
+        function initLiveHomeMap() {
+            if (liveMapInstance) {
+                liveMapInstance.invalidateSize(true);
+                return;
+            }
+            const el = document.getElementById('customerMapLive');
+            if (!el) return;
+
+            liveMapInstance = L.map('customerMapLive', { zoomControl: false }).setView(currentPickupCoordLive, 15);
+            
+            // Google Maps India Tile Layer with Carto fallback
+            const googleTiles = L.tileLayer('https://mt{s}.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}', {
+                subdomains: ['0', '1', '2', '3'],
+                maxZoom: 20,
+                attribution: '&copy; <a href="https://maps.google.com" target="_blank">Google Maps India</a> | Oi Toto!'
+            });
+            const cartoTiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
+                subdomains: ['a', 'b', 'c', 'd'],
+                maxZoom: 20,
+                attribution: '&copy; CartoDB &copy; OpenStreetMap'
+            });
+            googleTiles.addTo(liveMapInstance);
+            googleTiles.on('tileerror', function() {
+                if (!liveMapInstance.hasLayer(cartoTiles)) {
+                    cartoTiles.addTo(liveMapInstance);
+                }
+            });
+
+            // Pickup Marker (Draggable)
+            const pickupIcon = createDivIcon('bi-geo-alt-fill', 'pin-pickup');
+            custPickupMarkerLive = L.marker(currentPickupCoordLive, { icon: pickupIcon, draggable: true })
+                .bindPopup(`<b>Pickup:</b> ${currentPickupNameLive}<br><small style="color:var(--oi-muted);">Drag pin to adjust pickup</small>`)
+                .addTo(liveMapInstance);
+
+            custPickupMarkerLive.on('dragend', function(e) {
+                const pos = e.target.getLatLng();
+                currentPickupCoordLive = [pos.lat, pos.lng];
+                currentPickupNameLive = getNearestLandmarkName(pos.lat, pos.lng);
+                const pInput = document.getElementById('cPickupInputLive');
+                if (pInput) pInput.value = currentPickupNameLive;
+                custPickupMarkerLive.bindPopup(`<b>Pickup:</b> ${currentPickupNameLive}`).openPopup();
+                renderNearbyDestinationChipsLive(currentPickupCoordLive);
+                updateCustomerRideDetailsLive();
+            });
+
+            // Destination Marker (Draggable)
+            const dropIcon = createDivIcon('bi-pin-map-fill', 'pin-drop');
+            custDropMarkerLive = L.marker(currentDropCoordLive, { icon: dropIcon, draggable: true })
+                .bindPopup(`<b>Destination:</b> ${currentDropNameLive}<br><small style="color:var(--oi-muted);">Drag pin to choose destination</small>`)
+                .addTo(liveMapInstance);
+
+            custDropMarkerLive.on('dragend', function(e) {
+                handleMapPinDropLive(e.target.getLatLng());
+            });
+
+            // Click on map listener
+            liveMapInstance.on('click', function(e) {
+                handleMapPinDropLive(e.latlng);
+            });
+
+            // Route Polyline
+            custRoutePolylineLive = L.polyline([
+                currentPickupCoordLive,
+                currentDropCoordLive
+            ], {
+                color: '#0A8B42',
+                weight: 5,
+                opacity: 0.9,
+                dashArray: '7, 6'
+            }).addTo(liveMapInstance);
+
+            spawnNearbyTotosLive(currentPickupCoordLive[0], currentPickupCoordLive[1]);
+            renderNearbyDestinationChipsLive(currentPickupCoordLive);
+
+            setTimeout(() => {
+                liveMapInstance.invalidateSize(true);
+                liveMapInstance.fitBounds([currentPickupCoordLive, currentDropCoordLive], { padding: [35, 35] });
+            }, 300);
+        }
+
+        window.addEventListener('resize', () => {
+            if (liveMapInstance) liveMapInstance.invalidateSize(true);
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initLiveHomeMap();
+        });
+    </script>
+</body>
+</html>
