@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:geolocator/geolocator.dart';
 import '../core/theme/driver_theme.dart';
 import '../core/constants/driver_constants.dart';
 import '../core/localization/driver_localizations.dart';
@@ -70,8 +71,23 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
     _gpsTimer?.cancel();
     _pollTripTimer?.cancel();
 
+    // Fetch initial device GPS position
+    Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high).then((pos) {
+      if (mounted) {
+        setState(() => _currentLocation = LatLng(pos.latitude, pos.longitude));
+        _mapController.move(_currentLocation, 15.0);
+      }
+    }).catchError((_) {});
+
     // 1. Broadcast GPS every 6 seconds
-    _gpsTimer = Timer.periodic(const Duration(seconds: 6), (_) {
+    _gpsTimer = Timer.periodic(const Duration(seconds: 6), (_) async {
+      try {
+        final pos = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.medium);
+        if (mounted) {
+          setState(() => _currentLocation = LatLng(pos.latitude, pos.longitude));
+        }
+      } catch (_) {}
+
       DriverApiService().updateLocation(
         _currentLocation.latitude,
         _currentLocation.longitude,

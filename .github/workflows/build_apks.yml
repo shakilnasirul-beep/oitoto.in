@@ -63,7 +63,10 @@ jobs:
 
           bg = 'android/app/build.gradle'
           bg_c = open(bg).read()
+          bg_c = bg_c.replace('compileSdkVersion flutter.compileSdkVersion', 'compileSdkVersion 34')
+          bg_c = bg_c.replace('compileSdk = flutter.compileSdk', 'compileSdk = 34')
           bg_c = bg_c.replace('minSdkVersion flutter.minSdkVersion', 'minSdkVersion 21')
+          bg_c = bg_c.replace('minSdk = flutter.minSdk', 'minSdk = 21')
           bg_c = bg_c.replace('defaultConfig {', 'defaultConfig {\n        multiDexEnabled true')
           open(bg, 'w').write(bg_c)
           "
@@ -142,7 +145,10 @@ jobs:
 
           bg = 'android/app/build.gradle'
           bg_c = open(bg).read()
+          bg_c = bg_c.replace('compileSdkVersion flutter.compileSdkVersion', 'compileSdkVersion 34')
+          bg_c = bg_c.replace('compileSdk = flutter.compileSdk', 'compileSdk = 34')
           bg_c = bg_c.replace('minSdkVersion flutter.minSdkVersion', 'minSdkVersion 21')
+          bg_c = bg_c.replace('minSdk = flutter.minSdk', 'minSdk = 21')
           bg_c = bg_c.replace('defaultConfig {', 'defaultConfig {\n        multiDexEnabled true')
           open(bg, 'w').write(bg_c)
           "
