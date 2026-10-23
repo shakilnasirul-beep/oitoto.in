@@ -1027,43 +1027,45 @@
             margin-top: 2px;
         }
 
-        /* Interactive Fare Estimator Section */
+        /* Interactive Fare Estimator Section - Compact Single-Glance Design */
         .calculator-card {
             background: linear-gradient(135deg, #083429 0%, #06261E 100%);
             color: #FFFFFF;
-            border-radius: 28px;
-            padding: 42px;
-            box-shadow: 0 25px 60px rgba(6, 38, 30, 0.35);
+            border-radius: 20px;
+            padding: 20px 26px;
+            box-shadow: 0 16px 45px rgba(6, 38, 30, 0.3);
             position: relative;
             overflow: hidden;
+            border: 1.5px solid rgba(255, 255, 255, 0.1);
         }
 
         .calc-output-box {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.07);
             backdrop-filter: blur(14px);
             -webkit-backdrop-filter: blur(14px);
-            border: 1px solid rgba(255, 255, 255, 0.18);
-            border-radius: 20px;
-            padding: 26px;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            border-radius: 16px;
+            padding: 14px 18px;
             text-align: center;
         }
 
         .fare-price-big {
-            font-size: 3.4rem;
+            font-size: 2.35rem;
             font-weight: 800;
             color: #FFB703;
             font-family: 'Space Grotesk', sans-serif;
             line-height: 1;
-            margin: 10px 0;
+            margin: 2px 0 4px;
         }
 
         .calc-slider {
             width: 100%;
-            height: 8px;
-            border-radius: 5px;
+            height: 6px;
+            border-radius: 4px;
             background: rgba(255, 255, 255, 0.2);
             outline: none;
             accent-color: #FFB703;
+            cursor: pointer;
         }
 
         /* Why Oi Toto Reactive Alternating Transparent Cards */
@@ -2617,25 +2619,23 @@
             </div>
         </div>
     </section>
-        </div>
-    </section>
 
-    <!-- 4. Interactive Live Fare Calculator Section -->
-    <section id="fareCalculator" class="py-5">
-        <div class="container py-4">
+    <!-- 4. Interactive Live Fare Calculator Section (Compact Single-Glance Design) -->
+    <section id="fareCalculator" class="py-3 py-lg-4">
+        <div class="container py-1 py-lg-2">
             <div class="calculator-card">
-                <div class="row align-items-center g-5">
+                <div class="row align-items-center g-3 g-lg-4">
                     <div class="col-lg-7">
-                        <span class="badge bg-warning text-dark px-3 py-1 fw-bold mb-3" id="badgeCalc">Transparent Estimation</span>
-                        <h2 class="fw-bold mb-3" id="titleCalc">Calculate Your Fixed Fare Instantly</h2>
-                        <p class="text-white-50 mb-4" id="descCalc">
+                        <span class="badge bg-warning text-dark px-2.5 py-0.5 fw-bold mb-1" id="badgeCalc" style="font-size: 0.72rem;">Transparent Estimation</span>
+                        <h3 class="fw-bold mb-1 text-white" id="titleCalc" style="font-size: 1.38rem;">Calculate Your Fixed Fare Instantly</h3>
+                        <p class="text-white-50 small mb-2.5" id="descCalc" style="font-size: 0.82rem; line-height: 1.4;">
                             No bargaining and no surge pricing. First 1 km base fare is fixed at ₹15.00, followed by ₹10.00/km onwards. Use the slider or select standard Kolkata commuter routes below.
                         </p>
 
                         <!-- Preset Route Select -->
-                        <div class="mb-4">
-                            <label class="form-label small fw-bold text-white-50" id="lblQuickRoute">Select Popular Route Preset:</label>
-                            <select class="form-select bg-dark text-white border-secondary py-2" id="quickRouteSelect" onchange="onSelectRoutePreset(this.value)">
+                        <div class="mb-2">
+                            <label class="form-label small fw-bold text-white-50 mb-1" id="lblQuickRoute" style="font-size: 0.76rem;">Select Popular Route Preset:</label>
+                            <select class="form-select form-select-sm bg-dark text-white border-secondary py-1.5" id="quickRouteSelect" onchange="onSelectRoutePreset(this.value)" style="font-size: 0.84rem;">
                                 <option value="1.8">Shyambazar ➔ Hatibagan Market (1.8 km)</option>
                                 <option value="2.3">Hatibagan ➔ College Street Boi Para (2.3 km)</option>
                                 <option value="1.5">Sealdah Station ➔ Moulali Crossing (1.5 km)</option>
@@ -2646,13 +2646,13 @@
                         </div>
 
                         <!-- Distance Slider -->
-                        <div class="mb-3">
-                            <div class="d-flex justify-content-between mb-2">
-                                <span class="small text-white-50" id="lblSliderDist">Trip Distance:</span>
-                                <strong class="text-warning"><span id="calcDistVal">1.8</span> km</strong>
+                        <div class="mb-0">
+                            <div class="d-flex justify-content-between mb-1">
+                                <span class="small text-white-50" id="lblSliderDist" style="font-size: 0.76rem;">Trip Distance:</span>
+                                <strong class="text-warning small"><span id="calcDistVal">1.8</span> km</strong>
                             </div>
                             <input type="range" class="calc-slider" id="calcSlider" min="0.5" max="10.0" step="0.1" value="1.8" oninput="updateFareFromSlider(this.value)">
-                            <div class="d-flex justify-content-between text-white-50 small mt-1">
+                            <div class="d-flex justify-content-between text-white-50 mt-1" style="font-size: 0.72rem;">
                                 <span>0.5 km</span>
                                 <span>5.0 km</span>
                                 <span>10.0 km</span>
@@ -2662,24 +2662,24 @@
 
                     <div class="col-lg-5">
                         <div class="calc-output-box">
-                            <span class="text-white-50 small text-uppercase fw-bold" id="lblEstFare">Total Fixed Upfront Fare</span>
+                            <span class="text-white-50 small text-uppercase fw-bold" id="lblEstFare" style="font-size: 0.72rem; letter-spacing: 0.4px;">Total Fixed Upfront Fare</span>
                             <div class="fare-price-big" id="calcFareBig">₹23.00</div>
-                            <div class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 px-3 py-1 mb-4" id="badgeZeroSurge">
+                            <div class="badge bg-success bg-opacity-25 text-success border border-success border-opacity-50 px-2.5 py-0.5 mb-2.5" id="badgeZeroSurge" style="font-size: 0.72rem;">
                                 <i class="bi bi-shield-check me-1"></i> Zero Surge Guaranteed
                             </div>
 
-                            <div class="d-flex justify-content-around text-start border-top border-secondary border-opacity-50 pt-3 mb-4">
+                            <div class="d-flex justify-content-around text-start border-top border-secondary border-opacity-40 pt-2 mb-2.5">
                                 <div>
-                                    <small class="text-white-50 d-block" id="lblEstTime">Est. Commute</small>
-                                    <strong class="text-white" id="calcTimeVal">~8 mins</strong>
+                                    <small class="text-white-50 d-block" id="lblEstTime" style="font-size: 0.7rem;">Est. Commute</small>
+                                    <strong class="text-white small" id="calcTimeVal">~8 mins</strong>
                                 </div>
                                 <div>
-                                    <small class="text-white-50 d-block" id="lblCo2">CO₂ Prevented</small>
-                                    <strong class="text-success" id="calcCo2Val">0.36 kg</strong>
+                                    <small class="text-white-50 d-block" id="lblCo2" style="font-size: 0.7rem;">CO₂ Prevented</small>
+                                    <strong class="text-success small" id="calcCo2Val">0.36 kg</strong>
                                 </div>
                             </div>
 
-                            <a href="preview/index.html" class="btn btn-oi-yellow w-100 fw-bold py-2 rounded-3 shadow" id="btnCalcSimulator">
+                            <a href="preview/index.html" class="btn btn-oi-yellow btn-sm w-100 fw-bold py-1.5 rounded-3 shadow-sm" id="btnCalcSimulator" style="font-size: 0.84rem;">
                                 <i class="bi bi-play-circle-fill me-1"></i> <span id="btnCalcSimulatorText">Book This Route in Simulator</span>
                             </a>
                         </div>
@@ -4123,6 +4123,19 @@
                     if (portalSec) {
                         const navH = document.querySelector('.navbar-custom')?.offsetHeight || 65;
                         const targetPos = portalSec.getBoundingClientRect().top + window.pageYOffset - navH - 8;
+                        window.scrollTo({ top: targetPos, behavior: 'smooth' });
+                    }
+                });
+            });
+
+            // Header F. Calculator link smooth centering so the compact card is visible at a single glance
+            document.querySelectorAll('a[href="#fareCalculator"]').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const calcSec = document.getElementById('fareCalculator');
+                    if (calcSec) {
+                        const navH = document.querySelector('.navbar-custom')?.offsetHeight || 65;
+                        const targetPos = calcSec.getBoundingClientRect().top + window.pageYOffset - navH - 8;
                         window.scrollTo({ top: targetPos, behavior: 'smooth' });
                     }
                 });
