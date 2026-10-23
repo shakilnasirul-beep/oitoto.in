@@ -70,23 +70,33 @@ class Validator
                         break;
 
                     case 'min':
-                        if ($val !== null) {
+                        if ($val !== null && $val !== '') {
                             $min = (float)$params[0];
-                            if (is_numeric($val) && (float)$val < $min) {
-                                $this->errors[$field][] = "The {$field} must be at least {$min}.";
-                            } elseif (is_string($val) && strlen($val) < (int)$min) {
-                                $this->errors[$field][] = "The {$field} must have at least {$min} characters.";
+                            $isNumericRule = in_array('numeric', $ruleList, true) || is_int($val) || is_float($val);
+                            if ($isNumericRule && is_numeric($val)) {
+                                if ((float)$val < $min) {
+                                    $this->errors[$field][] = "The {$field} must be at least {$min}.";
+                                }
+                            } elseif (is_string($val)) {
+                                if (mb_strlen($val) < (int)$min) {
+                                    $this->errors[$field][] = "The {$field} must have at least {$min} characters.";
+                                }
                             }
                         }
                         break;
 
                     case 'max':
-                        if ($val !== null) {
+                        if ($val !== null && $val !== '') {
                             $max = (float)$params[0];
-                            if (is_numeric($val) && (float)$val > $max) {
-                                $this->errors[$field][] = "The {$field} must not exceed {$max}.";
-                            } elseif (is_string($val) && strlen($val) > (int)$max) {
-                                $this->errors[$field][] = "The {$field} must not exceed {$max} characters.";
+                            $isNumericRule = in_array('numeric', $ruleList, true) || is_int($val) || is_float($val);
+                            if ($isNumericRule && is_numeric($val)) {
+                                if ((float)$val > $max) {
+                                    $this->errors[$field][] = "The {$field} must not exceed {$max}.";
+                                }
+                            } elseif (is_string($val)) {
+                                if (mb_strlen($val) > (int)$max) {
+                                    $this->errors[$field][] = "The {$field} must not exceed {$max} characters.";
+                                }
                             }
                         }
                         break;
