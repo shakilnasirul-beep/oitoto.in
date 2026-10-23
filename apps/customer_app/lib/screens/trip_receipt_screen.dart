@@ -39,7 +39,7 @@ class _TripReceiptScreenState extends State<TripReceiptScreen> {
 
   Future<void> _handleSubmitFeedback() async {
     setState(() => _isSubmitting = true);
-    final bookingId = widget.booking['id'] as int? ?? 1;
+    final bookingId = int.tryParse(widget.booking['id']?.toString() ?? '') ?? 1;
 
     await ApiService().submitRating(
       bookingId,

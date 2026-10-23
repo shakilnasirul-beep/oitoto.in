@@ -11,7 +11,16 @@ import 'history_screen.dart';
 import 'profile_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final String selectedCategory;
+  final String categoryName;
+  final String categoryIcon;
+
+  const HomeScreen({
+    super.key,
+    this.selectedCategory = 'toto',
+    this.categoryName = 'Oi Toto',
+    this.categoryIcon = '🛺',
+  });
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -267,8 +276,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   // Nearby Online E-Rickshaws
                   ..._nearbyDrivers.map((d) {
-                    final dLat = (d['current_lat'] as num?)?.toDouble() ?? _currentLocation.latitude;
-                    final dLng = (d['current_lng'] as num?)?.toDouble() ?? _currentLocation.longitude;
+                    final dLat = double.tryParse(d['current_lat']?.toString() ?? '') ?? _currentLocation.latitude;
+                    final dLng = double.tryParse(d['current_lng']?.toString() ?? '') ?? _currentLocation.longitude;
                     return Marker(
                       point: LatLng(dLat, dLng),
                       width: 40,
@@ -285,8 +294,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                           ],
                         ),
-                        child: const Center(
-                          child: Text('🛺', style: TextStyle(fontSize: 18)),
+                        child: Center(
+                          child: Text(widget.categoryIcon, style: const TextStyle(fontSize: 18)),
                         ),
                       ),
                     );
@@ -328,7 +337,40 @@ class _HomeScreenState extends State<HomeScreen> {
                             color: AppColors.deepNavy,
                           ),
                         ),
-                        const SizedBox(width: 8),
+                        const SizedBox(width: 6),
+                        InkWell(
+                          onTap: () {
+                            if (Navigator.canPop(context)) {
+                              Navigator.pop(context);
+                            }
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+                            decoration: BoxDecoration(
+                              color: const Color(0xFFEFF6FF),
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: const Color(0xFF93C5FD)),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(widget.categoryIcon, style: const TextStyle(fontSize: 12)),
+                                const SizedBox(width: 3),
+                                Text(
+                                  widget.categoryName.split(' ')[0],
+                                  style: const TextStyle(
+                                    color: Color(0xFF1E40AF),
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w800,
+                                  ),
+                                ),
+                                const SizedBox(width: 2),
+                                const Icon(Icons.edit, size: 9, color: Color(0xFF1E40AF)),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 6),
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                           decoration: BoxDecoration(
@@ -408,22 +450,26 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ],
               ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Handle bar
-                  Center(
-                    child: Container(
-                      width: 40,
-                      height: 4,
-                      margin: const EdgeInsets.only(bottom: 14),
-                      decoration: BoxDecoration(
-                        color: Colors.grey.shade300,
-                        borderRadius: BorderRadius.circular(2),
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height * 0.70),
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Handle bar
+                      Center(
+                        child: Container(
+                          width: 40,
+                          height: 4,
+                          margin: const EdgeInsets.only(bottom: 14),
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade300,
+                            borderRadius: BorderRadius.circular(2),
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
 
                   // Pickup & Drop Fields
                   Container(
@@ -608,8 +654,10 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ),
-        ],
+        ),
       ),
-    );
+    ],
+  ),
+);
   }
 }

@@ -4,6 +4,7 @@ import '../core/theme/app_theme.dart';
 import '../core/localization/app_localizations.dart';
 import '../core/services/api_service.dart';
 import 'home_screen.dart';
+import 'ride_category_screen.dart';
 
 class AuthScreen extends StatefulWidget {
   const AuthScreen({super.key});
@@ -105,7 +106,7 @@ class _AuthScreenState extends State<AuthScreen> {
         if (!mounted) return;
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => const HomeScreen()),
+          MaterialPageRoute(builder: (_) => const RideCategoryScreen()),
         );
       } else {
         setState(() => _errorMessage = res['message'] ?? 'Verification failed.');

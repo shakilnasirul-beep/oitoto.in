@@ -13,6 +13,26 @@ void main() async {
       statusBarIconBrightness: Brightness.dark,
     ),
   );
+  ErrorWidget.builder = (FlutterErrorDetails details) {
+    return Material(
+      color: Colors.white,
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Icon(Icons.error_outline, size: 48, color: DriverColors.primaryGreen),
+              const SizedBox(height: 12),
+              const Text('Oi Toto Partner', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: DriverColors.deepNavy)),
+              const SizedBox(height: 6),
+              Text(details.exceptionAsString(), textAlign: TextAlign.center, style: const TextStyle(fontSize: 12, color: DriverColors.textMuted)),
+            ],
+          ),
+        ),
+      ),
+    );
+  };
   await DriverApiService().init();
   runApp(const OiTotoDriverApp());
 }

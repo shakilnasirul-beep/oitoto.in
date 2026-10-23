@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../core/theme/app_theme.dart';
 import '../core/services/api_service.dart';
 import 'home_screen.dart';
+import 'ride_category_screen.dart';
 import 'onboarding_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -45,7 +46,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
     if (ApiService().isAuthenticated) {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => const HomeScreen()),
+        MaterialPageRoute(builder: (_) => const RideCategoryScreen()),
       );
     } else {
       Navigator.pushReplacement(

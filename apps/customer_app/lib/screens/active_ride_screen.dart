@@ -108,9 +108,9 @@ class _ActiveRideScreenState extends State<ActiveRideScreen> {
   }
 
   Future<void> _handleSos() async {
-    final lat = (_currentBooking?['pickup_lat'] as num?)?.toDouble() ?? 22.5726;
-    final lng = (_currentBooking?['pickup_lng'] as num?)?.toDouble() ?? 88.3639;
-    final bId = _currentBooking?['id'] as int?;
+    final lat = double.tryParse(_currentBooking?['pickup_lat']?.toString() ?? '') ?? 22.5726;
+    final lng = double.tryParse(_currentBooking?['pickup_lng']?.toString() ?? '') ?? 88.3639;
+    final bId = int.tryParse(_currentBooking?['id']?.toString() ?? '');
 
     final res = await ApiService().triggerSos(lat, lng, bookingId: bId);
     if (!mounted) return;
@@ -153,10 +153,10 @@ class _ActiveRideScreenState extends State<ActiveRideScreen> {
     final status = _currentBooking?['booking_status'] ?? 'requested';
     final otp = _currentBooking?['start_otp'] ?? '----';
 
-    final pLat = (_currentBooking?['pickup_lat'] as num?)?.toDouble() ?? 22.5726;
-    final pLng = (_currentBooking?['pickup_lng'] as num?)?.toDouble() ?? 88.3639;
-    final dLat = (_currentBooking?['driver_lat'] as num?)?.toDouble();
-    final dLng = (_currentBooking?['driver_lng'] as num?)?.toDouble();
+    final pLat = double.tryParse(_currentBooking?['pickup_lat']?.toString() ?? '') ?? 22.5726;
+    final pLng = double.tryParse(_currentBooking?['pickup_lng']?.toString() ?? '') ?? 88.3639;
+    final dLat = double.tryParse(_currentBooking?['driver_lat']?.toString() ?? '');
+    final dLng = double.tryParse(_currentBooking?['driver_lng']?.toString() ?? '');
 
     final centerPoint = LatLng(pLat, pLng);
 

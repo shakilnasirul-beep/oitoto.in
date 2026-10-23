@@ -52,10 +52,11 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
         _isLoading = false;
 
         if (prof?['current_lat'] != null && prof?['current_lng'] != null) {
-          _currentLocation = LatLng(
-            (prof!['current_lat'] as num).toDouble(),
-            (prof!['current_lng'] as num).toDouble(),
-          );
+          final lat = double.tryParse(prof!['current_lat']?.toString() ?? '');
+          final lng = double.tryParse(prof!['current_lng']?.toString() ?? '');
+          if (lat != null && lng != null) {
+            _currentLocation = LatLng(lat, lng);
+          }
         }
       });
 
@@ -121,7 +122,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
   // --- TRIP STAGES ACTIONS ---
   Future<void> _handleArrived() async {
     if (_activeTrip == null) return;
-    final bId = _activeTrip!['id'] as int;
+    final bId = int.tryParse(_activeTrip!['id']?.toString() ?? '') ?? 0;
 
     final res = await DriverApiService().markArrived(bId);
     if (res['success'] == true) {
@@ -134,7 +135,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
 
   Future<void> _handleStartTrip() async {
     if (_activeTrip == null) return;
-    final bId = _activeTrip!['id'] as int;
+    final bId = int.tryParse(_activeTrip!['id']?.toString() ?? '') ?? 0;
     final otp = _otpInputController.text.trim();
 
     if (otp.length != 4) {
@@ -158,8 +159,8 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
 
   Future<void> _handleCompleteTrip() async {
     if (_activeTrip == null) return;
-    final bId = _activeTrip!['id'] as int;
-    final dist = (_activeTrip!['estimated_distance_km'] as num?)?.toDouble() ?? 1.8;
+    final bId = int.tryParse(_activeTrip!['id']?.toString() ?? '') ?? 0;
+    final dist = double.tryParse(_activeTrip!['estimated_distance_km']?.toString() ?? '') ?? 1.8;
 
     final res = await DriverApiService().completeTrip(bId, dist);
     if (res['success'] == true) {

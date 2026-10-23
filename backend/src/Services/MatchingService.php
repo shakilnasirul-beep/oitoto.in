@@ -61,6 +61,8 @@ class MatchingService
             );
 
             if ($dist <= $radiusKm) {
+                $cand['current_lat'] = (float)$cand['current_lat'];
+                $cand['current_lng'] = (float)$cand['current_lng'];
                 $cand['distance_to_pickup_km'] = $dist;
                 $cand['estimated_pickup_mins'] = LocationService::estimateDurationMinutes($dist, 16.0);
                 $nearby[] = $cand;
