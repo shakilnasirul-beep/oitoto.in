@@ -2026,6 +2026,23 @@
             box-shadow: 0 16px 36px -8px rgba(99, 102, 241, 0.24), 0 0 0 1.5px rgba(99, 102, 241, 0.35);
         }
 
+        /* 4. Operations & Digital Systems Card: Soft Amber/Warm Gold Tint */
+        .team-card-ops {
+            background: linear-gradient(145deg, rgba(245, 158, 11, 0.05) 0%, rgba(217, 119, 6, 0.03) 100%);
+            border: 1.5px solid rgba(245, 158, 11, 0.22);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+        }
+        .team-card-ops::after {
+            background: linear-gradient(90deg, #F59E0B 0%, #D97706 100%);
+        }
+        .team-card-ops:hover {
+            background: #FFFFFF !important;
+            border-color: #F59E0B;
+            transform: translateY(-8px);
+            box-shadow: 0 16px 36px -8px rgba(245, 158, 11, 0.24), 0 0 0 1.5px rgba(245, 158, 11, 0.35);
+        }
+
         /* Avatar Container & Interactive Ring */
         .team-avatar-container {
             position: relative;
@@ -2054,6 +2071,9 @@
         }
         .team-card-dev .team-avatar-ring {
             background: linear-gradient(135deg, rgba(99, 102, 241, 0.45), rgba(168, 85, 247, 0.55));
+        }
+        .team-card-ops .team-avatar-ring {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.45), rgba(217, 119, 6, 0.55));
         }
 
         .team-card:hover .team-avatar-ring {
@@ -2143,6 +2163,11 @@
             background: #EEF2FF;
             color: #4338CA;
             border: 1px solid #C7D2FE;
+        }
+        .role-pill-ops {
+            background: #FFFBEB;
+            color: #B45309;
+            border: 1px solid #FDE68A;
         }
 
         .team-card:hover .team-role-pill {
@@ -3006,7 +3031,7 @@
 
             <div class="row g-4 justify-content-center">
                 <!-- CARD 1: FOUNDER -->
-                <div class="col-lg-4 col-md-6 team-card-col">
+                <div class="col-xl-3 col-lg-6 col-md-6 team-card-col">
                     <div class="team-card team-card-founder">
                         <div>
                             <!-- Avatar with rotating halo and fallback -->
@@ -3047,7 +3072,7 @@
                 </div>
 
                 <!-- CARD 2: CEO -->
-                <div class="col-lg-4 col-md-6 team-card-col">
+                <div class="col-xl-3 col-lg-6 col-md-6 team-card-col">
                     <div class="team-card team-card-ceo">
                         <div>
                             <!-- Avatar with rotating halo and fallback -->
@@ -3088,7 +3113,7 @@
                 </div>
 
                 <!-- CARD 3: DEVELOPER -->
-                <div class="col-lg-4 col-md-6 team-card-col">
+                <div class="col-xl-3 col-lg-6 col-md-6 team-card-col">
                     <div class="team-card team-card-dev">
                         <div>
                             <!-- Avatar with rotating halo and fallback -->
@@ -3122,6 +3147,47 @@
                             <div class="team-social-links">
                                 <a href="javascript:void(0)" class="team-social-btn" title="GitHub / Tech Stack"><i class="bi bi-github"></i></a>
                                 <a href="javascript:void(0)" class="team-social-btn" title="Contact Developer"><i class="bi bi-envelope-fill"></i></a>
+                                <a href="javascript:void(0)" class="team-social-btn" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CARD 4: BUSINESS OPERATIONS & DIGITAL SYSTEMS -->
+                <div class="col-xl-3 col-lg-6 col-md-6 team-card-col">
+                    <div class="team-card team-card-ops">
+                        <div>
+                            <!-- Avatar with rotating halo -->
+                            <div class="team-avatar-container">
+                                <div class="team-avatar-ring"></div>
+                                <div class="team-avatar-inner">
+                                    <img src="assets/team/md_adnan.jpg" alt="Mr. Md. Adnan" class="team-avatar-img" style="object-position: center 12%;">
+                                </div>
+                                <div class="team-verified-pill text-warning" title="Operations & Digital Systems Specialist">
+                                    <i class="bi bi-briefcase-fill"></i>
+                                </div>
+                            </div>
+
+                            <span class="team-role-pill role-pill-ops" id="teamRoleOps">
+                                <i class="bi bi-briefcase-fill text-warning"></i> Business Operations & Digital Systems Specialist
+                            </span>
+
+                            <h4 class="team-name" id="teamNameOps">Mr. Md. Adnan</h4>
+                            <span class="team-degree-pill" id="teamDegOps">B.A. Graduate | Business & Administration</span>
+
+                            <p class="team-bio" id="teamBioOps">
+                                A motivated business professional with an interest in digital systems, technology, and business administration. Focused on improving operational efficiency, organizing business processes, managing digital information, and supporting technology-driven solutions. Committed to continuous learning, problem-solving, and professional growth.
+                            </p>
+                        </div>
+
+                        <!-- Card Footer -->
+                        <div class="team-card-footer">
+                            <span class="team-org-label">
+                                <i class="bi bi-graph-up-arrow text-warning"></i> Business Operations
+                            </span>
+                            <div class="team-social-links">
+                                <a href="javascript:void(0)" class="team-social-btn" title="Executive Profile"><i class="bi bi-person-badge-fill"></i></a>
+                                <a href="javascript:void(0)" class="team-social-btn" title="Contact Specialist"><i class="bi bi-envelope-fill"></i></a>
                                 <a href="javascript:void(0)" class="team-social-btn" title="LinkedIn"><i class="bi bi-linkedin"></i></a>
                             </div>
                         </div>
@@ -3344,6 +3410,10 @@
                 teamNameDev: 'Mr. Nasirul Islam_Shakil',
                 teamDegDev: 'M.A, M.Ed & Computer Science',
                 teamBioDev: 'Bridging education pedagogy and high-performance software engineering. Chief architect of Oi Toto\'s real-time matching algorithms, offline QR payments, concurrency-safe dispatch engine, and mobile apps.',
+                teamRoleOps: '<i class="bi bi-briefcase-fill text-warning"></i> Business Operations & Digital Systems Specialist',
+                teamNameOps: 'Mr. Md. Adnan',
+                teamDegOps: 'B.A. Graduate | Business & Administration',
+                teamBioOps: 'A motivated business professional with an interest in digital systems, technology, and business administration. Focused on improving operational efficiency, organizing business processes, managing digital information, and supporting technology-driven solutions. Committed to continuous learning, problem-solving, and professional growth.',
                 footerAbout: 'West Bengal\'s premier smart and secure electric rickshaw aggregator platform. Making daily urban last-mile travel eco-friendly, predictable, and dignified.',
                 footerPortalsTitle: 'System Portals',
                 footerCustApp: 'Passenger App',
@@ -3493,6 +3563,10 @@
                 teamNameDev: 'Mr. Nasirul Islam_Shakil',
                 teamDegDev: 'M.A, M.Ed & Computer Science',
                 teamBioDev: 'শিক্ষাবিজ্ঞান ও আধুনিক কম্পিউটার সায়েন্সের এক অনন্য সমন্বয়। ওই টোটোর রিয়েল-টাইম রাইড ম্যাচিং, দ্রুত QR পেমেন্ট ও কনকারেন্সি-সেফ আধুনিক মোবাইল অ্যাপের প্রধান স্থপতি।',
+                teamRoleOps: '<i class="bi bi-briefcase-fill text-warning"></i> বিজনেস অপারেশনস ও ডিজিটাল সিস্টেম স্পেশালিস্ট',
+                teamNameOps: 'Mr. Md. Adnan',
+                teamDegOps: 'বি.এ. গ্র্যাজুয়েট | বিজনেস অ্যান্ড অ্যাডমিনিস্ট্রেশন',
+                teamBioOps: 'ডিজিটাল সিস্টেম, প্রযুক্তি ও ব্যবসায়িক ব্যবস্থাপনায় নিবেদিতপ্রাণ পেশাদার। কর্মদক্ষতা বৃদ্ধি, ব্যবসায়িক প্রক্রিয়া সুসংগঠিতকরণ, ডিজিটাল তথ্য ব্যবস্থাপনা এবং প্রযুক্তিভিত্তিক সমাধান সম্প্রসারণে সক্রিয় ভূমিকা রাখছেন। অবিচ্ছিন্ন শিক্ষা, সমস্যা সমাধান ও পেশাগত উৎকর্ষে প্রতিশ্রুতিবদ্ধ।',
                 footerAbout: 'পশ্চিমবঙ্গের প্রথম স্মার্ট ও সম্পূর্ণ সুরক্ষিত ইলেকট্রিক রিকশা এগ্রিগেটর প্ল্যাটফর্ম।',
                 footerPortalsTitle: 'সিস্টেম পোর্টাল',
                 footerCustApp: 'যাত্রী অ্যাপ',
@@ -3642,6 +3716,10 @@
                 teamNameDev: 'Mr. Nasirul Islam_Shakil',
                 teamDegDev: 'M.A, M.Ed & Computer Science',
                 teamBioDev: 'शिक्षा और कंप्यूटर विज्ञान के अनूठे मेल के साथ, वे ओई टोटो के रियल-टाइम एल्गोरिदम, त्वरित क्यूआर भुगतान और मोबाइल ऐप्स के मुख्य निर्माता हैं।',
+                teamRoleOps: '<i class="bi bi-briefcase-fill text-warning"></i> व्यवसाय संचालन एवं डिजिटल सिस्टम विशेषज्ञ',
+                teamNameOps: 'Mr. Md. Adnan',
+                teamDegOps: 'बी.ए. स्नातक | व्यवसाय एवं प्रशासन',
+                teamBioOps: 'डिजिटल सिस्टम, प्रौद्योगिकी और व्यवसाय प्रशासन में रुचि रखने वाले समर्पित पेशेवर। परिचालन दक्षता बढ़ाने, व्यावसायिक प्रक्रियाओं को व्यवस्थित करने, डिजिटल जानकारी के प्रबंधन और तकनीक-आधारित समाधानों को आगे बढ़ाने में सक्रिय। सतत सीखने और समस्या समाधान के प्रति प्रतिबद्ध।',
                 footerAbout: 'पश्चिम बंगाल का प्रमुख स्मार्ट और सुरक्षित इलेक्ट्रिक रिक्शा एग्रीगेटर प्लेटफॉर्म।',
                 footerPortalsTitle: 'सिस्टम पोर्टल',
                 footerCustApp: 'यात्री ऐप',
