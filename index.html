@@ -913,10 +913,12 @@
             z-index: 2;
         }
 
-        /* 1. Passenger App: Soft Emerald */
+        /* 1. Passenger App: Distinct Transparent Emerald Tint */
         .portal-card-cust {
-            background: linear-gradient(135deg, rgba(10, 139, 66, 0.04) 0%, #FFFFFF 65%, rgba(255, 183, 3, 0.03) 100%);
-            border-color: rgba(10, 139, 66, 0.24);
+            background: linear-gradient(135deg, rgba(10, 139, 66, 0.08) 0%, rgba(255, 255, 255, 0.82) 45%, rgba(16, 185, 129, 0.07) 100%);
+            border: 1.5px solid rgba(10, 139, 66, 0.32);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
         }
         .portal-card-cust::after {
             background: linear-gradient(90deg, #0A8B42 0%, #10B981 50%, #FFB703 100%);
@@ -924,17 +926,19 @@
         .portal-card-cust:hover {
             border-color: #0A8B42;
             transform: translateY(-3px);
-            box-shadow: 0 10px 24px -4px rgba(10, 139, 66, 0.16), 0 0 0 1px #0A8B42;
-            background: #FFFFFF !important;
+            box-shadow: 0 12px 28px -4px rgba(10, 139, 66, 0.22), 0 0 0 1px #0A8B42;
+            background: linear-gradient(135deg, rgba(10, 139, 66, 0.13) 0%, rgba(255, 255, 255, 0.94) 45%, rgba(16, 185, 129, 0.10) 100%) !important;
         }
         .portal-card-cust:hover .portal-card-title {
             color: #0A8B42 !important;
         }
 
-        /* 2. Driver Partner App: Soft Amber/Gold */
+        /* 2. Driver Partner App: Distinct Transparent Amber/Gold Tint */
         .portal-card-drv {
-            background: linear-gradient(135deg, rgba(255, 183, 3, 0.05) 0%, #FFFFFF 65%, rgba(245, 158, 11, 0.03) 100%);
-            border-color: rgba(255, 183, 3, 0.32);
+            background: linear-gradient(135deg, rgba(255, 183, 3, 0.12) 0%, rgba(255, 255, 255, 0.82) 45%, rgba(245, 158, 11, 0.09) 100%);
+            border: 1.5px solid rgba(255, 183, 3, 0.42);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
         }
         .portal-card-drv::after {
             background: linear-gradient(90deg, #FFB703 0%, #F59E0B 100%);
@@ -942,17 +946,19 @@
         .portal-card-drv:hover {
             border-color: #F59E0B;
             transform: translateY(-3px);
-            box-shadow: 0 10px 24px -4px rgba(245, 158, 11, 0.18), 0 0 0 1px #F59E0B;
-            background: #FFFFFF !important;
+            box-shadow: 0 12px 28px -4px rgba(245, 158, 11, 0.24), 0 0 0 1px #F59E0B;
+            background: linear-gradient(135deg, rgba(255, 183, 3, 0.18) 0%, rgba(255, 255, 255, 0.94) 45%, rgba(245, 158, 11, 0.14) 100%) !important;
         }
         .portal-card-drv:hover .portal-card-title {
             color: #D97706 !important;
         }
 
-        /* 3. Fleet Admin Portal: Soft Ocean Blue/Indigo */
+        /* 3. Fleet Admin Portal: Distinct Transparent Sky/Ocean Blue Tint */
         .portal-card-adm {
-            background: linear-gradient(135deg, rgba(2, 132, 199, 0.04) 0%, #FFFFFF 65%, rgba(99, 102, 241, 0.03) 100%);
-            border-color: rgba(2, 132, 199, 0.24);
+            background: linear-gradient(135deg, rgba(2, 132, 199, 0.09) 0%, rgba(255, 255, 255, 0.82) 45%, rgba(99, 102, 241, 0.07) 100%);
+            border: 1.5px solid rgba(2, 132, 199, 0.32);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
         }
         .portal-card-adm::after {
             background: linear-gradient(90deg, #0284C7 0%, #6366F1 100%);
@@ -960,8 +966,8 @@
         .portal-card-adm:hover {
             border-color: #0284C7;
             transform: translateY(-3px);
-            box-shadow: 0 10px 24px -4px rgba(2, 132, 199, 0.18), 0 0 0 1px #0284C7;
-            background: #FFFFFF !important;
+            box-shadow: 0 12px 28px -4px rgba(2, 132, 199, 0.22), 0 0 0 1px #0284C7;
+            background: linear-gradient(135deg, rgba(2, 132, 199, 0.15) 0%, rgba(255, 255, 255, 0.94) 45%, rgba(99, 102, 241, 0.11) 100%) !important;
         }
         .portal-card-adm:hover .portal-card-title {
             color: #0284C7 !important;
@@ -1254,53 +1260,56 @@
             z-index: 2;
         }
 
-        /* ALTERNATE TRANSPARENT GLASSMORPHIC COLORS FOR FARE TILES */
-        /* Tile 1: Base Fare - Soft Emerald Tint */
+        /* ALTERNATE TRANSPARENT GLASSMORPHIC COLORS FOR FARE TILES (Same Design as Gateways) */
+        /* Tile 1: Base Fare - Distinct Transparent Emerald Tint */
         .tile-base {
-            background: linear-gradient(145deg, rgba(10, 139, 66, 0.05) 0%, #FFFFFF 65%, rgba(16, 185, 129, 0.03) 100%);
-            border: 1.5px solid rgba(10, 139, 66, 0.22);
+            background: linear-gradient(135deg, rgba(10, 139, 66, 0.08) 0%, rgba(255, 255, 255, 0.82) 45%, rgba(16, 185, 129, 0.07) 100%);
+            border: 1.5px solid rgba(10, 139, 66, 0.32);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
         }
         .tile-base::after {
             background: linear-gradient(90deg, #0A8B42 0%, #10B981 100%);
         }
         .tile-base:hover {
-            background: #FFFFFF !important;
             border-color: #0A8B42;
             transform: translateY(-3px);
-            box-shadow: 0 10px 24px -4px rgba(10, 139, 66, 0.16), 0 0 0 1px #0A8B42;
+            box-shadow: 0 12px 28px -4px rgba(10, 139, 66, 0.22), 0 0 0 1px #0A8B42;
+            background: linear-gradient(135deg, rgba(10, 139, 66, 0.13) 0%, rgba(255, 255, 255, 0.94) 45%, rgba(16, 185, 129, 0.10) 100%) !important;
         }
 
-        /* Tile 2: Subsequent Rate - Soft Sky/Blue Tint */
+        /* Tile 2: Subsequent Rate - Distinct Transparent Sky/Blue Tint */
         .tile-km {
-            background: linear-gradient(145deg, rgba(2, 132, 199, 0.05) 0%, #FFFFFF 65%, rgba(99, 102, 241, 0.03) 100%);
-            border: 1.5px solid rgba(2, 132, 199, 0.22);
+            background: linear-gradient(135deg, rgba(2, 132, 199, 0.09) 0%, rgba(255, 255, 255, 0.82) 45%, rgba(99, 102, 241, 0.07) 100%);
+            border: 1.5px solid rgba(2, 132, 199, 0.32);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
         }
         .tile-km::after {
             background: linear-gradient(90deg, #0284C7 0%, #6366F1 100%);
         }
         .tile-km:hover {
-            background: #FFFFFF !important;
             border-color: #0284C7;
             transform: translateY(-3px);
-            box-shadow: 0 10px 24px -4px rgba(2, 132, 199, 0.16), 0 0 0 1px #0284C7;
+            box-shadow: 0 12px 28px -4px rgba(2, 132, 199, 0.22), 0 0 0 1px #0284C7;
+            background: linear-gradient(135deg, rgba(2, 132, 199, 0.15) 0%, rgba(255, 255, 255, 0.94) 45%, rgba(99, 102, 241, 0.11) 100%) !important;
         }
 
-        /* Tile 3: Surge Policy - Soft Amber/Gold Tint */
+        /* Tile 3: Surge Policy - Distinct Transparent Amber/Gold Tint */
         .tile-surge {
-            background: linear-gradient(145deg, rgba(255, 183, 3, 0.06) 0%, #FFFFFF 65%, rgba(245, 158, 11, 0.03) 100%);
-            border: 1.5px solid rgba(255, 183, 3, 0.32);
+            background: linear-gradient(135deg, rgba(255, 183, 3, 0.12) 0%, rgba(255, 255, 255, 0.82) 45%, rgba(245, 158, 11, 0.09) 100%);
+            border: 1.5px solid rgba(255, 183, 3, 0.42);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
         }
         .tile-surge::after {
             background: linear-gradient(90deg, #FFB703 0%, #F59E0B 100%);
         }
         .tile-surge:hover {
-            background: #FFFFFF !important;
             border-color: #F59E0B;
             transform: translateY(-3px);
-            box-shadow: 0 10px 24px -4px rgba(245, 158, 11, 0.16), 0 0 0 1px #F59E0B;
-        }
-            transform: translateY(-4px);
-            box-shadow: 0 14px 30px -6px rgba(245, 158, 11, 0.22), 0 0 0 1px rgba(245, 158, 11, 0.3);
+            box-shadow: 0 12px 28px -4px rgba(245, 158, 11, 0.24), 0 0 0 1px #F59E0B;
+            background: linear-gradient(135deg, rgba(255, 183, 3, 0.18) 0%, rgba(255, 255, 255, 0.94) 45%, rgba(245, 158, 11, 0.14) 100%) !important;
         }
 
         .tile-icon-wrap {
@@ -1518,11 +1527,11 @@
         }
 
         .rate-row-item:nth-child(even) {
-            background: rgba(248, 250, 252, 0.65);
+            background: rgba(10, 139, 66, 0.045);
         }
 
         .rate-row-item:nth-child(odd) {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(2, 132, 199, 0.035);
         }
 
         .rate-row-item:last-child {
@@ -1535,7 +1544,7 @@
         }
 
         .rate-row-item:hover {
-            background: rgba(10, 139, 66, 0.07) !important;
+            background: rgba(10, 139, 66, 0.10) !important;
             transform: scale(1.002);
         }
 
@@ -2372,7 +2381,7 @@
                     <!-- Live Pill -->
                     <div class="hero-badge-pill" id="heroBadge">
                         <span class="pulse-dot"></span>
-                        <span id="heroBadgeText">West Bengal's #1 Smart E-Rickshaw Network</span>
+                        <span id="heroBadgeText">India's No 1 Smart E-Rickshaw Network</span>
                     </div>
 
                     <h1 class="hero-heading" id="heroTitle">
@@ -2394,9 +2403,9 @@
 
                     <!-- Primary Action Buttons -->
                     <div class="d-flex flex-wrap gap-3 mb-3">
-                        <a href="tel:7001315215" class="btn btn-oi-yellow btn-lg d-inline-flex align-items-center gap-2" id="heroBtnCustomerCare" title="Click to call Customer Care">
+                        <a href="tel:9832199977" class="btn btn-oi-yellow btn-lg d-inline-flex align-items-center gap-2" id="heroBtnCustomerCare" title="Click to call Customer Care">
                             <i class="bi bi-headset fs-5"></i>
-                            <span id="heroBtnCustomerCareText">Customer Care: 7001315215</span>
+                            <span id="heroBtnCustomerCareText">Customer Care: 9832199977</span>
                         </a>
                         <a href="preview/index.html" class="btn btn-oi-glass btn-lg d-inline-flex align-items-center gap-2" id="heroBtnSimulator" title="Launch Dual App Simulator">
                             <i class="bi bi-phone-fill fs-5"></i>
@@ -3163,7 +3172,7 @@
                 <div class="col-lg-4">
                     <h6 id="footerContactTitle">Support & Emergency</h6>
                     <ul class="list-unstyled small text-white-50" id="footerContactList">
-                        <li class="mb-2"><i class="bi bi-telephone text-warning me-2"></i> Helpline: <a href="tel:7331315215" class="text-white text-decoration-none fw-bold">7331315215</a></li>
+                        <li class="mb-2"><i class="bi bi-telephone text-warning me-2"></i> Helpline: <a href="tel:7001315215" class="text-white text-decoration-none fw-bold">7001315215</a></li>
                         <li class="mb-2"><i class="bi bi-envelope text-warning me-2"></i> Email: <a href="mailto:oitoto.in@gmail.com" class="text-white text-decoration-none fw-bold">oitoto.in@gmail.com</a></li>
                         <li class="mb-2"><i class="bi bi-geo-alt text-warning me-2"></i> Head Office: <span class="text-white">Chanchal, Near College, Malda, West Bengal, India</span></li>
                     </ul>
@@ -3206,10 +3215,10 @@
                 navTeam: '<i class="bi bi-people-fill text-success"></i> Team',
                 btnNavSimulatorText: 'Simulator',
                 btnNavLoginText: 'Admin Login',
-                heroBadgeText: 'West Bengal\'s #1 Smart E-Rickshaw Network',
+                heroBadgeText: "India's No 1 Smart E-Rickshaw Network",
                 heroTitle: 'Tap. Book. <span class="gold-text">Chalo!</span>',
                 heroDesc: 'Fast, eco-friendly, and transparent fixed-fare smart Toto commuting across West Bengal and Bihar. No bargaining, zero surge fees, and 100% verified driver partners at your fingertips.<div class="hero-phone-booking-box mt-3"><span class="phone-box-text"><i class="bi bi-phone-vibrate-fill text-warning me-1"></i> Don\'t know how to use mobile apps? Book Oi Toto by phone:</span><div class="d-inline-flex flex-wrap align-items-center gap-2 mt-1"><span class="phone-state-label">for W.B —</span><a href="tel:9832199977" class="hero-booking-phone-badge"><i class="bi bi-telephone-fill me-1"></i> 9832199977</a><span class="phone-state-label ms-md-2">for Bihar —</span><a href="tel:9572453828" class="hero-booking-phone-badge"><i class="bi bi-telephone-fill me-1"></i> 9572453828</a></div></div>',
-                heroBtnCustomerCareText: 'Customer Care: 7001315215',
+                heroBtnCustomerCareText: 'Customer Care: 9832199977',
                 heroBtnSimulatorText: 'Launch Dual App Simulator',
                 orbTitle0: '100% Fixed Fares',
                 orbSub0: 'No surge pricing • No bargaining • Upfront locked',
@@ -3355,10 +3364,10 @@
                 navTeam: '<i class="bi bi-people-fill text-success"></i> টিম',
                 btnNavSimulatorText: 'সিমুলেটর',
                 btnNavLoginText: 'অ্যাডমিন লগইন',
-                heroBadgeText: 'পশ্চিমবঙ্গের 1 নম্বর স্মার্ট ই-রিকশা প্ল্যাটফর্ম',
+                heroBadgeText: 'ভারতের 1 নম্বর স্মার্ট ই-রিকশা প্ল্যাটফর্ম',
                 heroTitle: 'ট্যাপ করুন। বুক করুন। <span class="gold-text">চলো!</span>',
                 heroDesc: 'পশ্চিমবঙ্গ ও বিহার জুড়ে দ্রুত, পরিবেশবান্ধব ও স্থির ভাড়ায় স্মার্ট টোটো ভ্রমণের আধুনিক প্ল্যাটফর্ম। কোনো দরদাম নেই, জিরো সার্জ ফি এবং ১০০% ভেরিফাইড চালক।<div class="hero-phone-booking-box mt-3"><span class="phone-box-text"><i class="bi bi-phone-vibrate-fill text-warning me-1"></i> মোবাইল অ্যাপ চালাতে জানেন না? ফোন করে \'ওই টোটো\' বুক করুন:</span><div class="d-inline-flex flex-wrap align-items-center gap-2 mt-1"><span class="phone-state-label">for W.B —</span><a href="tel:9832199977" class="hero-booking-phone-badge"><i class="bi bi-telephone-fill me-1"></i> 9832199977</a><span class="phone-state-label ms-md-2">for Bihar —</span><a href="tel:9572453828" class="hero-booking-phone-badge"><i class="bi bi-telephone-fill me-1"></i> 9572453828</a></div></div>',
-                heroBtnCustomerCareText: 'কাস্টমার কেয়ার: 7001315215',
+                heroBtnCustomerCareText: 'কাস্টমার কেয়ার: 9832199977',
                 heroBtnSimulatorText: 'ডুয়াল অ্যাপ সিমুলেটর দেখুন',
                 orbTitle0: '100% স্থির ভাড়া',
                 orbSub0: 'কোনো দরদাম নেই • জিরো সার্জ ফি • লকড ন্যায্য ভাড়া',
@@ -3504,10 +3513,10 @@
                 navTeam: '<i class="bi bi-people-fill text-success"></i> टीम',
                 btnNavSimulatorText: 'सिम्युलेटर',
                 btnNavLoginText: 'व्यवस्थापक लॉगिन',
-                heroBadgeText: 'पश्चिम बंगाल का नं. 1 स्मार्ट ई-रिक्शा नेटवर्क',
+                heroBadgeText: 'भारत का नं. 1 स्मार्ट ई-रिक्शा नेटवर्क',
                 heroTitle: 'टैप करें। बुक करें। <span class="gold-text">चलो!</span>',
                 heroDesc: 'पश्चिम बंगाल और बिहार में तेज़, पर्यावरण-अनुकूल और निश्चित किराए पर स्मार्ट टोटो यात्रा। कोई मोलभाव नहीं, शून्य सर्ज शुल्क और 100% सत्यापित चालक।<div class="hero-phone-booking-box mt-3"><span class="phone-box-text"><i class="bi bi-phone-vibrate-fill text-warning me-1"></i> मोबाइल ऐप चलाना नहीं जानते? सीधे फोन करके \'ओई टोटो\' बुक करें:</span><div class="d-inline-flex flex-wrap align-items-center gap-2 mt-1"><span class="phone-state-label">for W.B —</span><a href="tel:9832199977" class="hero-booking-phone-badge"><i class="bi bi-telephone-fill me-1"></i> 9832199977</a><span class="phone-state-label ms-md-2">for Bihar —</span><a href="tel:9572453828" class="hero-booking-phone-badge"><i class="bi bi-telephone-fill me-1"></i> 9572453828</a></div></div>',
-                heroBtnCustomerCareText: 'कस्टमर केयर: 7001315215',
+                heroBtnCustomerCareText: 'कस्टमर केयर: 9832199977',
                 heroBtnSimulatorText: 'ड्यूल ऐप सिम्युलेटर देखें',
                 orbTitle0: '100% निश्चित किराया',
                 orbSub0: 'कोई मोलभाव नहीं • शून्य सर्ज • अग्रिम लॉक किराया',
