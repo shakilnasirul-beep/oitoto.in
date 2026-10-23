@@ -47,6 +47,7 @@ jobs:
 
           # 4. Inject Android permissions, app label, and multidex
           python3 -c "
+          import re, os
           p = 'android/app/src/main/AndroidManifest.xml'
           c = open(p).read()
           perms = '''
@@ -69,6 +70,20 @@ jobs:
           bg_c = bg_c.replace('minSdk = flutter.minSdk', 'minSdk = 21')
           bg_c = bg_c.replace('defaultConfig {', 'defaultConfig {\n        multiDexEnabled true')
           open(bg, 'w').write(bg_c)
+
+          # Update root build.gradle kotlin version to 1.9.22
+          bgr = 'android/build.gradle'
+          if os.path.exists(bgr):
+              bgr_c = open(bgr).read()
+              bgr_c = re.sub(r\"ext\.kotlin_version\s*=\s*['\"][^'\"]+['\"]\", \"ext.kotlin_version = '1.9.22'\", bgr_c)
+              bgr_c = re.sub(r'kotlin-gradle-plugin:[0-9.]+', 'kotlin-gradle-plugin:1.9.22', bgr_c)
+              open(bgr, 'w').write(bgr_c)
+
+          sg = 'android/settings.gradle'
+          if os.path.exists(sg):
+              sg_c = open(sg).read()
+              sg_c = re.sub(r'org\.jetbrains\.kotlin\.android\"\s+version\s+\"[^\"]+\"', 'org.jetbrains.kotlin.android\" version \"1.9.22\"', sg_c)
+              open(sg, 'w').write(sg_c)
           "
 
           # 5. Get packages fresh
@@ -151,6 +166,20 @@ jobs:
           bg_c = bg_c.replace('minSdk = flutter.minSdk', 'minSdk = 21')
           bg_c = bg_c.replace('defaultConfig {', 'defaultConfig {\n        multiDexEnabled true')
           open(bg, 'w').write(bg_c)
+
+          # Update root build.gradle kotlin version to 1.9.22
+          bgr = 'android/build.gradle'
+          if os.path.exists(bgr):
+              bgr_c = open(bgr).read()
+              bgr_c = re.sub(r\"ext\.kotlin_version\s*=\s*['\"][^'\"]+['\"]\", \"ext.kotlin_version = '1.9.22'\", bgr_c)
+              bgr_c = re.sub(r'kotlin-gradle-plugin:[0-9.]+', 'kotlin-gradle-plugin:1.9.22', bgr_c)
+              open(bgr, 'w').write(bgr_c)
+
+          sg = 'android/settings.gradle'
+          if os.path.exists(sg):
+              sg_c = open(sg).read()
+              sg_c = re.sub(r'org\.jetbrains\.kotlin\.android\"\s+version\s+\"[^\"]+\"', 'org.jetbrains.kotlin.android\" version \"1.9.22\"', sg_c)
+              open(sg, 'w').write(sg_c)
           "
 
           # 5. Get packages fresh
