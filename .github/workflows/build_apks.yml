@@ -26,7 +26,7 @@ jobs:
           channel: 'stable'
           cache: true
 
-      - name: Generate Android Platform & Preserve Oi Toto App Code
+      - name: Prepare Android Platform & Dependencies
         run: |
           cd apps/customer_app
           # 1. Backup real Oi Toto code and dependencies
@@ -37,11 +37,11 @@ jobs:
           flutter create . --project-name oi_toto_customer --org in.oitoto --platforms=android --overwrite
 
           # 3. Restore real Oi Toto application code
-          rm -rf lib
+          rm -rf lib .dart_tool pubspec.lock
           cp -r /tmp/cust_lib_backup lib
           cp /tmp/cust_pubspec_backup.yaml pubspec.yaml
 
-          # 4. Inject Android permissions and cleartext traffic
+          # 4. Inject Android permissions and multidex
           python3 -c "
           p = 'android/app/src/main/AndroidManifest.xml'
           c = open(p).read()
@@ -55,15 +55,21 @@ jobs:
           '''
           c = c.replace('<application', perms + '    <application android:usesCleartextTraffic=\"true\"')
           open(p, 'w').write(c)
+
+          bg = 'android/app/build.gradle'
+          bg_c = open(bg).read()
+          bg_c = bg_c.replace('minSdkVersion flutter.minSdkVersion', 'minSdkVersion 21')
+          bg_c = bg_c.replace('defaultConfig {', 'defaultConfig {\n        multiDexEnabled true')
+          open(bg, 'w').write(bg_c)
           "
 
-          # 5. Get packages for real Oi Toto App
+          # 5. Get packages fresh
           flutter pub get
 
       - name: Build Real Customer Release APK
         run: |
           cd apps/customer_app
-          flutter build apk --release --no-tree-shake-icons
+          flutter build apk --release --no-tree-shake-icons || (flutter build apk --release --no-tree-shake-icons -v 2>&1 | tail -n 150; exit 1)
 
       - name: Upload Passenger Customer APK
         uses: actions/upload-artifact@v4
@@ -91,7 +97,7 @@ jobs:
           channel: 'stable'
           cache: true
 
-      - name: Generate Android Platform & Preserve Oi Toto App Code
+      - name: Prepare Android Platform & Dependencies
         run: |
           cd apps/driver_app
           # 1. Backup real Oi Toto code and dependencies
@@ -102,11 +108,11 @@ jobs:
           flutter create . --project-name oi_toto_driver --org in.oitoto --platforms=android --overwrite
 
           # 3. Restore real Oi Toto application code
-          rm -rf lib
+          rm -rf lib .dart_tool pubspec.lock
           cp -r /tmp/driver_lib_backup lib
           cp /tmp/driver_pubspec_backup.yaml pubspec.yaml
 
-          # 4. Inject Android permissions and cleartext traffic
+          # 4. Inject Android permissions and multidex
           python3 -c "
           p = 'android/app/src/main/AndroidManifest.xml'
           c = open(p).read()
@@ -122,15 +128,21 @@ jobs:
           '''
           c = c.replace('<application', perms + '    <application android:usesCleartextTraffic=\"true\"')
           open(p, 'w').write(c)
+
+          bg = 'android/app/build.gradle'
+          bg_c = open(bg).read()
+          bg_c = bg_c.replace('minSdkVersion flutter.minSdkVersion', 'minSdkVersion 21')
+          bg_c = bg_c.replace('defaultConfig {', 'defaultConfig {\n        multiDexEnabled true')
+          open(bg, 'w').write(bg_c)
           "
 
-          # 5. Get packages for real Oi Toto App
+          # 5. Get packages fresh
           flutter pub get
 
       - name: Build Real Driver Release APK
         run: |
           cd apps/driver_app
-          flutter build apk --release --no-tree-shake-icons
+          flutter build apk --release --no-tree-shake-icons || (flutter build apk --release --no-tree-shake-icons -v 2>&1 | tail -n 150; exit 1)
 
       - name: Upload Driver Partner APK
         uses: actions/upload-artifact@v4
