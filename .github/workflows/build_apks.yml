@@ -6,8 +6,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  build-apks:
-    name: Build Customer & Driver APKs
+  build-customer-apk:
+    name: Build Passenger App APK
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -26,28 +26,56 @@ jobs:
           channel: 'stable'
           cache: true
 
-      - name: Generate Android Platform & Build Customer App APK
+      - name: Prepare Android Platform & Fetch Packages
         run: |
           cd apps/customer_app
-          flutter create . --org in.oitoto --platforms=android
+          flutter create . --project-name oi_toto_customer --org in.oitoto --platforms=android
           flutter pub get
-          flutter build apk --release
 
-      - name: Generate Android Platform & Build Driver App APK
+      - name: Build Customer Release APK
         run: |
-          cd apps/driver_app
-          flutter create . --org in.oitoto --platforms=android
-          flutter pub get
-          flutter build apk --release
+          cd apps/customer_app
+          flutter build apk --release --no-tree-shake-icons
 
       - name: Upload Passenger Customer APK
         uses: actions/upload-artifact@v4
         with:
-          name: oi_toto_customer
+          name: oi_toto_customer_apk
           path: apps/customer_app/build/app/outputs/flutter-apk/app-release.apk
+
+  build-driver-apk:
+    name: Build Driver Partner App APK
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.19.6'
+          channel: 'stable'
+          cache: true
+
+      - name: Prepare Android Platform & Fetch Packages
+        run: |
+          cd apps/driver_app
+          flutter create . --project-name oi_toto_driver --org in.oitoto --platforms=android
+          flutter pub get
+
+      - name: Build Driver Release APK
+        run: |
+          cd apps/driver_app
+          flutter build apk --release --no-tree-shake-icons
 
       - name: Upload Driver Partner APK
         uses: actions/upload-artifact@v4
         with:
-          name: oi_toto_driver
+          name: oi_toto_driver_apk
           path: apps/driver_app/build/app/outputs/flutter-apk/app-release.apk
