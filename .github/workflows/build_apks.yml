@@ -26,10 +26,24 @@ jobs:
           channel: 'stable'
           cache: true
 
-      - name: Prepare Android Platform & Fetch Packages
+      - name: Generate Android Platform & Apply Permissions
         run: |
           cd apps/customer_app
-          flutter create . --project-name oi_toto_customer --org in.oitoto --platforms=android
+          flutter create . --project-name oi_toto_customer --org in.oitoto --platforms=android --overwrite
+          python3 -c "
+          p = 'android/app/src/main/AndroidManifest.xml'
+          c = open(p).read()
+          perms = '''
+              <uses-permission android:name=\"android.permission.INTERNET\"/>
+              <uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\"/>
+              <uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\"/>
+              <uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>
+              <uses-permission android:name=\"android.permission.CALL_PHONE\"/>
+              <uses-permission android:name=\"android.permission.VIBRATE\"/>
+          '''
+          c = c.replace('<application', perms + '    <application android:usesCleartextTraffic=\"true\"')
+          open(p, 'w').write(c)
+          "
           flutter pub get
 
       - name: Build Customer Release APK
@@ -63,10 +77,26 @@ jobs:
           channel: 'stable'
           cache: true
 
-      - name: Prepare Android Platform & Fetch Packages
+      - name: Generate Android Platform & Apply Permissions
         run: |
           cd apps/driver_app
-          flutter create . --project-name oi_toto_driver --org in.oitoto --platforms=android
+          flutter create . --project-name oi_toto_driver --org in.oitoto --platforms=android --overwrite
+          python3 -c "
+          p = 'android/app/src/main/AndroidManifest.xml'
+          c = open(p).read()
+          perms = '''
+              <uses-permission android:name=\"android.permission.INTERNET\"/>
+              <uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\"/>
+              <uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\"/>
+              <uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>
+              <uses-permission android:name=\"android.permission.WAKE_LOCK\"/>
+              <uses-permission android:name=\"android.permission.VIBRATE\"/>
+              <uses-permission android:name=\"android.permission.CALL_PHONE\"/>
+              <uses-permission android:name=\"android.permission.CAMERA\"/>
+          '''
+          c = c.replace('<application', perms + '    <application android:usesCleartextTraffic=\"true\"')
+          open(p, 'w').write(c)
+          "
           flutter pub get
 
       - name: Build Driver Release APK
