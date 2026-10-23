@@ -29,21 +29,23 @@ jobs:
       - name: Prepare Android Platform & Dependencies
         run: |
           cd apps/customer_app
-          # 1. Backup real Oi Toto code and dependencies
+          # 1. Backup real Oi Toto code, assets and res
           cp -r lib /tmp/cust_lib_backup
           cp -r assets /tmp/cust_assets_backup 2>/dev/null || true
+          cp -r android/app/src/main/res /tmp/cust_res_backup 2>/dev/null || true
           cp pubspec.yaml /tmp/cust_pubspec_backup.yaml
 
           # 2. Generate android build wrappers
           flutter create . --project-name oi_toto_customer --org in.oitoto --platforms=android --overwrite
 
-          # 3. Restore real Oi Toto application code
+          # 3. Restore real Oi Toto application code, assets and custom launcher icons
           rm -rf lib .dart_tool pubspec.lock
           cp -r /tmp/cust_lib_backup lib
           cp -r /tmp/cust_assets_backup assets 2>/dev/null || true
+          cp -r /tmp/cust_res_backup/* android/app/src/main/res/ 2>/dev/null || true
           cp /tmp/cust_pubspec_backup.yaml pubspec.yaml
 
-          # 4. Inject Android permissions and multidex
+          # 4. Inject Android permissions, app label, and multidex
           python3 -c "
           p = 'android/app/src/main/AndroidManifest.xml'
           c = open(p).read()
@@ -56,6 +58,7 @@ jobs:
               <uses-permission android:name=\"android.permission.VIBRATE\"/>
           '''
           c = c.replace('<application', perms + '    <application android:usesCleartextTraffic=\"true\"')
+          c = c.replace('android:label=\"oi_toto_customer\"', 'android:label=\"Oi Toto!\"')
           open(p, 'w').write(c)
 
           bg = 'android/app/build.gradle'
@@ -103,21 +106,23 @@ jobs:
       - name: Prepare Android Platform & Dependencies
         run: |
           cd apps/driver_app
-          # 1. Backup real Oi Toto code and dependencies
+          # 1. Backup real Oi Toto code, assets and res
           cp -r lib /tmp/driver_lib_backup
           cp -r assets /tmp/driver_assets_backup 2>/dev/null || true
+          cp -r android/app/src/main/res /tmp/driver_res_backup 2>/dev/null || true
           cp pubspec.yaml /tmp/driver_pubspec_backup.yaml
 
           # 2. Generate android build wrappers
           flutter create . --project-name oi_toto_driver --org in.oitoto --platforms=android --overwrite
 
-          # 3. Restore real Oi Toto application code
+          # 3. Restore real Oi Toto application code, assets and custom launcher icons
           rm -rf lib .dart_tool pubspec.lock
           cp -r /tmp/driver_lib_backup lib
           cp -r /tmp/driver_assets_backup assets 2>/dev/null || true
+          cp -r /tmp/driver_res_backup/* android/app/src/main/res/ 2>/dev/null || true
           cp /tmp/driver_pubspec_backup.yaml pubspec.yaml
 
-          # 4. Inject Android permissions and multidex
+          # 4. Inject Android permissions, app label, and multidex
           python3 -c "
           p = 'android/app/src/main/AndroidManifest.xml'
           c = open(p).read()
@@ -132,6 +137,7 @@ jobs:
               <uses-permission android:name=\"android.permission.CAMERA\"/>
           '''
           c = c.replace('<application', perms + '    <application android:usesCleartextTraffic=\"true\"')
+          c = c.replace('android:label=\"oi_toto_driver\"', 'android:label=\"Oi Toto Partner\"')
           open(p, 'w').write(c)
 
           bg = 'android/app/build.gradle'

@@ -23,7 +23,7 @@ class OiTotoCustomerApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Oi Toto! — E-Rickshaw Booking',
+      title: 'Oi Toto!',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.lightTheme,
       localizationsDelegates: const [

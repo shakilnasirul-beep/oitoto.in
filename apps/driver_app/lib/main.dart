@@ -23,7 +23,7 @@ class OiTotoDriverApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Oi Toto! Partner — Driver App',
+      title: 'Oi Toto Partner',
       debugShowCheckedModeBanner: false,
       theme: DriverTheme.lightTheme,
       localizationsDelegates: const [
