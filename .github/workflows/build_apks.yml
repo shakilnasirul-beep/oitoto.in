@@ -45,46 +45,8 @@ jobs:
           cp -r /tmp/cust_res_backup/* android/app/src/main/res/ 2>/dev/null || true
           cp /tmp/cust_pubspec_backup.yaml pubspec.yaml
 
-          # 4. Inject Android permissions, app label, and multidex
-          python3 -c "
-          import re, os
-          p = 'android/app/src/main/AndroidManifest.xml'
-          c = open(p).read()
-          perms = '''
-              <uses-permission android:name=\"android.permission.INTERNET\"/>
-              <uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\"/>
-              <uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\"/>
-              <uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>
-              <uses-permission android:name=\"android.permission.CALL_PHONE\"/>
-              <uses-permission android:name=\"android.permission.VIBRATE\"/>
-          '''
-          c = c.replace('<application', perms + '    <application android:usesCleartextTraffic=\"true\"')
-          c = c.replace('android:label=\"oi_toto_customer\"', 'android:label=\"Oi Toto!\"')
-          open(p, 'w').write(c)
-
-          bg = 'android/app/build.gradle'
-          bg_c = open(bg).read()
-          bg_c = bg_c.replace('compileSdkVersion flutter.compileSdkVersion', 'compileSdkVersion 34')
-          bg_c = bg_c.replace('compileSdk = flutter.compileSdk', 'compileSdk = 34')
-          bg_c = bg_c.replace('minSdkVersion flutter.minSdkVersion', 'minSdkVersion 21')
-          bg_c = bg_c.replace('minSdk = flutter.minSdk', 'minSdk = 21')
-          bg_c = bg_c.replace('defaultConfig {', 'defaultConfig {\n        multiDexEnabled true')
-          open(bg, 'w').write(bg_c)
-
-          # Update root build.gradle kotlin version to 1.9.22
-          bgr = 'android/build.gradle'
-          if os.path.exists(bgr):
-              bgr_c = open(bgr).read()
-              bgr_c = re.sub(r\"ext\.kotlin_version\s*=\s*['\"][^'\"]+['\"]\", \"ext.kotlin_version = '1.9.22'\", bgr_c)
-              bgr_c = re.sub(r'kotlin-gradle-plugin:[0-9.]+', 'kotlin-gradle-plugin:1.9.22', bgr_c)
-              open(bgr, 'w').write(bgr_c)
-
-          sg = 'android/settings.gradle'
-          if os.path.exists(sg):
-              sg_c = open(sg).read()
-              sg_c = re.sub(r'org\.jetbrains\.kotlin\.android\"\s+version\s+\"[^\"]+\"', 'org.jetbrains.kotlin.android\" version \"1.9.22\"', sg_c)
-              open(sg, 'w').write(sg_c)
-          "
+          # 4. Inject Android permissions, app label, multidex, and Kotlin 1.9.22
+          python3 ../../scripts/prepare_android.py customer
 
           # 5. Get packages fresh
           flutter pub get
@@ -140,47 +102,8 @@ jobs:
           cp -r /tmp/driver_res_backup/* android/app/src/main/res/ 2>/dev/null || true
           cp /tmp/driver_pubspec_backup.yaml pubspec.yaml
 
-          # 4. Inject Android permissions, app label, and multidex
-          python3 -c "
-          p = 'android/app/src/main/AndroidManifest.xml'
-          c = open(p).read()
-          perms = '''
-              <uses-permission android:name=\"android.permission.INTERNET\"/>
-              <uses-permission android:name=\"android.permission.ACCESS_FINE_LOCATION\"/>
-              <uses-permission android:name=\"android.permission.ACCESS_COARSE_LOCATION\"/>
-              <uses-permission android:name=\"android.permission.ACCESS_NETWORK_STATE\"/>
-              <uses-permission android:name=\"android.permission.WAKE_LOCK\"/>
-              <uses-permission android:name=\"android.permission.VIBRATE\"/>
-              <uses-permission android:name=\"android.permission.CALL_PHONE\"/>
-              <uses-permission android:name=\"android.permission.CAMERA\"/>
-          '''
-          c = c.replace('<application', perms + '    <application android:usesCleartextTraffic=\"true\"')
-          c = c.replace('android:label=\"oi_toto_driver\"', 'android:label=\"Oi Toto Partner\"')
-          open(p, 'w').write(c)
-
-          bg = 'android/app/build.gradle'
-          bg_c = open(bg).read()
-          bg_c = bg_c.replace('compileSdkVersion flutter.compileSdkVersion', 'compileSdkVersion 34')
-          bg_c = bg_c.replace('compileSdk = flutter.compileSdk', 'compileSdk = 34')
-          bg_c = bg_c.replace('minSdkVersion flutter.minSdkVersion', 'minSdkVersion 21')
-          bg_c = bg_c.replace('minSdk = flutter.minSdk', 'minSdk = 21')
-          bg_c = bg_c.replace('defaultConfig {', 'defaultConfig {\n        multiDexEnabled true')
-          open(bg, 'w').write(bg_c)
-
-          # Update root build.gradle kotlin version to 1.9.22
-          bgr = 'android/build.gradle'
-          if os.path.exists(bgr):
-              bgr_c = open(bgr).read()
-              bgr_c = re.sub(r\"ext\.kotlin_version\s*=\s*['\"][^'\"]+['\"]\", \"ext.kotlin_version = '1.9.22'\", bgr_c)
-              bgr_c = re.sub(r'kotlin-gradle-plugin:[0-9.]+', 'kotlin-gradle-plugin:1.9.22', bgr_c)
-              open(bgr, 'w').write(bgr_c)
-
-          sg = 'android/settings.gradle'
-          if os.path.exists(sg):
-              sg_c = open(sg).read()
-              sg_c = re.sub(r'org\.jetbrains\.kotlin\.android\"\s+version\s+\"[^\"]+\"', 'org.jetbrains.kotlin.android\" version \"1.9.22\"', sg_c)
-              open(sg, 'w').write(sg_c)
-          "
+          # 4. Inject Android permissions, app label, multidex, and Kotlin 1.9.22
+          python3 ../../scripts/prepare_android.py driver
 
           # 5. Get packages fresh
           flutter pub get
