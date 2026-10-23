@@ -26,10 +26,22 @@ jobs:
           channel: 'stable'
           cache: true
 
-      - name: Generate Android Platform & Apply Permissions
+      - name: Generate Android Platform & Preserve Oi Toto App Code
         run: |
           cd apps/customer_app
+          # 1. Backup real Oi Toto code and dependencies
+          cp -r lib /tmp/cust_lib_backup
+          cp pubspec.yaml /tmp/cust_pubspec_backup.yaml
+
+          # 2. Generate android build wrappers
           flutter create . --project-name oi_toto_customer --org in.oitoto --platforms=android --overwrite
+
+          # 3. Restore real Oi Toto application code
+          rm -rf lib
+          cp -r /tmp/cust_lib_backup lib
+          cp /tmp/cust_pubspec_backup.yaml pubspec.yaml
+
+          # 4. Inject Android permissions and cleartext traffic
           python3 -c "
           p = 'android/app/src/main/AndroidManifest.xml'
           c = open(p).read()
@@ -44,9 +56,11 @@ jobs:
           c = c.replace('<application', perms + '    <application android:usesCleartextTraffic=\"true\"')
           open(p, 'w').write(c)
           "
+
+          # 5. Get packages for real Oi Toto App
           flutter pub get
 
-      - name: Build Customer Release APK
+      - name: Build Real Customer Release APK
         run: |
           cd apps/customer_app
           flutter build apk --release --no-tree-shake-icons
@@ -77,10 +91,22 @@ jobs:
           channel: 'stable'
           cache: true
 
-      - name: Generate Android Platform & Apply Permissions
+      - name: Generate Android Platform & Preserve Oi Toto App Code
         run: |
           cd apps/driver_app
+          # 1. Backup real Oi Toto code and dependencies
+          cp -r lib /tmp/driver_lib_backup
+          cp pubspec.yaml /tmp/driver_pubspec_backup.yaml
+
+          # 2. Generate android build wrappers
           flutter create . --project-name oi_toto_driver --org in.oitoto --platforms=android --overwrite
+
+          # 3. Restore real Oi Toto application code
+          rm -rf lib
+          cp -r /tmp/driver_lib_backup lib
+          cp /tmp/driver_pubspec_backup.yaml pubspec.yaml
+
+          # 4. Inject Android permissions and cleartext traffic
           python3 -c "
           p = 'android/app/src/main/AndroidManifest.xml'
           c = open(p).read()
@@ -97,9 +123,11 @@ jobs:
           c = c.replace('<application', perms + '    <application android:usesCleartextTraffic=\"true\"')
           open(p, 'w').write(c)
           "
+
+          # 5. Get packages for real Oi Toto App
           flutter pub get
 
-      - name: Build Driver Release APK
+      - name: Build Real Driver Release APK
         run: |
           cd apps/driver_app
           flutter build apk --release --no-tree-shake-icons
