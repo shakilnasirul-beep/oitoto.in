@@ -31,6 +31,7 @@ jobs:
           cd apps/customer_app
           # 1. Backup real Oi Toto code and dependencies
           cp -r lib /tmp/cust_lib_backup
+          cp -r assets /tmp/cust_assets_backup 2>/dev/null || true
           cp pubspec.yaml /tmp/cust_pubspec_backup.yaml
 
           # 2. Generate android build wrappers
@@ -39,6 +40,7 @@ jobs:
           # 3. Restore real Oi Toto application code
           rm -rf lib .dart_tool pubspec.lock
           cp -r /tmp/cust_lib_backup lib
+          cp -r /tmp/cust_assets_backup assets 2>/dev/null || true
           cp /tmp/cust_pubspec_backup.yaml pubspec.yaml
 
           # 4. Inject Android permissions and multidex
@@ -65,6 +67,7 @@ jobs:
 
           # 5. Get packages fresh
           flutter pub get
+          flutter analyze --no-fatal-infos || true
 
       - name: Build Real Customer Release APK
         run: |
@@ -102,6 +105,7 @@ jobs:
           cd apps/driver_app
           # 1. Backup real Oi Toto code and dependencies
           cp -r lib /tmp/driver_lib_backup
+          cp -r assets /tmp/driver_assets_backup 2>/dev/null || true
           cp pubspec.yaml /tmp/driver_pubspec_backup.yaml
 
           # 2. Generate android build wrappers
@@ -110,6 +114,7 @@ jobs:
           # 3. Restore real Oi Toto application code
           rm -rf lib .dart_tool pubspec.lock
           cp -r /tmp/driver_lib_backup lib
+          cp -r /tmp/driver_assets_backup assets 2>/dev/null || true
           cp /tmp/driver_pubspec_backup.yaml pubspec.yaml
 
           # 4. Inject Android permissions and multidex
@@ -138,6 +143,7 @@ jobs:
 
           # 5. Get packages fresh
           flutter pub get
+          flutter analyze --no-fatal-infos || true
 
       - name: Build Real Driver Release APK
         run: |

@@ -204,7 +204,7 @@ class _AuthScreenState extends State<AuthScreen> {
               if (_errorMessage != null)
                 Container(
                   padding: const EdgeInsets.all(12),
-                  margin: const EdgeInsets.bottom(20),
+                  margin: const EdgeInsets.only(bottom: 20),
                   decoration: BoxDecoration(
                     color: Colors.red.shade50,
                     borderRadius: BorderRadius.circular(10),
@@ -283,7 +283,7 @@ class _AuthScreenState extends State<AuthScreen> {
                 if (_sandboxOtpHint != null)
                   Container(
                     padding: const EdgeInsets.all(12),
-                    margin: const EdgeInsets.bottom(20),
+                    margin: const EdgeInsets.only(bottom: 20),
                     decoration: BoxDecoration(
                       color: AppColors.warmYellowLight,
                       borderRadius: BorderRadius.circular(10),

@@ -166,7 +166,7 @@ class _DriverAuthScreenState extends State<DriverAuthScreen> {
               if (_errorMessage != null)
                 Container(
                   padding: const EdgeInsets.all(12),
-                  margin: const EdgeInsets.bottom(20),
+                  margin: const EdgeInsets.only(bottom: 20),
                   decoration: BoxDecoration(
                     color: Colors.red.shade50,
                     borderRadius: BorderRadius.circular(10),
@@ -201,7 +201,7 @@ class _DriverAuthScreenState extends State<DriverAuthScreen> {
                 if (_sandboxOtpHint != null)
                   Container(
                     padding: const EdgeInsets.all(12),
-                    margin: const EdgeInsets.bottom(20),
+                    margin: const EdgeInsets.only(bottom: 20),
                     decoration: BoxDecoration(
                       color: DriverColors.warmYellow.withOpacity(0.15),
                       borderRadius: BorderRadius.circular(10),
