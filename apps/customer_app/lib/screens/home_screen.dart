@@ -982,6 +982,8 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
       ),
     );
+  }
+
   Widget _buildMapModePill(String mode, String label) {
     final isSelected = _mapMode == mode;
     return InkWell(
