@@ -1,13 +1,14 @@
 # Oi Toto APK Redirection Rules
-/downloads/OiToto_Customer_v1.0.5.apk   /downloads/oi_toto_customer.apk   302
-/downloads/OiToto_Driver_v1.0.5.apk     /downloads/oi_toto_driver.apk     302
-/downloads/OiToto_Customer_v1.0.4.apk   /downloads/oi_toto_customer.apk   302
-/downloads/OiToto_Driver_v1.0.4.apk     /downloads/oi_toto_driver.apk     302
-/downloads/OiToto_Customer_v1.0.3.apk   /downloads/oi_toto_customer.apk   302
-/downloads/OiToto_Driver_v1.0.3.apk     /downloads/oi_toto_driver.apk     302
-/downloads/OiToto_Customer_v1.0.2.apk   /downloads/oi_toto_customer.apk   302
-/downloads/OiToto_Driver_v1.0.2.apk     /downloads/oi_toto_driver.apk     302
-/downloads/OiToto_Customer_v1.0.1.apk   /downloads/oi_toto_customer.apk   302
-/downloads/OiToto_Driver_v1.0.1.apk     /downloads/oi_toto_driver.apk     302
-/downloads/OiToto_Customer.apk          /downloads/oi_toto_customer.apk   302
-/downloads/OiToto_Driver.apk            /downloads/oi_toto_driver.apk     302
+# Redirect generic and legacy URLs to latest release files with version in filename
+/downloads/oi_toto_customer.apk         /downloads/OiToto_Customer_v1.0.5.apk   302
+/downloads/oi_toto_driver.apk           /downloads/OiToto_Driver_v1.0.5.apk     302
+/downloads/OiToto_Customer.apk          /downloads/OiToto_Customer_v1.0.5.apk   302
+/downloads/OiToto_Driver.apk            /downloads/OiToto_Driver_v1.0.5.apk     302
+/downloads/OiToto_Customer_v1.0.4.apk   /downloads/OiToto_Customer_v1.0.5.apk   302
+/downloads/OiToto_Driver_v1.0.4.apk     /downloads/OiToto_Driver_v1.0.5.apk     302
+/downloads/OiToto_Customer_v1.0.3.apk   /downloads/OiToto_Customer_v1.0.5.apk   302
+/downloads/OiToto_Driver_v1.0.3.apk     /downloads/OiToto_Driver_v1.0.5.apk     302
+/downloads/OiToto_Customer_v1.0.2.apk   /downloads/OiToto_Customer_v1.0.5.apk   302
+/downloads/OiToto_Driver_v1.0.2.apk     /downloads/OiToto_Driver_v1.0.5.apk     302
+/downloads/OiToto_Customer_v1.0.1.apk   /downloads/OiToto_Customer_v1.0.5.apk   302
+/downloads/OiToto_Driver_v1.0.1.apk     /downloads/OiToto_Driver_v1.0.5.apk     302
