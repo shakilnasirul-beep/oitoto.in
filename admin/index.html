@@ -2092,30 +2092,36 @@
             <!-- TAB 6: SERVICE ZONES -->
             <section id="tab-serviceAreas" style="display: none;">
                 <div class="card-custom">
-                    <div class="card-header-custom">
+                    <div class="card-header-custom flex-wrap gap-2">
                         <div>
                             <h6 class="fw-bold mb-0">Pan-India Service Zones</h6>
-                            <small class="text-muted">Approved geographic corridors for E-Rickshaw aggregations</small>
+                            <small class="text-muted">Approved geographic corridors for E-Rickshaw aggregations & dispatch</small>
                         </div>
-                        <button class="btn btn-sm btn-oi-green" onclick="alert('Use Add Zone API or configure via backend.')">
-                            <i class="bi bi-plus-lg"></i> Add Service Zone
-                        </button>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="badge bg-success bg-opacity-10 text-success fw-bold px-3 py-2 rounded-pill" id="activeZonesCountBadge">
+                                <i class="bi bi-geo-alt-fill me-1"></i> <span id="activeZonesCount">0</span> Active Zones
+                            </span>
+                            <button class="btn btn-sm btn-oi-green shadow-sm" onclick="openAddZoneModal()">
+                                <i class="bi bi-plus-lg me-1"></i> Add Service Zone
+                            </button>
+                        </div>
                     </div>
                     <div class="table-responsive">
                         <table class="table table-custom table-hover mb-0">
                             <thead>
                                 <tr>
-                                    <th>Zone Name</th>
+                                    <th>Zone Name & ID</th>
                                     <th>City & State</th>
                                     <th>Center Lat/Lng</th>
-                                    <th>Radius (km)</th>
-                                    <th>Max Search (km)</th>
+                                    <th>Radius</th>
+                                    <th>Max Search</th>
                                     <th>Active Fleet</th>
                                     <th>Status</th>
+                                    <th class="text-end">Actions</th>
                                 </tr>
                             </thead>
                             <tbody id="serviceAreasTable">
-                                <tr><td colspan="7" class="text-center py-4 text-muted">Loading zones...</td></tr>
+                                <tr><td colspan="8" class="text-center py-4 text-muted"><div class="spinner-border spinner-border-sm text-success me-2"></div>Loading zones...</td></tr>
                             </tbody>
                         </table>
                     </div>
@@ -2856,6 +2862,126 @@
                         <span>Secure OTP verified platform history &bull; All booking tracking stored in digital ledger</span>
                     </div>
                     <button type="button" class="btn btn-secondary btn-sm px-4" data-bs-dismiss="modal">Close Profile</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: SERVICE ZONE (ADD / EDIT) -->
+    <div class="modal fade" id="serviceZoneModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: 16px; overflow: hidden;">
+                <div class="modal-header modal-header-oi text-white py-3 px-4 d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="modal-title fw-bold mb-0" id="serviceZoneModalTitle">
+                            <i class="bi bi-geo-alt-fill me-2"></i> Add New Service Zone
+                        </h5>
+                        <small class="text-white-50" style="font-size: 0.75rem;">Pan-India E-Rickshaw Geofencing & Operational Corridor</small>
+                    </div>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4 bg-light">
+                    <form id="serviceZoneForm" onsubmit="saveServiceZone(event)">
+                        <input type="hidden" id="szId">
+
+                        <!-- Zone Name -->
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold text-dark">Service Zone Name *</label>
+                            <input type="text" id="szName" class="form-control" placeholder="e.g. Kolkata North Zone (Shyambazar - Hatibagan - Bagbazar)" required>
+                            <div class="form-text text-muted" style="font-size: 0.75rem;">Descriptive corridor name visible to drivers and dispatchers.</div>
+                        </div>
+
+                        <!-- City & State -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-semibold text-dark">City *</label>
+                                <input type="text" id="szCity" class="form-control" placeholder="e.g. Kolkata" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-semibold text-dark">State *</label>
+                                <input type="text" id="szState" class="form-control" placeholder="e.g. West Bengal" required>
+                            </div>
+                        </div>
+
+                        <!-- Quick Location Presets & GPS Auto-detect -->
+                        <div class="p-3 bg-white rounded-3 border mb-3">
+                            <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
+                                <label class="form-label small fw-bold text-success mb-0">
+                                    <i class="bi bi-pin-map-fill me-1"></i> Quick Location Presets & Coordinates
+                                </label>
+                                <button type="button" class="btn btn-sm btn-outline-success py-0.5 px-2.5 rounded-pill" onclick="detectZoneGps()">
+                                    <i class="bi bi-crosshair me-1"></i> Use My Current GPS
+                                </button>
+                            </div>
+                            <select id="szPresetSelect" class="form-select form-select-sm" onchange="applyZonePreset(this.value)">
+                                <option value="">-- Choose a Preset Location to Auto-fill --</option>
+                                <option value="kolkata_north">Kolkata North (Shyambazar / Hatibagan / Bagbazar)</option>
+                                <option value="kolkata_central">Kolkata Central (Sealdah / College St / MG Road)</option>
+                                <option value="kolkata_south">Kolkata South (Gariahat / Jadavpur / Tollygunge)</option>
+                                <option value="howrah_station">Howrah Station & Foreshore Road Feeder</option>
+                                <option value="siliguri_town">Siliguri Town & Junction Corridor</option>
+                                <option value="durgapur_centre">Durgapur City Centre & Benachity Feeder</option>
+                                <option value="asansol_junction">Asansol Junction & Court Area Feeder</option>
+                                <option value="bardhaman_town">Bardhaman Station Feeder & Curzon Gate</option>
+                                <option value="kharagpur_feeder">Kharagpur Railway Town & Golbazar</option>
+                                <option value="patna_junction">Patna Junction & Bailey Road Corridor (Bihar)</option>
+                                <option value="lucknow_charbagh">Lucknow Charbagh & Gomti Nagar (UP)</option>
+                            </select>
+                        </div>
+
+                        <!-- Center Lat/Lng -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-semibold text-dark">Center Latitude *</label>
+                                <input type="number" step="any" id="szLat" class="form-control font-monospace" placeholder="e.g. 22.6028" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-semibold text-dark">Center Longitude *</label>
+                                <input type="number" step="any" id="szLng" class="form-control font-monospace" placeholder="e.g. 88.3718" required>
+                            </div>
+                        </div>
+
+                        <!-- Radius & Max Search Radius -->
+                        <div class="row g-3 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-semibold text-dark">Operational Radius (km) *</label>
+                                <input type="number" step="0.1" id="szRadius" class="form-control" value="5.0" required>
+                                <div class="form-text text-muted" style="font-size: 0.72rem;">Primary corridor radius for E-Rickshaw boundary.</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-semibold text-dark">Max Search Radius (km) *</label>
+                                <input type="number" step="0.1" id="szMaxRadius" class="form-control" value="7.0" required>
+                                <div class="form-text text-muted" style="font-size: 0.72rem;">Extended radar for matching standby drivers.</div>
+                            </div>
+                        </div>
+
+                        <!-- Status & Legal Compliance -->
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label small fw-semibold text-dark">Operational Status *</label>
+                                <select id="szStatus" class="form-select">
+                                    <option value="1">Active (Allow bookings & driver duty)</option>
+                                    <option value="0">Inactive / Standby (Pause bookings)</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label small fw-semibold text-dark">Legal & RTO Compliance Status</label>
+                                <select id="szCompliance" class="form-select">
+                                    <option value="approved">RTO Corridor Approved</option>
+                                    <option value="pending_review">RTO Regulatory Review Pending</option>
+                                    <option value="exempt">Municipal Local Feeder (Exempt)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Modal Actions -->
+                        <div class="d-flex justify-content-end gap-2 pt-2 border-top">
+                            <button type="button" class="btn btn-light px-3" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-oi-green px-4 fw-bold" id="szSubmitBtn">
+                                <i class="bi bi-check2-circle me-1"></i> Save Service Zone
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -8593,39 +8719,378 @@
             `).join('');
         }
 
-        // 6. Service Areas Loader (with safe offline fallback)
-        async function loadServiceAreas() {
-            const fallbackAreas = [
-                { name: 'Kolkata North Zone (Shyambazar - Hatibagan - Bagbazar)', city: 'Kolkata', state: 'West Bengal', center_lat: 22.6028, center_lng: 88.3718, radius_km: 5.0, max_search_radius_km: 7.0, online_drivers: 3, total_vehicles: 5, is_active: true },
-                { name: 'Kolkata Central Zone (Sealdah - College St - MG Road)', city: 'Kolkata', state: 'West Bengal', center_lat: 22.5670, center_lng: 88.3710, radius_km: 4.5, max_search_radius_km: 6.0, online_drivers: 2, total_vehicles: 3, is_active: true },
-                { name: 'Howrah Station & Foreshore Road Feeder', city: 'Howrah', state: 'West Bengal', center_lat: 22.5850, center_lng: 88.3410, radius_km: 4.0, max_search_radius_km: 5.5, online_drivers: 1, total_vehicles: 2, is_active: true }
-            ];
+        // 6. Service Areas State & Functions
+        let globalServiceAreas = [];
 
-            let areas = fallbackAreas;
+        function escapeHtml(str) {
+            if (!str) return '';
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        const ZONE_PRESETS = {
+            kolkata_north: { name: 'Kolkata North Zone (Shyambazar - Hatibagan - Bagbazar)', city: 'Kolkata', state: 'West Bengal', lat: 22.6028, lng: 88.3718, radius: 5.0, maxRadius: 7.0 },
+            kolkata_central: { name: 'Kolkata Central Zone (Sealdah - College St - MG Road)', city: 'Kolkata', state: 'West Bengal', lat: 22.5670, lng: 88.3710, radius: 4.5, maxRadius: 6.0 },
+            kolkata_south: { name: 'Kolkata South Zone (Gariahat - Jadavpur - Tollygunge)', city: 'Kolkata', state: 'West Bengal', lat: 22.5186, lng: 88.3639, radius: 5.5, maxRadius: 7.5 },
+            howrah_station: { name: 'Howrah Station & Foreshore Road Feeder', city: 'Howrah', state: 'West Bengal', lat: 22.5850, lng: 88.3410, radius: 4.0, maxRadius: 5.5 },
+            siliguri_town: { name: 'Siliguri Town & Junction Corridor', city: 'Siliguri', state: 'West Bengal', lat: 26.7271, lng: 88.3953, radius: 6.0, maxRadius: 8.0 },
+            durgapur_centre: { name: 'Durgapur City Centre & Benachity Feeder', city: 'Durgapur', state: 'West Bengal', lat: 23.5204, lng: 87.3119, radius: 5.0, maxRadius: 7.0 },
+            asansol_junction: { name: 'Asansol Junction & Court Area Feeder', city: 'Asansol', state: 'West Bengal', lat: 23.6739, lng: 86.9524, radius: 5.0, maxRadius: 7.0 },
+            bardhaman_town: { name: 'Bardhaman Station Feeder & Curzon Gate', city: 'Bardhaman', state: 'West Bengal', lat: 23.2324, lng: 87.8615, radius: 4.5, maxRadius: 6.5 },
+            kharagpur_feeder: { name: 'Kharagpur Railway Town & Golbazar', city: 'Kharagpur', state: 'West Bengal', lat: 22.3460, lng: 87.2320, radius: 5.0, maxRadius: 7.0 },
+            patna_junction: { name: 'Patna Junction & Bailey Road Corridor', city: 'Patna', state: 'Bihar', lat: 25.5941, lng: 85.1376, radius: 5.5, maxRadius: 7.5 },
+            lucknow_charbagh: { name: 'Lucknow Charbagh & Gomti Nagar Feeder', city: 'Lucknow', state: 'Uttar Pradesh', lat: 26.8467, lng: 80.9462, radius: 5.5, maxRadius: 7.5 }
+        };
+
+        function getInitialServiceAreas() {
+            return [
+                { id: 1, name: 'Kolkata North Zone (Shyambazar - Hatibagan - Bagbazar)', city: 'Kolkata', state: 'West Bengal', center_lat: 22.6028, center_lng: 88.3718, radius_km: 5.0, max_search_radius_km: 7.0, online_drivers: 3, total_vehicles: 5, is_active: true, legal_compliance_status: 'approved' },
+                { id: 2, name: 'Kolkata Central Zone (Sealdah - College St - MG Road)', city: 'Kolkata', state: 'West Bengal', center_lat: 22.5670, center_lng: 88.3710, radius_km: 4.5, max_search_radius_km: 6.0, online_drivers: 2, total_vehicles: 3, is_active: true, legal_compliance_status: 'approved' },
+                { id: 3, name: 'Howrah Station & Foreshore Road Feeder', city: 'Howrah', state: 'West Bengal', center_lat: 22.5850, center_lng: 88.3410, radius_km: 4.0, max_search_radius_km: 5.5, online_drivers: 1, total_vehicles: 2, is_active: true, legal_compliance_status: 'approved' },
+                { id: 4, name: 'Siliguri Town & Junction Corridor', city: 'Siliguri', state: 'West Bengal', center_lat: 26.7271, center_lng: 88.3953, radius_km: 6.0, max_search_radius_km: 8.0, online_drivers: 4, total_vehicles: 6, is_active: true, legal_compliance_status: 'approved' },
+                { id: 5, name: 'Durgapur City Centre & Benachity Feeder', city: 'Durgapur', state: 'West Bengal', center_lat: 23.5204, center_lng: 87.3119, radius_km: 5.0, max_search_radius_km: 7.0, online_drivers: 2, total_vehicles: 4, is_active: true, legal_compliance_status: 'approved' },
+                { id: 6, name: 'Lucknow Charbagh & Gomti Nagar Feeder', city: 'Lucknow', state: 'Uttar Pradesh', center_lat: 26.8467, center_lng: 80.9462, radius_km: 5.5, max_search_radius_km: 7.5, online_drivers: 2, total_vehicles: 4, is_active: true, legal_compliance_status: 'approved' }
+            ];
+        }
+
+        async function loadServiceAreas() {
+            const stored = localStorage.getItem('oitoto_service_areas');
+            if (stored) {
+                try {
+                    globalServiceAreas = JSON.parse(stored);
+                } catch (e) {
+                    globalServiceAreas = getInitialServiceAreas();
+                }
+            } else {
+                globalServiceAreas = getInitialServiceAreas();
+                localStorage.setItem('oitoto_service_areas', JSON.stringify(globalServiceAreas));
+            }
+
             try {
                 const res = await fetch(`${API_BASE}/service-areas`);
                 const json = await res.json();
                 if (json.success && Array.isArray(json.data) && json.data.length > 0) {
-                    areas = json.data;
+                    globalServiceAreas = json.data.map(item => ({
+                        ...item,
+                        id: Number(item.id),
+                        is_active: item.is_active === 1 || item.is_active === '1' || item.is_active === true
+                    }));
+                    localStorage.setItem('oitoto_service_areas', JSON.stringify(globalServiceAreas));
                 }
             } catch (e) {
-                // Keep fallback
+                // Keep local state
             }
 
+            renderServiceAreasTable();
+        }
+
+        function renderServiceAreasTable() {
             const tbody = document.getElementById('serviceAreasTable');
             if (!tbody) return;
 
-            tbody.innerHTML = areas.map(a => `
-                <tr>
-                    <td class="fw-bold">${a.name}</td>
-                    <td>${a.city}, ${a.state}</td>
-                    <td><small>${a.center_lat}, ${a.center_lng}</small></td>
-                    <td>${a.radius_km} km</td>
-                    <td>${a.max_search_radius_km} km</td>
-                    <td>${a.online_drivers} online / ${a.total_vehicles} total</td>
-                    <td><span class="badge-status ${a.is_active ? 'approved' : 'rejected'}">${a.is_active ? 'Active' : 'Inactive'}</span></td>
-                </tr>
-            `).join('');
+            const activeCount = globalServiceAreas.filter(a => a.is_active === true || a.is_active === 1 || a.is_active === '1').length;
+            const countElem = document.getElementById('activeZonesCount');
+            if (countElem) countElem.innerText = activeCount;
+
+            if (!globalServiceAreas || globalServiceAreas.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="8" class="text-center py-5 text-muted">
+                            <i class="bi bi-geo-alt fs-1 d-block mb-2 text-secondary opacity-50"></i>
+                            <div class="fw-semibold">No service zones registered yet.</div>
+                            <div class="small">Click "+ Add Service Zone" to create your first operational corridor.</div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            tbody.innerHTML = globalServiceAreas.map(a => {
+                const isActive = a.is_active === true || a.is_active === 1 || a.is_active === '1';
+                const latFormatted = a.center_lat ? Number(a.center_lat).toFixed(4) : '0.0000';
+                const lngFormatted = a.center_lng ? Number(a.center_lng).toFixed(4) : '0.0000';
+                const radius = a.radius_km ? Number(a.radius_km).toFixed(1) : '5.0';
+                const maxRadius = a.max_search_radius_km ? Number(a.max_search_radius_km).toFixed(1) : (Number(radius) + 2.0).toFixed(1);
+                const online = a.online_drivers || 0;
+                const total = a.total_vehicles || 0;
+
+                return `
+                    <tr>
+                        <td>
+                            <div class="fw-bold text-dark">${escapeHtml(a.name)}</div>
+                            <small class="text-muted"><i class="bi bi-tag me-1"></i>ID: #ZN-${String(a.id || 0).padStart(3, '0')}</small>
+                        </td>
+                        <td>
+                            <span class="fw-semibold text-dark">${escapeHtml(a.city || 'Kolkata')}</span><br>
+                            <small class="text-muted">${escapeHtml(a.state || 'West Bengal')}</small>
+                        </td>
+                        <td>
+                            <span class="badge bg-light text-dark border font-monospace" style="font-size: 0.76rem;" title="GPS Coordinates">
+                                <i class="bi bi-geo-alt-fill text-danger me-1"></i>${latFormatted}, ${lngFormatted}
+                            </span>
+                        </td>
+                        <td><span class="badge bg-success bg-opacity-10 text-success fw-bold">${radius} km</span></td>
+                        <td><span class="badge bg-secondary bg-opacity-10 text-dark fw-bold">${maxRadius} km</span></td>
+                        <td>
+                            <div class="small fw-semibold ${online > 0 ? 'text-success' : 'text-muted'}">
+                                <i class="bi bi-circle-fill me-1" style="font-size: 0.5rem;"></i>${online} online
+                            </div>
+                            <div class="small text-muted">${total} vehicles</div>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-sm p-0 border-0" onclick="toggleZoneStatus(${a.id})" title="Click to ${isActive ? 'Deactivate' : 'Activate'} Zone">
+                                <span class="badge-status ${isActive ? 'approved' : 'rejected'} d-inline-flex align-items-center gap-1 shadow-sm" style="cursor: pointer;">
+                                    <i class="bi ${isActive ? 'bi-check-circle-fill' : 'bi-dash-circle-fill'}"></i>
+                                    ${isActive ? 'Active' : 'Inactive'}
+                                </span>
+                            </button>
+                        </td>
+                        <td class="text-end text-nowrap">
+                            <div class="btn-group btn-group-sm">
+                                <button class="btn btn-outline-primary btn-sm px-2.5 py-1" onclick="openEditZoneModal(${a.id})" title="Edit Zone Details">
+                                    <i class="bi bi-pencil-square me-1"></i> Edit
+                                </button>
+                                <button class="btn btn-sm px-2.5 py-1 ${isActive ? 'btn-outline-warning' : 'btn-outline-success'}" onclick="toggleZoneStatus(${a.id})" title="${isActive ? 'Deactivate (Pause Dispatch)' : 'Activate (Enable Dispatch)'}">
+                                    <i class="bi ${isActive ? 'bi-pause-circle me-1' : 'bi-play-circle me-1'}"></i> ${isActive ? 'Deactivate' : 'Activate'}
+                                </button>
+                                <button class="btn btn-outline-danger btn-sm px-2 py-1" onclick="deleteZone(${a.id})" title="Delete Service Zone">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function openAddZoneModal() {
+            document.getElementById('serviceZoneForm').reset();
+            document.getElementById('szId').value = '';
+            document.getElementById('szPresetSelect').value = '';
+            document.getElementById('szRadius').value = '5.0';
+            document.getElementById('szMaxRadius').value = '7.0';
+            document.getElementById('szStatus').value = '1';
+            document.getElementById('szCompliance').value = 'approved';
+
+            document.getElementById('serviceZoneModalTitle').innerHTML = '<i class="bi bi-geo-alt-fill me-2 text-success"></i> Add New Service Zone';
+            document.getElementById('szSubmitBtn').innerHTML = '<i class="bi bi-plus-lg me-1"></i> Create Service Zone';
+
+            const modalElem = document.getElementById('serviceZoneModal');
+            const modal = bootstrap.Modal.getOrCreateInstance(modalElem);
+            modal.show();
+        }
+
+        function openEditZoneModal(id) {
+            const zone = globalServiceAreas.find(a => Number(a.id) === Number(id));
+            if (!zone) {
+                alert('Service zone not found for ID: ' + id);
+                return;
+            }
+
+            document.getElementById('szId').value = zone.id;
+            document.getElementById('szName').value = zone.name || '';
+            document.getElementById('szCity').value = zone.city || '';
+            document.getElementById('szState').value = zone.state || '';
+            document.getElementById('szLat').value = zone.center_lat || '';
+            document.getElementById('szLng').value = zone.center_lng || '';
+            document.getElementById('szRadius').value = zone.radius_km || '5.0';
+            document.getElementById('szMaxRadius').value = zone.max_search_radius_km || (Number(zone.radius_km || 5.0) + 2.0).toFixed(1);
+            document.getElementById('szStatus').value = (zone.is_active === true || zone.is_active === 1 || zone.is_active === '1') ? '1' : '0';
+            document.getElementById('szCompliance').value = zone.legal_compliance_status || 'approved';
+            document.getElementById('szPresetSelect').value = '';
+
+            document.getElementById('serviceZoneModalTitle').innerHTML = `<i class="bi bi-pencil-square me-2 text-primary"></i> Edit Service Zone: ${escapeHtml(zone.name)}`;
+            document.getElementById('szSubmitBtn').innerHTML = '<i class="bi bi-check2-circle me-1"></i> Update Service Zone';
+
+            const modalElem = document.getElementById('serviceZoneModal');
+            const modal = bootstrap.Modal.getOrCreateInstance(modalElem);
+            modal.show();
+        }
+
+        function applyZonePreset(presetKey) {
+            if (!presetKey || !ZONE_PRESETS[presetKey]) return;
+            const p = ZONE_PRESETS[presetKey];
+            const nameInput = document.getElementById('szName');
+            if (!nameInput.value || Object.values(ZONE_PRESETS).some(x => x.name === nameInput.value)) {
+                nameInput.value = p.name;
+            }
+            document.getElementById('szCity').value = p.city;
+            document.getElementById('szState').value = p.state;
+            document.getElementById('szLat').value = p.lat;
+            document.getElementById('szLng').value = p.lng;
+            document.getElementById('szRadius').value = p.radius;
+            document.getElementById('szMaxRadius').value = p.maxRadius;
+        }
+
+        function detectZoneGps() {
+            if (!navigator.geolocation) {
+                alert('Geolocation is not supported by your browser.');
+                return;
+            }
+            navigator.geolocation.getCurrentPosition(
+                pos => {
+                    document.getElementById('szLat').value = pos.coords.latitude.toFixed(6);
+                    document.getElementById('szLng').value = pos.coords.longitude.toFixed(6);
+                    alert(`✓ GPS Location Detected!\n\nLatitude: ${pos.coords.latitude.toFixed(6)}\nLongitude: ${pos.coords.longitude.toFixed(6)}\nCoordinates auto-filled into form.`);
+                },
+                err => {
+                    alert('Unable to retrieve your location: ' + err.message);
+                },
+                { enableHighAccuracy: true, timeout: 10000 }
+            );
+        }
+
+        async function saveServiceZone(e) {
+            e.preventDefault();
+
+            const idStr = document.getElementById('szId').value;
+            const name = document.getElementById('szName').value.trim();
+            const city = document.getElementById('szCity').value.trim();
+            const state = document.getElementById('szState').value.trim();
+            const center_lat = parseFloat(document.getElementById('szLat').value);
+            const center_lng = parseFloat(document.getElementById('szLng').value);
+            const radius_km = parseFloat(document.getElementById('szRadius').value) || 5.0;
+            const max_search_radius_km = parseFloat(document.getElementById('szMaxRadius').value) || (radius_km + 2.0);
+            const is_active = document.getElementById('szStatus').value === '1';
+            const legal_compliance_status = document.getElementById('szCompliance').value || 'approved';
+
+            if (!name || !city || !state || isNaN(center_lat) || isNaN(center_lng)) {
+                alert('Please fill in all required fields (Name, City, State, Latitude, Longitude).');
+                return;
+            }
+
+            const isEdit = Boolean(idStr);
+            const zoneId = isEdit ? Number(idStr) : (globalServiceAreas.reduce((max, a) => Math.max(max, Number(a.id) || 0), 0) + 1);
+
+            const payload = {
+                id: zoneId,
+                name,
+                city,
+                state,
+                center_lat,
+                center_lng,
+                radius_km,
+                max_search_radius_km,
+                is_active,
+                legal_compliance_status
+            };
+
+            if (isEdit) {
+                const idx = globalServiceAreas.findIndex(a => Number(a.id) === zoneId);
+                if (idx !== -1) {
+                    globalServiceAreas[idx] = {
+                        ...globalServiceAreas[idx],
+                        ...payload
+                    };
+                }
+            } else {
+                payload.online_drivers = 0;
+                payload.total_vehicles = 0;
+                globalServiceAreas.unshift(payload);
+            }
+
+            localStorage.setItem('oitoto_service_areas', JSON.stringify(globalServiceAreas));
+
+            // Sync with backend API
+            try {
+                await ensureAuth();
+                const url = isEdit ? `${API_BASE}/service-areas/${zoneId}` : `${API_BASE}/service-areas`;
+                const method = isEdit ? 'PUT' : 'POST';
+                await fetch(url, {
+                    method: method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${adminToken}`
+                    },
+                    body: JSON.stringify({
+                        name,
+                        city,
+                        state,
+                        center_lat,
+                        center_lng,
+                        radius_km,
+                        max_search_radius_km,
+                        is_active: is_active ? 1 : 0
+                    })
+                });
+            } catch (err) {
+                // Offline safe
+            }
+
+            const modalElem = document.getElementById('serviceZoneModal');
+            const modal = bootstrap.Modal.getInstance(modalElem);
+            if (modal) modal.hide();
+
+            renderServiceAreasTable();
+
+            alert(isEdit 
+                ? `✓ Service Zone "${name}" updated successfully!` 
+                : `✓ New Service Zone "${name}" created successfully!\nCorridor geofence active with radius ${radius_km} km.`
+            );
+        }
+
+        async function toggleZoneStatus(id) {
+            const zone = globalServiceAreas.find(a => Number(a.id) === Number(id));
+            if (!zone) return;
+
+            const wasActive = zone.is_active === true || zone.is_active === 1 || zone.is_active === '1';
+            const newActive = !wasActive;
+            zone.is_active = newActive;
+
+            localStorage.setItem('oitoto_service_areas', JSON.stringify(globalServiceAreas));
+            renderServiceAreasTable();
+
+            try {
+                await ensureAuth();
+                await fetch(`${API_BASE}/service-areas/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${adminToken}`
+                    },
+                    body: JSON.stringify({ is_active: newActive ? 1 : 0 })
+                });
+            } catch (err) {
+                // Offline safe
+            }
+
+            if (newActive) {
+                alert(`✓ Service Zone "${zone.name}" is now ACTIVE!\n\nE-Rickshaw passenger booking requests and driver duty are enabled in this corridor.`);
+            } else {
+                alert(`⚠️ Service Zone "${zone.name}" has been DEACTIVATED (Standby).\n\nPassenger booking requests are temporarily paused in this corridor.`);
+            }
+        }
+
+        async function deleteZone(id) {
+            const zone = globalServiceAreas.find(a => Number(a.id) === Number(id));
+            if (!zone) return;
+
+            const confirmMsg = `Are you sure you want to delete service zone "${zone.name}"?\n\nThis will remove geographic aggregation rules and fare calculation boundaries for this corridor.`;
+            if (!confirm(confirmMsg)) {
+                return;
+            }
+
+            globalServiceAreas = globalServiceAreas.filter(a => Number(a.id) !== Number(id));
+            localStorage.setItem('oitoto_service_areas', JSON.stringify(globalServiceAreas));
+            renderServiceAreasTable();
+
+            try {
+                await ensureAuth();
+                await fetch(`${API_BASE}/service-areas/${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Authorization': `Bearer ${adminToken}`
+                    }
+                });
+            } catch (err) {
+                // Offline safe
+            }
+
+            alert(`✓ Service Zone "${zone.name}" has been deleted.`);
         }
 
         // 7. Complaints Loader (with safe offline fallback)

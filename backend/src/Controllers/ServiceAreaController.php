@@ -129,4 +129,15 @@ class ServiceAreaController
 
         Response::success(null, 'Service area updated successfully.');
     }
+
+    public function destroy(Request $request): void
+    {
+        $id = (int)$request->param('id');
+        $db = Database::getConnection();
+
+        $stmt = $db->prepare("DELETE FROM service_areas WHERE id = ?");
+        $stmt->execute([$id]);
+
+        Response::success(null, 'Service area deleted successfully.');
+    }
 }

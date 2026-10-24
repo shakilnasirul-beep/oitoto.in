@@ -106,6 +106,7 @@ $router->group('/api/v1', function(Router $r) {
     $r->get('/service-areas/{id}', [ServiceAreaController::class, 'show']);
     $r->post('/service-areas', [ServiceAreaController::class, 'store'], [AuthMiddleware::class, RoleMiddleware::allow('admin', 'super_admin')]);
     $r->put('/service-areas/{id}', [ServiceAreaController::class, 'update'], [AuthMiddleware::class, RoleMiddleware::allow('admin', 'super_admin')]);
+    $r->delete('/service-areas/{id}', [ServiceAreaController::class, 'destroy'], [AuthMiddleware::class, RoleMiddleware::allow('admin', 'super_admin')]);
 
     // --- FARE CALCULATION ENGINE ---
     $r->post('/fare/estimate', [FareController::class, 'estimate']);
