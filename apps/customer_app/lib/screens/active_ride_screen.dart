@@ -169,11 +169,16 @@ class _ActiveRideScreenState extends State<ActiveRideScreen> {
             options: MapOptions(
               initialCenter: centerPoint,
               initialZoom: 15.0,
+              maxZoom: 20.0,
+              minZoom: 4.0,
             ),
             children: [
               TileLayer(
-                urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                urlTemplate: 'https://mt{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
+                subdomains: const ['0', '1', '2', '3'],
                 userAgentPackageName: 'in.oitoto.customer',
+                maxZoom: 20,
+                maxNativeZoom: 20,
               ),
               MarkerLayer(
                 markers: [

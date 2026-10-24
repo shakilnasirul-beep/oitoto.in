@@ -578,7 +578,7 @@
         .map-badge-overlay {
             position: absolute;
             top: 10px;
-            right: 10px;
+            left: 10px;
             background: rgba(255, 255, 255, 0.95);
             padding: 4px 10px;
             border-radius: 20px;
@@ -592,6 +592,107 @@
             gap: 5px;
             pointer-events: none;
             border: 1px solid rgba(10, 139, 66, 0.2);
+        }
+        .map-mode-vertical-toggle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 500;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(0, 0, 0, 0.14);
+            border-radius: 12px;
+            padding: 4px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.16);
+        }
+        .btn-mode-vertical {
+            border: none;
+            background: transparent;
+            padding: 5px 9px;
+            border-radius: 8px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #334155;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        .btn-mode-vertical:hover {
+            background: rgba(10, 139, 66, 0.08);
+            color: var(--oi-green);
+        }
+        .btn-mode-vertical.active {
+            background: var(--oi-green) !important;
+            color: #FFFFFF !important;
+            box-shadow: 0 2px 6px rgba(10, 139, 66, 0.35);
+        }
+        .map-gps-float-btn {
+            position: absolute;
+            bottom: 48px;
+            right: 12px;
+            z-index: 500;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #FFFFFF;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            color: var(--oi-green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.15rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .map-gps-float-btn:hover {
+            transform: scale(1.08);
+            background: var(--oi-green);
+            color: #FFFFFF;
+        }
+        .gps-permission-modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(4px);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+        .gps-permission-modal-card {
+            background: #FFFFFF;
+            max-width: 390px;
+            width: 100%;
+            border-radius: 20px;
+            padding: 24px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.25);
+            animation: modalFadeIn 0.25s ease-out;
+        }
+        .gps-modal-icon-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #E8F5E9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+        }
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.92); }
+            to { opacity: 1; transform: scale(1); }
         }
         .map-badge-overlay i {
             font-size: 0.75rem;
@@ -1103,6 +1204,19 @@
                                 <div class="map-badge-overlay" id="cCustomerMapBadge">
                                     <i class="bi bi-geo-alt-fill"></i> Kolkata • Live Google Map
                                 </div>
+                                <!-- Vertical 2-Mode Map Layer Selector (Road & Satellite) -->
+                                <div class="map-mode-vertical-toggle" id="cMapModeToggle">
+                                    <button type="button" class="btn-mode-vertical active" id="cModeRoad" onclick="setSimulatorMapMode('customer', 'road')" title="Standard Road Map (Streets & Alleys)">
+                                        <i class="bi bi-map-fill"></i> Road
+                                    </button>
+                                    <button type="button" class="btn-mode-vertical" id="cModeSat" onclick="setSimulatorMapMode('customer', 'satellite')" title="Satellite View (Aerial imagery + road overlays)">
+                                        <i class="bi bi-globe-americas"></i> Sat
+                                    </button>
+                                </div>
+                                <!-- Floating Live GPS Recenter Button -->
+                                <button type="button" class="map-gps-float-btn" onclick="useDeviceGpsLocation()" title="Detect My Current GPS Location">
+                                    <i class="bi bi-crosshair2"></i>
+                                </button>
                                 <div class="map-instruction-pill" id="cMapInstruction">
                                     <i class="bi bi-hand-index-thumb-fill"></i> Tap map or drag pin to choose destination
                                 </div>
@@ -1864,6 +1978,19 @@
                                 <div class="map-badge-overlay" id="dDriverRadarOverlay">
                                     <i class="bi bi-compass-fill"></i> Kolkata • Driver GPS Radar
                                 </div>
+                                <!-- Vertical 2-Mode Map Layer Selector (Road & Satellite) -->
+                                <div class="map-mode-vertical-toggle" id="dMapModeToggle">
+                                    <button type="button" class="btn-mode-vertical active" id="dModeRoad" onclick="setSimulatorMapMode('driver', 'road')" title="Standard Road Map">
+                                        <i class="bi bi-map-fill"></i> Road
+                                    </button>
+                                    <button type="button" class="btn-mode-vertical" id="dModeSat" onclick="setSimulatorMapMode('driver', 'satellite')" title="Satellite View">
+                                        <i class="bi bi-globe-americas"></i> Sat
+                                    </button>
+                                </div>
+                                <!-- Floating Live GPS Recenter Button -->
+                                <button type="button" class="map-gps-float-btn" onclick="useDeviceGpsLocation()" title="Detect My Current GPS Location">
+                                    <i class="bi bi-crosshair2"></i>
+                                </button>
                             </div>
 
                             <!-- Bottom Status Card -->
@@ -4768,29 +4895,68 @@
             });
         }
 
-        // Attach Google Maps India tile layer with Carto Voyager fallback
-        function attachIndiaTileLayer(map) {
-            const googleTiles = L.tileLayer('https://mt{s}.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}', {
+        // Two-mode map layer manager (Road, Satellite - Vertical Layout)
+        const mapTileLayers = {
+            customer: { road: null, sat: null, mode: 'road' },
+            driver: { road: null, sat: null, mode: 'road' },
+            customerActive: { road: null, sat: null, mode: 'road' },
+            driverActive: { road: null, sat: null, mode: 'road' }
+        };
+
+        function createRoadTileLayer() {
+            return L.tileLayer('https://mt{s}.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}', {
                 subdomains: ['0', '1', '2', '3'],
                 maxZoom: 20,
-                attribution: '&copy; <a href="https://maps.google.com" target="_blank">Google Maps India</a> | Oi Toto!'
+                maxNativeZoom: 20,
+                attribution: '&copy; <a href="https://maps.google.com" target="_blank">Google Maps Road</a> | Oi Toto!'
             });
+        }
 
-            const cartoTiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-                subdomains: ['a', 'b', 'c', 'd'],
+        function createSatTileLayer() {
+            return L.tileLayer('https://mt{s}.google.com/vt/lyrs=y&hl=en&x={x}&y={y}&z={z}', {
+                subdomains: ['0', '1', '2', '3'],
                 maxZoom: 20,
-                attribution: '&copy; CartoDB &copy; OpenStreetMap'
+                maxNativeZoom: 20,
+                attribution: '&copy; Google Hybrid Satellite | Oi Toto!'
             });
+        }
 
-            googleTiles.addTo(map);
+        // Attach Google Maps India tile layer with Satellite support
+        function attachIndiaTileLayer(map, key = 'customer') {
+            const roadLayer = createRoadTileLayer();
+            roadLayer.addTo(map);
 
-            googleTiles.on('tileerror', function() {
-                if (!map.hasLayer(cartoTiles)) {
-                    cartoTiles.addTo(map);
-                }
-            });
+            if (mapTileLayers[key]) {
+                mapTileLayers[key].road = roadLayer;
+                mapTileLayers[key].sat = createSatTileLayer();
+                mapTileLayers[key].mode = 'road';
+            }
+            return roadLayer;
+        }
 
-            return googleTiles;
+        function setSimulatorMapMode(target, mode) {
+            let mapObj = (target === 'customer') ? custMap : drvMap;
+            let layers = mapTileLayers[target];
+            let roadBtn = document.getElementById(target === 'customer' ? 'cModeRoad' : 'dModeRoad');
+            let satBtn = document.getElementById(target === 'customer' ? 'cModeSat' : 'dModeSat');
+
+            if (!mapObj || !layers) return;
+
+            if (mode === 'satellite') {
+                if (layers.road && mapObj.hasLayer(layers.road)) mapObj.removeLayer(layers.road);
+                if (!layers.sat) layers.sat = createSatTileLayer();
+                layers.sat.addTo(mapObj);
+                layers.mode = 'satellite';
+                if (roadBtn) roadBtn.classList.remove('active');
+                if (satBtn) satBtn.classList.add('active');
+            } else {
+                if (layers.sat && mapObj.hasLayer(layers.sat)) mapObj.removeLayer(layers.sat);
+                if (!layers.road) layers.road = createRoadTileLayer();
+                layers.road.addTo(mapObj);
+                layers.mode = 'road';
+                if (satBtn) satBtn.classList.remove('active');
+                if (roadBtn) roadBtn.classList.add('active');
+            }
         }
 
         function setViewMode(mode) {
@@ -5152,6 +5318,21 @@
             }
         }
 
+        function showGpsPermissionModal() {
+            const modal = document.getElementById('gpsPermissionModal');
+            if (modal) modal.style.display = 'flex';
+        }
+
+        function dismissGpsModal() {
+            const modal = document.getElementById('gpsPermissionModal');
+            if (modal) modal.style.display = 'none';
+        }
+
+        function allowGpsFromModal() {
+            dismissGpsModal();
+            useDeviceGpsLocation();
+        }
+
         // Device GPS location detection
         function useDeviceGpsLocation() {
             const btn = document.getElementById('cBtnGps');
@@ -5192,11 +5373,29 @@
                     if (custMap) {
                         custMap.setView(currentPickupCoord, 16);
                     }
+                    if (drvMap) {
+                        drvMap.setView(currentPickupCoord, 16);
+                    }
+
+                    // Attempt reverse geocoding for exact real street address
+                    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=17&addressdetails=1`)
+                        .then(r => r.json())
+                        .then(data => {
+                            if (data && data.address) {
+                                const road = data.address.road || data.address.suburb || data.address.neighbourhood || data.address.city || data.address.town;
+                                if (road) {
+                                    currentPickupName = `📍 ${road}`;
+                                    if (pInput) pInput.value = currentPickupName;
+                                    if (custPickupMarker) custPickupMarker.bindPopup(`<b>${dict.pickupPrefix} (GPS Live):</b><br>${road}`).openPopup();
+                                }
+                            }
+                        }).catch(() => {});
 
                     spawnNearbyTotosAround(lat, lng);
                     userCustomPinDropped = false;
                     renderNearbyDestinationChips(currentPickupCoord);
                     updateCustomerRideDetails();
+                    dismissGpsModal();
                 },
                 (err) => {
                     console.warn("GPS error", err);
@@ -5364,7 +5563,7 @@
             }
 
             custMap = L.map('customerMap', { zoomControl: false }).setView(currentPickupCoord, 15);
-            attachIndiaTileLayer(custMap);
+            attachIndiaTileLayer(custMap, 'customer');
 
             // Pickup Marker (Draggable)
             const pickupIcon = createDivIcon('bi-geo-alt-fill', 'pin-pickup');
@@ -5433,7 +5632,7 @@
             }
 
             custActiveMap = L.map('customerActiveMap', { zoomControl: false }).setView(currentPickupCoord, 15);
-            attachIndiaTileLayer(custActiveMap);
+            attachIndiaTileLayer(custActiveMap, 'customerActive');
 
             updateCustomerActiveMapRoute();
 
@@ -5504,7 +5703,7 @@
             }
 
             drvMap = L.map('driverMap', { zoomControl: false }).setView(currentPickupCoord, 15);
-            attachIndiaTileLayer(drvMap);
+            attachIndiaTileLayer(drvMap, 'driver');
 
             const myTotoIcon = createDivIcon('', 'pin-toto', '🛺');
             L.marker(currentPickupCoord, { icon: myTotoIcon })
@@ -5534,7 +5733,7 @@
             }
 
             drvActiveMap = L.map('driverActiveMap', { zoomControl: false }).setView(currentPickupCoord, 15);
-            attachIndiaTileLayer(drvActiveMap);
+            attachIndiaTileLayer(drvActiveMap, 'driverActive');
 
             updateDriverActiveMapRoute();
 
@@ -7188,7 +7387,35 @@
             applyDriverLanguage(savedDrvLang);
             updateHeaderLangToggle(savedCustLang === savedDrvLang ? savedCustLang : 'en');
             updateCustomerSecurityUI();
+
+            // Prompt GPS Permission on load
+            setTimeout(() => {
+                if (!currentPickupPlaceId && currentPickupName.includes('Shyambazar')) {
+                    showGpsPermissionModal();
+                }
+            }, 1200);
         });
     </script>
+
+    <!-- REAL DEVICE GPS PERMISSION DIALOG MODAL -->
+    <div class="gps-permission-modal-backdrop" id="gpsPermissionModal" style="display: none;">
+        <div class="gps-permission-modal-card">
+            <div class="gps-modal-icon-circle">
+                <i class="bi bi-geo-alt-fill text-success" style="font-size: 2rem;"></i>
+            </div>
+            <h5 class="fw-bold text-dark mb-2" id="gpsModalTitle">Allow Device GPS Location</h5>
+            <p class="text-muted small mb-3" id="gpsModalDesc" style="line-height: 1.5;">
+                Oi Toto needs your real device GPS location to automatically find nearby e-rickshaws and set your pickup point wherever you are.
+            </p>
+            <div class="d-flex flex-column gap-2">
+                <button type="button" class="btn btn-oi-green fw-bold py-2 rounded-3 shadow-sm" onclick="allowGpsFromModal()">
+                    <i class="bi bi-crosshair me-1"></i> <span id="gpsModalAllowBtn">Allow GPS & Detect Location</span>
+                </button>
+                <button type="button" class="btn btn-light text-secondary fw-semibold py-1.5 rounded-3" onclick="dismissGpsModal()">
+                    <span id="gpsModalSkipBtn">Continue with Demo Location</span>
+                </button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

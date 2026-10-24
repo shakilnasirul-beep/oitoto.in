@@ -25,7 +25,8 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
 
   bool _isOnline = false;
   bool _isLoading = true;
-  String _mapMode = 'road'; // 'road', 'satellite', 'traffic'
+  bool _isLocatingGps = false;
+  String _mapMode = 'road'; // 'road', 'satellite'
   Map<String, dynamic>? _profile;
   Map<String, dynamic>? _activeTrip;
   Map<String, dynamic>? _earningsToday;
@@ -38,6 +39,67 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
   void initState() {
     super.initState();
     _loadInitialData();
+    _initDeviceGps();
+  }
+
+  Future<void> _initDeviceGps() async {
+    if (!mounted) return;
+    setState(() => _isLocatingGps = true);
+
+    try {
+      bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        if (mounted) {
+          setState(() => _isLocatingGps = false);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: const Text('Please enable GPS / Location on your device.'),
+              backgroundColor: Colors.red.shade700,
+              duration: const Duration(seconds: 4),
+              action: SnackBarAction(
+                label: 'Turn On',
+                textColor: Colors.white,
+                onPressed: () => Geolocator.openLocationSettings(),
+              ),
+            ),
+          );
+        }
+        return;
+      }
+
+      LocationPermission permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          if (mounted) setState(() => _isLocatingGps = false);
+          return;
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        if (mounted) setState(() => _isLocatingGps = false);
+        return;
+      }
+
+      final pos = await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+        timeLimit: const Duration(seconds: 12),
+      );
+
+      final newGps = LatLng(pos.latitude, pos.longitude);
+      if (mounted) {
+        setState(() {
+          _currentLocation = newGps;
+          _isLocatingGps = false;
+        });
+        _mapController.move(newGps, 16.0);
+        if (_isOnline) {
+          DriverApiService().updateLocation(newGps.latitude, newGps.longitude);
+        }
+      }
+    } catch (_) {
+      if (mounted) setState(() => _isLocatingGps = false);
+    }
   }
 
   Future<void> _loadInitialData() async {
@@ -374,20 +436,26 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
 
   Widget _buildMapModePill(String mode, String label) {
     final isSelected = _mapMode == mode;
-    return InkWell(
-      onTap: () => setState(() => _mapMode = mode),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        decoration: BoxDecoration(
-          color: isSelected ? DriverColors.primaryGreen : Colors.transparent,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            fontSize: 11,
-            fontWeight: FontWeight.w700,
-            color: isSelected ? Colors.white : DriverColors.deepNavy,
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () => setState(() => _mapMode = mode),
+        borderRadius: BorderRadius.circular(10),
+        child: Container(
+          width: 76,
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+          decoration: BoxDecoration(
+            color: isSelected ? DriverColors.primaryGreen : Colors.transparent,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          alignment: Alignment.center,
+          child: Text(
+            label,
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w700,
+              color: isSelected ? Colors.white : DriverColors.deepNavy,
+            ),
           ),
         ),
       ),
@@ -409,31 +477,25 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
             options: MapOptions(
               initialCenter: _currentLocation,
               initialZoom: 15.0,
-              maxZoom: 19.0,
+              maxZoom: 20.0,
               minZoom: 4.0,
             ),
             children: [
               if (_mapMode == 'satellite')
                 TileLayer(
-                  urlTemplate: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+                  urlTemplate: 'https://mt{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',
+                  subdomains: const ['0', '1', '2', '3'],
                   userAgentPackageName: 'in.oitoto.driver',
-                  maxZoom: 19,
-                  maxNativeZoom: 19,
-                )
-              else if (_mapMode == 'traffic')
-                TileLayer(
-                  urlTemplate: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
-                  subdomains: const ['a', 'b', 'c', 'd'],
-                  userAgentPackageName: 'in.oitoto.driver',
-                  maxZoom: 19,
-                  maxNativeZoom: 19,
+                  maxZoom: 20,
+                  maxNativeZoom: 20,
                 )
               else
                 TileLayer(
-                  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                  urlTemplate: 'https://mt{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
+                  subdomains: const ['0', '1', '2', '3'],
                   userAgentPackageName: 'in.oitoto.driver',
-                  maxZoom: 19,
-                  maxNativeZoom: 19,
+                  maxZoom: 20,
+                  maxNativeZoom: 20,
                 ),
               MarkerLayer(
                 markers: [
@@ -554,27 +616,46 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
             ),
           ),
 
-          // 2.1 3-Mode Location Map Selector Pill (Road / Satellite / Traffic)
+          // 2.1 2-Mode Location Map Selector (Road & Satellite - Vertical Layout)
           Positioned(
             top: 68,
-            right: 16,
+            right: 14,
             child: Container(
-              padding: const EdgeInsets.all(3),
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 5),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(24),
+                borderRadius: BorderRadius.circular(16),
                 boxShadow: [
-                  BoxShadow(color: Colors.black.withOpacity(0.12), blurRadius: 8, offset: const Offset(0, 3)),
+                  BoxShadow(color: Colors.black.withOpacity(0.16), blurRadius: 10, offset: const Offset(0, 3)),
                 ],
               ),
-              child: Row(
+              child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   _buildMapModePill('road', '🛣️ ${loc.tr('map_road')}'),
+                  const SizedBox(height: 4),
                   _buildMapModePill('satellite', '🛰️ ${loc.tr('map_satellite')}'),
-                  _buildMapModePill('traffic', '🚦 ${loc.tr('map_traffic')}'),
                 ],
               ),
+            ),
+          ),
+
+          // Floating Live GPS Recenter Button
+          Positioned(
+            right: 16,
+            bottom: _activeTrip != null ? 360 : 130,
+            child: FloatingActionButton.small(
+              heroTag: 'driverBtnLiveGps',
+              backgroundColor: Colors.white,
+              elevation: 4,
+              onPressed: _isLocatingGps ? null : _initDeviceGps,
+              child: _isLocatingGps
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(strokeWidth: 2.2, color: DriverColors.primaryGreen),
+                    )
+                  : const Icon(Icons.my_location, color: DriverColors.primaryGreen, size: 24),
             ),
           ),
 

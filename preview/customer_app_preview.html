@@ -271,6 +271,69 @@
             white-space: nowrap;
             border: 1px solid rgba(255, 255, 255, 0.15);
         }
+        .map-mode-vertical-toggle {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 500;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(0, 0, 0, 0.14);
+            border-radius: 12px;
+            padding: 4px;
+            box-shadow: 0 4px 14px rgba(0, 0, 0, 0.16);
+        }
+        .btn-mode-vertical {
+            border: none;
+            background: transparent;
+            padding: 5px 9px;
+            border-radius: 8px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: #334155;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        .btn-mode-vertical:hover {
+            background: rgba(10, 139, 66, 0.08);
+            color: var(--oi-green);
+        }
+        .btn-mode-vertical.active {
+            background: var(--oi-green) !important;
+            color: #FFFFFF !important;
+            box-shadow: 0 2px 6px rgba(10, 139, 66, 0.35);
+        }
+        .map-gps-float-btn {
+            position: absolute;
+            bottom: 48px;
+            right: 12px;
+            z-index: 500;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #FFFFFF;
+            border: 1px solid rgba(0, 0, 0, 0.15);
+            color: var(--oi-green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.15rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .map-gps-float-btn:hover {
+            transform: scale(1.08);
+            background: var(--oi-green);
+            color: #FFFFFF;
+        }
         .map-instruction-pill i {
             color: var(--oi-yellow);
         }
@@ -488,6 +551,19 @@
 
                 <!-- Leaflet Interactive Map -->
                 <div id="customerMapLive">
+                    <!-- Vertical 2-Mode Map Layer Selector (Road & Satellite) -->
+                    <div class="map-mode-vertical-toggle" id="cMapModeToggleLive">
+                        <button type="button" class="btn-mode-vertical active" id="cModeRoadLive" onclick="setLiveMapMode('road')" title="Standard Road Map (Streets & Alleys)">
+                            <i class="bi bi-map-fill"></i> Road
+                        </button>
+                        <button type="button" class="btn-mode-vertical" id="cModeSatLive" onclick="setLiveMapMode('satellite')" title="Satellite View (Aerial imagery + road overlays)">
+                            <i class="bi bi-globe-americas"></i> Sat
+                        </button>
+                    </div>
+                    <!-- Floating Live GPS Recenter Button -->
+                    <button type="button" class="map-gps-float-btn" onclick="useDeviceGpsLocationLive()" title="Detect My Current GPS Location">
+                        <i class="bi bi-crosshair2"></i>
+                    </button>
                     <div class="map-instruction-pill">
                         <i class="bi bi-hand-index-thumb-fill"></i> Tap on map or drag pin to choose destination
                     </div>
@@ -1073,6 +1149,90 @@
             }
         });
 
+        let liveMapRoadLayer = null;
+        let liveMapSatLayer = null;
+
+        function setLiveMapMode(mode) {
+            if (!liveMapInstance) return;
+            const roadBtn = document.getElementById('cModeRoadLive');
+            const satBtn = document.getElementById('cModeSatLive');
+
+            if (mode === 'satellite') {
+                if (liveMapRoadLayer && liveMapInstance.hasLayer(liveMapRoadLayer)) {
+                    liveMapInstance.removeLayer(liveMapRoadLayer);
+                }
+                if (!liveMapSatLayer) {
+                    liveMapSatLayer = L.tileLayer('https://mt{s}.google.com/vt/lyrs=y&hl=en&x={x}&y={y}&z={z}', {
+                        subdomains: ['0', '1', '2', '3'],
+                        maxZoom: 20,
+                        maxNativeZoom: 20,
+                        attribution: '&copy; Google Hybrid Satellite | Oi Toto!'
+                    });
+                }
+                liveMapSatLayer.addTo(liveMapInstance);
+                if (roadBtn) roadBtn.classList.remove('active');
+                if (satBtn) satBtn.classList.add('active');
+            } else {
+                if (liveMapSatLayer && liveMapInstance.hasLayer(liveMapSatLayer)) {
+                    liveMapInstance.removeLayer(liveMapSatLayer);
+                }
+                if (!liveMapRoadLayer) {
+                    liveMapRoadLayer = L.tileLayer('https://mt{s}.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}', {
+                        subdomains: ['0', '1', '2', '3'],
+                        maxZoom: 20,
+                        maxNativeZoom: 20,
+                        attribution: '&copy; Google Maps Road | Oi Toto!'
+                    });
+                }
+                liveMapRoadLayer.addTo(liveMapInstance);
+                if (satBtn) satBtn.classList.remove('active');
+                if (roadBtn) roadBtn.classList.add('active');
+            }
+        }
+
+        function useDeviceGpsLocationLive() {
+            if (!navigator.geolocation) {
+                alert('GPS location not supported by your browser.');
+                return;
+            }
+            navigator.geolocation.getCurrentPosition(
+                (pos) => {
+                    const lat = pos.coords.latitude;
+                    const lng = pos.coords.longitude;
+                    currentPickupCoordLive = [lat, lng];
+                    currentPickupNameLive = `📍 Current Location (${lat.toFixed(4)}, ${lng.toFixed(4)})`;
+                    const pInput = document.getElementById('cPickupInputLive');
+                    if (pInput) pInput.value = currentPickupNameLive;
+                    if (custPickupMarkerLive) {
+                        custPickupMarkerLive.setLatLng(currentPickupCoordLive);
+                        custPickupMarkerLive.bindPopup(`<b>Pickup:</b> ${currentPickupNameLive}`).openPopup();
+                    }
+                    if (liveMapInstance) {
+                        liveMapInstance.setView(currentPickupCoordLive, 16);
+                    }
+                    fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&zoom=17&addressdetails=1`)
+                        .then(r => r.json())
+                        .then(data => {
+                            if (data && data.address) {
+                                const road = data.address.road || data.address.suburb || data.address.neighbourhood || data.address.city;
+                                if (road) {
+                                    currentPickupNameLive = `📍 ${road}`;
+                                    if (pInput) pInput.value = currentPickupNameLive;
+                                    if (custPickupMarkerLive) custPickupMarkerLive.bindPopup(`<b>Pickup:</b> ${road}`).openPopup();
+                                }
+                            }
+                        }).catch(() => {});
+                    spawnNearbyTotosLive(lat, lng);
+                    renderNearbyDestinationChipsLive(currentPickupCoordLive);
+                    updateCustomerRideDetailsLive();
+                },
+                (err) => {
+                    alert('GPS location access was not permitted.');
+                },
+                { enableHighAccuracy: true, timeout: 8000 }
+            );
+        }
+
         function initLiveHomeMap() {
             if (liveMapInstance) {
                 liveMapInstance.invalidateSize(true);
@@ -1083,23 +1243,14 @@
 
             liveMapInstance = L.map('customerMapLive', { zoomControl: false }).setView(currentPickupCoordLive, 15);
             
-            // Google Maps India Tile Layer with Carto fallback
-            const googleTiles = L.tileLayer('https://mt{s}.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}', {
+            // Google Maps India Tile Layer
+            liveMapRoadLayer = L.tileLayer('https://mt{s}.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}', {
                 subdomains: ['0', '1', '2', '3'],
                 maxZoom: 20,
+                maxNativeZoom: 20,
                 attribution: '&copy; <a href="https://maps.google.com" target="_blank">Google Maps India</a> | Oi Toto!'
             });
-            const cartoTiles = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-                subdomains: ['a', 'b', 'c', 'd'],
-                maxZoom: 20,
-                attribution: '&copy; CartoDB &copy; OpenStreetMap'
-            });
-            googleTiles.addTo(liveMapInstance);
-            googleTiles.on('tileerror', function() {
-                if (!liveMapInstance.hasLayer(cartoTiles)) {
-                    cartoTiles.addTo(liveMapInstance);
-                }
-            });
+            liveMapRoadLayer.addTo(liveMapInstance);
 
             // Pickup Marker (Draggable)
             const pickupIcon = createDivIcon('bi-geo-alt-fill', 'pin-pickup');

@@ -45,7 +45,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String? _promoCode;
 
   // Real GPS & Navigation State
-  String _mapMode = 'road'; // 'road', 'satellite', 'traffic'
+  String _mapMode = 'road'; // 'road', 'satellite'
   bool _isLocatingGps = false;
   bool _isLoadingRoute = false;
   List<LatLng> _routePoints = [];
@@ -416,32 +416,26 @@ class _HomeScreenState extends State<HomeScreen> {
             options: MapOptions(
               initialCenter: _currentLocation,
               initialZoom: 15.0,
-              maxZoom: 19.0,
+              maxZoom: 20.0,
               minZoom: 4.0,
               onTap: (tapPosition, point) => _setDestination(point),
             ),
             children: [
               if (_mapMode == 'satellite')
                 TileLayer(
-                  urlTemplate: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}',
+                  urlTemplate: 'https://mt{s}.google.com/vt/lyrs=y&x={x}&y={y}&z={z}',
+                  subdomains: const ['0', '1', '2', '3'],
                   userAgentPackageName: 'in.oitoto.customer',
-                  maxZoom: 19,
-                  maxNativeZoom: 19,
-                )
-              else if (_mapMode == 'traffic')
-                TileLayer(
-                  urlTemplate: 'https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png',
-                  subdomains: const ['a', 'b', 'c', 'd'],
-                  userAgentPackageName: 'in.oitoto.customer',
-                  maxZoom: 19,
-                  maxNativeZoom: 19,
+                  maxZoom: 20,
+                  maxNativeZoom: 20,
                 )
               else
                 TileLayer(
-                  urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                  urlTemplate: 'https://mt{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',
+                  subdomains: const ['0', '1', '2', '3'],
                   userAgentPackageName: 'in.oitoto.customer',
-                  maxZoom: 19,
-                  maxNativeZoom: 19,
+                  maxZoom: 20,
+                  maxNativeZoom: 20,
                 ),
 
               // Road Route Layer following traffic/street network
@@ -672,25 +666,25 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
 
-          // 2.1 3-Mode Location Map Selector Pill (Road / Satellite / Traffic)
+          // 2.1 2-Mode Location Map Selector (Road & Satellite - Vertical Layout)
           Positioned(
             top: 72,
-            right: 16,
+            right: 14,
             child: Container(
-              padding: const EdgeInsets.all(3),
+              padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 5),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(24),
+                borderRadius: BorderRadius.circular(16),
                 boxShadow: [
-                  BoxShadow(color: Colors.black.withOpacity(0.12), blurRadius: 8, offset: const Offset(0, 3)),
+                  BoxShadow(color: Colors.black.withOpacity(0.16), blurRadius: 10, offset: const Offset(0, 3)),
                 ],
               ),
-              child: Row(
+              child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   _buildMapModePill('road', '🛣️ Road'),
+                  const SizedBox(height: 4),
                   _buildMapModePill('satellite', '🛰️ Sat'),
-                  _buildMapModePill('traffic', '🚦 Traffic'),
                 ],
               ),
             ),
@@ -986,21 +980,26 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildMapModePill(String mode, String label) {
     final isSelected = _mapMode == mode;
-    return InkWell(
-      onTap: () => setState(() => _mapMode = mode),
-      borderRadius: BorderRadius.circular(20),
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
-        decoration: BoxDecoration(
-          color: isSelected ? AppColors.primaryGreen : Colors.transparent,
-          borderRadius: BorderRadius.circular(20),
-        ),
-        child: Text(
-          label,
-          style: TextStyle(
-            fontSize: 11,
-            fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
-            color: isSelected ? Colors.white : AppColors.deepNavy,
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () => setState(() => _mapMode = mode),
+        borderRadius: BorderRadius.circular(10),
+        child: Container(
+          width: 72,
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+          decoration: BoxDecoration(
+            color: isSelected ? AppColors.primaryGreen : Colors.transparent,
+            borderRadius: BorderRadius.circular(10),
+          ),
+          alignment: Alignment.center,
+          child: Text(
+            label,
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: isSelected ? FontWeight.bold : FontWeight.w600,
+              color: isSelected ? Colors.white : AppColors.deepNavy,
+            ),
           ),
         ),
       ),
