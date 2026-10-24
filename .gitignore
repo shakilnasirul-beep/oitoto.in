@@ -25,3 +25,5 @@ backend/.env.local
 # OS Generated
 .DS_Store
 Thumbs.db
+
+deploy-web/
