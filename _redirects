@@ -1,0 +1,9 @@
+# Oi Toto APK Redirection Rules
+/downloads/OiToto_Customer_v1.0.3.apk   /downloads/oi_toto_customer.apk   302
+/downloads/OiToto_Driver_v1.0.3.apk     /downloads/oi_toto_driver.apk     302
+/downloads/OiToto_Customer_v1.0.2.apk   /downloads/oi_toto_customer.apk   302
+/downloads/OiToto_Driver_v1.0.2.apk     /downloads/oi_toto_driver.apk     302
+/downloads/OiToto_Customer_v1.0.1.apk   /downloads/oi_toto_customer.apk   302
+/downloads/OiToto_Driver_v1.0.1.apk     /downloads/oi_toto_driver.apk     302
+/downloads/OiToto_Customer.apk          /downloads/oi_toto_customer.apk   302
+/downloads/OiToto_Driver.apk            /downloads/oi_toto_driver.apk     302
