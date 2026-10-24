@@ -668,7 +668,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
           // 2.1 2-Mode Location Map Selector (Road & Satellite - Vertical Layout)
           Positioned(
-            top: 72,
+            top: 105,
             right: 14,
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 5),

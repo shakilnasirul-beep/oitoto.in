@@ -618,7 +618,7 @@ class _DriverHomeScreenState extends State<DriverHomeScreen> {
 
           // 2.1 2-Mode Location Map Selector (Road & Satellite - Vertical Layout)
           Positioned(
-            top: 68,
+            top: 105,
             right: 14,
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 5),
