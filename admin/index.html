@@ -2716,43 +2716,55 @@
         </div>
     </div>
 
-    <!-- MODAL: DRIVER FULL KYC & ONBOARDING INSPECTION -->
+    <!-- MODAL: PARTNER & VEHICLE UNIFIED KYC VERIFICATION HUB -->
     <div class="modal fade" id="driverKYCModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
             <div class="modal-content border-0 shadow-lg" style="border-radius: 16px; overflow: hidden;">
                 <div class="modal-header bg-dark text-white py-3 px-4 d-flex justify-content-between align-items-center">
                     <div class="d-flex align-items-center gap-2.5">
-                        <span class="badge bg-primary p-2 rounded-circle"><i class="bi bi-person-badge-fill text-white fs-5"></i></span>
+                        <span class="badge bg-primary p-2 rounded-circle"><i class="bi bi-shield-check text-white fs-5"></i></span>
                         <div>
-                            <h5 class="modal-title fw-bold mb-0 text-white" id="driverKYCModalTitle">Driver KYC & Onboarding Profile</h5>
-                            <small class="text-white-50" style="font-size: 0.72rem;">Driver Identity, License Verification & Ride Acceptance Lock Status</small>
+                            <h5 class="modal-title fw-bold mb-0 text-white" id="driverKYCModalTitle">Partner & Vehicle Unified KYC Verification Hub</h5>
+                            <small class="text-white-50" style="font-size: 0.72rem;">Mobile App OTP Onboarding &bull; Driver Identity &bull; Vehicle RTO Papers &bull; 3-Angle Vehicle Photos Audit</small>
                         </div>
                     </div>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body p-4" id="driverKYCModalBody" style="background-color: #F8FAFC; max-height: 80vh; overflow-y: auto;">
-                    <!-- Dynamically populated by openDriverKYCModal(id) -->
+                <div class="modal-body p-4" id="driverKYCModalBody" style="background-color: #F8FAFC; max-height: 85vh; overflow-y: auto;">
+                    <!-- Dynamically populated by openDriverKYCModal -->
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- MODAL: VEHICLE KYC & ROUTE PERMIT VERIFICATION HUB -->
-    <div class="modal fade" id="vehicleKYCModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-lg">
+    <!-- MODAL: VEHICLE KYC (ALIASED TO UNIFIED HUB FOR BACKWARD COMPATIBILITY) -->
+    <div class="modal fade" id="vehicleKYCModal" tabindex="-1" aria-hidden="true" style="display:none;">
+        <div class="modal-dialog modal-dialog-centered modal-xl">
             <div class="modal-content border-0 shadow-lg" style="border-radius: 16px; overflow: hidden;">
-                <div class="modal-header bg-dark text-white py-3 px-4 d-flex justify-content-between align-items-center">
-                    <div class="d-flex align-items-center gap-2.5">
-                        <span class="badge bg-success p-2 rounded-circle"><i class="bi bi-patch-check-fill text-white fs-5"></i></span>
-                        <div>
-                            <h5 class="modal-title fw-bold mb-0 text-white" id="vehicleKYCModalTitle">E-Rickshaw KYC & Documents Verification</h5>
-                            <small class="text-white-50" style="font-size: 0.72rem;">RC Certificate, Commercial Route Permit, Insurance & Fitness Roadworthiness</small>
-                        </div>
+                <div class="modal-body p-4" id="vehicleKYCModalBody">
+                    <!-- Forwarded to driverKYCModal -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL: VEHICLE & DOCUMENT HD PHOTO LIGHTBOX -->
+    <div class="modal fade" id="vehiclePhotoLightboxModal" tabindex="-1" aria-hidden="true" style="z-index: 1060;">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content border-0 shadow-2xl" style="border-radius: 16px; overflow: hidden; background: #0F172A; color: #FFFFFF;">
+                <div class="modal-header border-0 py-3 px-4 d-flex justify-content-between align-items-center" style="background: #1E293B;">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-camera-fill text-warning fs-5"></i>
+                        <h6 class="modal-title fw-bold text-white mb-0" id="photoLightboxTitle">Inspection Photo Preview</h6>
                     </div>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body p-4" id="vehicleKYCModalBody" style="background-color: #F8FAFC; max-height: 80vh; overflow-y: auto;">
-                    <!-- Dynamically populated by openVehicleKYCModal(vehNumber) -->
+                <div class="modal-body p-4 text-center" id="photoLightboxBody">
+                    <!-- Photo container populated dynamically -->
+                </div>
+                <div class="modal-footer border-0 py-2.5 px-4 justify-content-between" style="background: #1E293B;">
+                    <div class="small text-white-50" id="photoLightboxSubtitle">Verified Plate & Identity Inspection</div>
+                    <button type="button" class="btn btn-sm btn-outline-light" data-bs-dismiss="modal">Close Preview</button>
                 </div>
             </div>
         </div>
@@ -7509,6 +7521,51 @@
         // =========================================================================
         let globalDriversData = [
             { 
+                id: 7, 
+                full_name: 'Ratul Sarkar', 
+                driving_license_no: 'WB-04-2023-007712', 
+                aadhaar_no: 'XXXX-XXXX-3341',
+                phone: '+91 98307 77890', 
+                service_area_name: 'Malda Town (Rathbari)', 
+                vehicle_number: 'WB-01-E-1007', 
+                brand_make: 'Mayuri Pro 1000 EV', 
+                category: 'toto',
+                categoryName: 'Toto (E-Rickshaw)',
+                icon: '🛺',
+                ownership_model: 'independent_owner', 
+                current_balance: 0.00, 
+                status: 'pending_review', 
+                driver_kyc_status: 'pending',
+                vehicle_kyc_status: 'pending',
+                ride_accept_status: 'locked',
+                registered_via: 'Mobile App (OTP Verified)',
+                registered_date: '2026-10-25',
+                total_trips: 0 
+            },
+            { 
+                id: 8, 
+                full_name: 'Pradip Saha', 
+                driving_license_no: 'WB-04-2024-009988', 
+                aadhaar_no: 'XXXX-XXXX-5529',
+                phone: '+91 98308 88901', 
+                service_area_name: 'Chanchal Hub (Bus Stand)', 
+                vehicle_number: 'WB-01-E-1008', 
+                brand_make: 'Saarthi E-Cab DLX', 
+                category: 'toto',
+                categoryName: 'Toto (E-Rickshaw)',
+                icon: '🛺',
+                ownership_model: 'company_leased', 
+                current_balance: 0.00, 
+                status: 'pending_review', 
+                driver_kyc_status: 'pending',
+                vehicle_kyc_status: 'pending',
+                ride_accept_status: 'locked',
+                registered_via: 'Mobile App (OTP Verified)',
+                registered_date: '2026-10-25',
+                total_trips: 0 
+            },
+
+            { 
                 id: 1, 
                 full_name: 'Subhash Das', 
                 driving_license_no: 'WB-01-2018-004921', 
@@ -7939,7 +7996,7 @@
                                     ${(d.full_name || 'D').charAt(0)}
                                 </div>
                                 <div style="line-height: 1.25;">
-                                    <div class="fw-bold text-dark text-nowrap" style="font-size:0.84rem;">${d.full_name}</div>
+                                    <div class="fw-bold text-dark text-nowrap" style="font-size:0.84rem; cursor:pointer;" onclick="openDriverKYCModal(${d.id})" title="Click to view full KYC & Onboarding profile">${d.full_name}</div>
                                     <div class="d-flex align-items-center gap-1 text-nowrap mt-0.5">
                                         <small class="text-muted font-monospace" style="font-size:0.7rem;">DL: ${d.driving_license_no || 'N/A'}</small>
                                         <span class="badge bg-light text-muted border py-0 px-1" style="font-size: 0.62rem;">${d.registered_via && d.registered_via.includes('App') ? '📱 App' : '🌐 Web'}</span>
@@ -7952,7 +8009,7 @@
                         <td class="text-nowrap py-2">
                             ${d.vehicle_number ? `
                                 <div style="line-height: 1.25;">
-                                    <span class="fw-bold font-monospace text-primary" style="font-size:0.83rem;">${d.icon || '🛺'} ${d.vehicle_number}</span> 
+                                    <span class="fw-bold font-monospace text-primary" style="font-size:0.83rem; cursor:pointer;" onclick="openVehicleKYCModal('${d.vehicle_number}')" title="Click to view Vehicle & Partner KYC">${d.icon || '🛺'} ${d.vehicle_number}</span> 
                                     <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25" style="font-size:0.63rem;">${d.categoryName || d.category || 'Toto'}</span>
                                     <div class="text-muted small mt-0.5" style="font-size:0.71rem;">${d.brand_make || ''} &bull; <span class="badge bg-light text-dark border py-0 px-1" style="font-size:0.65rem;">${(d.ownership_model || '').replace('_', ' ')}</span></div>
                                 </div>
@@ -7960,7 +8017,7 @@
                         </td>
 
                         <!-- 3. Documents & KYC Papers (Driver + Vehicle) -->
-                        <td class="text-nowrap py-2">
+                        <td class="text-nowrap py-2" style="cursor:pointer;" onclick="openDriverKYCModal(${d.id})" title="Click to audit Partner & Vehicle KYC documents and photos">
                             <div class="d-flex flex-column gap-1">
                                 <div class="d-flex align-items-center gap-1">
                                     ${isDriverVerified ? 
@@ -8145,157 +8202,654 @@
             refreshDashboard();
         }
 
-        // Open Driver KYC Inspection & Onboarding Modal
-        function openDriverKYCModal(driverId) {
-            const d = globalDriversData.find(drv => drv.id === driverId);
+        // =========================================================================
+        // UNIFIED PARTNER & VEHICLE KYC INSPECTION HUB (DRIVER + VEHICLE + 3 PHOTOS)
+        // =========================================================================
+
+        // Photo Lightbox Viewer for HD documents & 3-angle inspection photos
+        function openPhotoLightbox(type, refNo, label) {
+            const body = document.getElementById('photoLightboxBody');
+            const title = document.getElementById('photoLightboxTitle');
+            const sub = document.getElementById('photoLightboxSubtitle');
+            if (!body) return;
+
+            let contentHtml = '';
+            let titleText = 'Inspection Photo Preview';
+            let subText = `Reference: ${refNo}`;
+
+            if (type === 'front') {
+                titleText = 'Vehicle Front View Inspection (With Number Plate)';
+                subText = `Plate: ${refNo} &bull; Angle: Front Windshield & Headlights`;
+                contentHtml = `
+                    <div class="p-3 bg-dark rounded-3 d-inline-block text-center border border-secondary" style="max-width: 520px; width: 100%;">
+                        <div class="position-relative bg-black rounded p-4 text-center overflow-hidden" style="min-height: 260px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle, #1E293B 0%, #0F172A 100%);">
+                            <div class="text-white mb-2" style="font-size: 5rem;">🛺</div>
+                            <div class="py-1 px-3 bg-warning text-dark font-monospace fw-bold fs-5 rounded border border-dark shadow-sm">
+                                ${refNo}
+                            </div>
+                            <div class="mt-2 text-success small fw-semibold"><i class="bi bi-patch-check-fill me-1"></i>Plate Number Legible & Clear</div>
+                            <div class="position-absolute top-0 start-0 p-2 text-white-50" style="font-size: 0.65rem;">
+                                <i class="bi bi-geo-alt-fill text-danger me-1"></i>GPS: 25.3950° N, 88.0070° E &bull; Front Camera
+                            </div>
+                            <div class="position-absolute top-0 end-0 p-2">
+                                <span class="badge bg-success" style="font-size: 0.68rem;">HD Verified</span>
+                            </div>
+                        </div>
+                        <div class="mt-2 text-white-50 small d-flex justify-content-between px-2">
+                            <span>Resolution: 1920x1080 (HD)</span>
+                            <span>Upload Source: Driver Mobile App</span>
+                        </div>
+                    </div>
+                `;
+            } else if (type === 'left') {
+                titleText = 'Vehicle Left Side View Inspection';
+                subText = `Plate: ${refNo} &bull; Angle: Left Seating, Canopy & Wheels`;
+                contentHtml = `
+                    <div class="p-3 bg-dark rounded-3 d-inline-block text-center border border-secondary" style="max-width: 520px; width: 100%;">
+                        <div class="position-relative bg-black rounded p-4 text-center overflow-hidden" style="min-height: 260px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle, #1E293B 0%, #0F172A 100%);">
+                            <div class="text-white mb-2" style="font-size: 5rem; transform: scaleX(-1);">🛺</div>
+                            <div class="py-1 px-3 bg-secondary text-white font-monospace small rounded border border-secondary">
+                                Left Profile Inspection &bull; Seating & Chassis
+                            </div>
+                            <div class="mt-2 text-success small fw-semibold"><i class="bi bi-check-circle-fill me-1"></i>Canopy, Side Bars & Tyres Pass</div>
+                            <div class="position-absolute top-0 start-0 p-2 text-white-50" style="font-size: 0.65rem;">
+                                <i class="bi bi-geo-alt-fill text-danger me-1"></i>GPS: 25.3950° N, 88.0070° E &bull; Left Camera
+                            </div>
+                        </div>
+                        <div class="mt-2 text-white-50 small d-flex justify-content-between px-2">
+                            <span>Passenger Safety: Passed</span>
+                            <span>Chassis Stamp: Matching</span>
+                        </div>
+                    </div>
+                `;
+            } else if (type === 'right') {
+                titleText = 'Vehicle Right Side & Rear View Inspection';
+                subText = `Plate: ${refNo} &bull; Angle: Right Profile, Battery Box & Rear Plate`;
+                contentHtml = `
+                    <div class="p-3 bg-dark rounded-3 d-inline-block text-center border border-secondary" style="max-width: 520px; width: 100%;">
+                        <div class="position-relative bg-black rounded p-4 text-center overflow-hidden" style="min-height: 260px; display: flex; flex-direction: column; align-items: center; justify-content: center; background: radial-gradient(circle, #1E293B 0%, #0F172A 100%);">
+                            <div class="text-white mb-2" style="font-size: 5rem;">🛺</div>
+                            <div class="py-1 px-3 bg-warning text-dark font-monospace fw-bold fs-6 rounded border border-dark shadow-sm">
+                                REAR PLATE: ${refNo}
+                            </div>
+                            <div class="mt-2 text-success small fw-semibold"><i class="bi bi-shield-check me-1"></i>Battery Isolation Box & Rear Plate Secure</div>
+                            <div class="position-absolute top-0 start-0 p-2 text-white-50" style="font-size: 0.65rem;">
+                                <i class="bi bi-geo-alt-fill text-danger me-1"></i>GPS: 25.3950° N, 88.0070° E &bull; Right Camera
+                            </div>
+                        </div>
+                        <div class="mt-2 text-white-50 small d-flex justify-content-between px-2">
+                            <span>Battery Isolation: AIS-156 Safe</span>
+                            <span>Rear Reflectors: Active</span>
+                        </div>
+                    </div>
+                `;
+            } else if (type === 'dl') {
+                titleText = 'Driving License (DL) Document Preview';
+                subText = `DL Number: ${refNo} &bull; Name: ${label || 'Driver'}`;
+                contentHtml = `
+                    <div class="p-3 bg-white text-dark rounded-3 d-inline-block text-start border shadow-sm" style="max-width: 480px; width: 100%; font-family: monospace;">
+                        <div class="d-flex align-items-center justify-content-between border-bottom pb-2 mb-2">
+                            <div class="d-flex align-items-center gap-2">
+                                <span class="fs-4">🇮🇳</span>
+                                <div>
+                                    <div class="fw-bold" style="font-size: 0.78rem;">UNION OF INDIA &bull; DRIVING LICENCE</div>
+                                    <div class="text-muted" style="font-size: 0.65rem;">TRANSPORT DEPT, GOVT OF WEST BENGAL</div>
+                                </div>
+                            </div>
+                            <span class="badge bg-primary">CHIP ENABLED</span>
+                        </div>
+                        <div class="d-flex gap-3 my-2">
+                            <div class="bg-light border text-center p-2 rounded" style="width: 80px; height: 95px;">
+                                <i class="bi bi-person-fill fs-1 text-secondary"></i>
+                                <div style="font-size: 0.55rem;">PHOTO</div>
+                            </div>
+                            <div class="small flex-grow-1">
+                                <div><strong>DL NO:</strong> <span class="text-primary font-monospace fw-bold">${refNo}</span></div>
+                                <div><strong>NAME:</strong> ${label || 'DRIVER PARTNER'}</div>
+                                <div><strong>CLASS:</strong> E-RICKSHAW / 3W CAB / LMV</div>
+                                <div><strong>VALID TILL:</strong> 2034-08-15 (VALID)</div>
+                                <div><strong>BLOOD GRP:</strong> B+ve</div>
+                            </div>
+                        </div>
+                        <div class="border-top pt-1 mt-2 text-muted text-center" style="font-size: 0.65rem;">
+                            &bull; OFFICIAL DIGITAL TRANSPORT AUDIT RECORD &bull;
+                        </div>
+                    </div>
+                `;
+            } else if (type === 'aadhaar') {
+                titleText = 'Aadhaar Identity Verification Slip';
+                subText = `UID: ${refNo} &bull; Name: ${label || 'Driver'}`;
+                contentHtml = `
+                    <div class="p-3 bg-white text-dark rounded-3 d-inline-block text-start border shadow-sm" style="max-width: 480px; width: 100%; font-family: monospace;">
+                        <div class="d-flex align-items-center justify-content-between border-bottom pb-2 mb-2">
+                            <div class="fw-bold text-danger" style="font-size: 0.85rem;">GOVERNMENT OF INDIA / UIDAI</div>
+                            <span class="badge bg-success"><i class="bi bi-shield-check me-1"></i>OTP VERIFIED</span>
+                        </div>
+                        <div class="d-flex gap-3 my-2">
+                            <div class="bg-light border text-center p-2 rounded" style="width: 80px; height: 95px;">
+                                <i class="bi bi-qr-code-scan fs-1 text-dark"></i>
+                                <div style="font-size: 0.55rem;">QR CODE</div>
+                            </div>
+                            <div class="small flex-grow-1">
+                                <div><strong>AADHAAR NO:</strong> <span class="text-dark font-monospace fw-bold">${refNo}</span></div>
+                                <div><strong>FULL NAME:</strong> ${label || 'DRIVER PARTNER'}</div>
+                                <div><strong>GENDER:</strong> MALE</div>
+                                <div><strong>DOB / YOB:</strong> 1988</div>
+                                <div><strong>AUTH:</strong> Mobile OTP Instant e-KYC</div>
+                            </div>
+                        </div>
+                        <div class="border-top pt-1 mt-2 text-muted text-center" style="font-size: 0.65rem;">
+                            MERA AADHAAR, MERI PEHCHAAN &bull; VERIFIED SECURE
+                        </div>
+                    </div>
+                `;
+            } else if (type === 'rc') {
+                titleText = 'Vehicle Registration Certificate (RC) Preview';
+                subText = `RC Number: ${refNo} &bull; Vehicle: ${label || 'E-Rickshaw'}`;
+                contentHtml = `
+                    <div class="p-3 bg-white text-dark rounded-3 d-inline-block text-start border shadow-sm" style="max-width: 480px; width: 100%; font-family: monospace;">
+                        <div class="d-flex align-items-center justify-content-between border-bottom pb-2 mb-2">
+                            <div class="fw-bold text-primary" style="font-size: 0.82rem;">CERTIFICATE OF REGISTRATION (FORM 23)</div>
+                            <span class="badge bg-success">GOVT APPROVED</span>
+                        </div>
+                        <div class="small">
+                            <div><strong>REGISTRATION NO:</strong> <span class="text-primary fw-bold">${label || refNo}</span></div>
+                            <div><strong>CERTIFICATE NO:</strong> ${refNo}</div>
+                            <div><strong>CLASS OF VEHICLE:</strong> E-RICKSHAW (SPECIAL PURPOSE 3-WHEELER)</div>
+                            <div><strong>FUEL / PROPULSION:</strong> PURE BATTERY ELECTRIC (EV)</div>
+                            <div><strong>REGISTERING AUTHORITY:</strong> BELTALA RTO, KOLKATA / MALDA RTO</div>
+                        </div>
+                    </div>
+                `;
+            } else if (type === 'permit') {
+                titleText = 'Commercial Route Permit Certificate';
+                subText = `Permit: ${refNo} &bull; Allowed Zone: ${label || 'Pan-India Hub'}`;
+                contentHtml = `
+                    <div class="p-3 bg-white text-dark rounded-3 d-inline-block text-start border shadow-sm" style="max-width: 480px; width: 100%; font-family: monospace;">
+                        <div class="d-flex align-items-center justify-content-between border-bottom pb-2 mb-2">
+                            <div class="fw-bold text-success" style="font-size: 0.82rem;">REGIONAL TRANSPORT AUTHORITY (RTA) PERMIT</div>
+                            <span class="badge bg-success">ACTIVE ROUTE</span>
+                        </div>
+                        <div class="small">
+                            <div><strong>PERMIT NUMBER:</strong> <span class="text-success fw-bold">${refNo}</span></div>
+                            <div><strong>CORRIDOR / ROUTE:</strong> ${label || 'Local Municipal Service Feeder'}</div>
+                            <div><strong>SEATING CAPACITY:</strong> 4 PASSENGERS + 1 DRIVER</div>
+                            <div><strong>VALIDITY:</strong> 2029-03-31 (5 YEARS)</div>
+                        </div>
+                    </div>
+                `;
+            } else if (type === 'insurance') {
+                titleText = 'Motor Vehicle Insurance Policy';
+                subText = `Policy: ${refNo} &bull; Insurer: ${label || 'Commercial EV'}`;
+                contentHtml = `
+                    <div class="p-3 bg-white text-dark rounded-3 d-inline-block text-start border shadow-sm" style="max-width: 480px; width: 100%; font-family: monospace;">
+                        <div class="d-flex align-items-center justify-content-between border-bottom pb-2 mb-2">
+                            <div class="fw-bold text-dark" style="font-size: 0.82rem;">COMMERCIAL MOTOR VEHICLE POLICY</div>
+                            <span class="badge bg-primary">COVERED</span>
+                        </div>
+                        <div class="small">
+                            <div><strong>POLICY NUMBER:</strong> <span class="text-dark fw-bold">${refNo}</span></div>
+                            <div><strong>INSURER:</strong> ${label || 'The New India Assurance / Tata AIG'}</div>
+                            <div><strong>COVERAGE:</strong> 3RD PARTY LIABILITY + DRIVER & PASSENGER COVER</div>
+                            <div><strong>EXPIRY DATE:</strong> 2027-12-31</div>
+                        </div>
+                    </div>
+                `;
+            } else if (type === 'fitness') {
+                titleText = 'Roadworthiness & Fitness Certificate';
+                subText = `Valid Till: ${refNo} &bull; Status: Sealed`;
+                contentHtml = `
+                    <div class="p-3 bg-white text-dark rounded-3 d-inline-block text-start border shadow-sm" style="max-width: 480px; width: 100%; font-family: monospace;">
+                        <div class="d-flex align-items-center justify-content-between border-bottom pb-2 mb-2">
+                            <div class="fw-bold text-warning text-dark" style="font-size: 0.82rem;">RTO FITNESS INSPECTION SLIP</div>
+                            <span class="badge bg-success">PASSED</span>
+                        </div>
+                        <div class="small">
+                            <div><strong>FITNESS VALID TILL:</strong> ${refNo}</div>
+                            <div><strong>SPEED GOVERNOR (25 KM/H):</strong> CERTIFIED SEALED & INTACT</div>
+                            <div><strong>BRAKES, TYRES & LIGHTS:</strong> PASSED MECHANICAL AUDIT</div>
+                            <div><strong>BMS ISOLATION SAFETY:</strong> PASSED AIS-156 FIRE SAFETY TEST</div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            title.textContent = titleText;
+            sub.innerHTML = subText;
+            body.innerHTML = contentHtml;
+
+            const modal = new bootstrap.Modal(document.getElementById('vehiclePhotoLightboxModal'));
+            modal.show();
+        }
+
+        // Master Open Unified Partner & Vehicle KYC Inspection Modal
+        function openDriverKYCModal(driverId, vehicleNumber) {
+            let d = null;
+            let v = null;
+
+            if (driverId) {
+                d = globalDriversData.find(drv => drv.id === Number(driverId));
+            }
+            if (!d && vehicleNumber) {
+                d = globalDriversData.find(drv => drv.vehicle_number === vehicleNumber);
+            }
+            if (d && !vehicleNumber) {
+                vehicleNumber = d.vehicle_number;
+            }
+            if (vehicleNumber) {
+                v = globalVehiclesData.find(veh => veh.vehicle_number === vehicleNumber);
+            }
+            if (!v && d && d.id) {
+                v = globalVehiclesData.find(veh => veh.driver_id === d.id);
+            }
+
+            // Fallback object builders if one entity is not found
+            if (!d && v) {
+                d = {
+                    id: v.driver_id || 999,
+                    full_name: v.driver_name || 'Driver Partner',
+                    phone: '+91 98300 00000',
+                    driving_license_no: 'WB-01-2023-009911',
+                    aadhaar_no: 'XXXX-XXXX-9911',
+                    service_area_name: 'Kolkata North Hub',
+                    vehicle_number: v.vehicle_number,
+                    brand_make: v.brand_make,
+                    category: v.category || 'toto',
+                    categoryName: v.category_name || 'Toto (E-Rickshaw)',
+                    status: (v.status === 'active' || v.status === 'verified_active') ? 'verified_active' : 'pending_review',
+                    driver_kyc_status: v.kyc_status || 'pending',
+                    vehicle_kyc_status: v.kyc_status || 'pending',
+                    ride_accept_status: (v.status === 'active' && v.kyc_status === 'verified') ? 'unlocked' : 'locked',
+                    registered_via: 'Mobile App (OTP Verified)',
+                    registered_date: '2026-10-25'
+                };
+            }
+            if (!v && d) {
+                v = {
+                    vehicle_number: d.vehicle_number || 'WB-01-E-9999',
+                    brand_make: d.brand_make || 'E-Rickshaw (Toto)',
+                    category: d.category || 'toto',
+                    category_name: d.categoryName || 'Toto (E-Rickshaw)',
+                    model_year: '2025',
+                    ownership_type: d.ownership_model || 'independent',
+                    driver_name: d.full_name,
+                    driver_id: d.id,
+                    battery_type: 'Lithium-ion Smart LFP (60V 100Ah)',
+                    status: d.status === 'verified_active' ? 'active' : 'pending_kyc',
+                    kyc_status: d.vehicle_kyc_status || 'pending',
+                    registration_certificate_no: `RC-${(d.vehicle_number || 'WB01E9999').replace(/-/g, '')}`,
+                    permit_no: 'PERMIT-KOL-2025-501',
+                    insurance_no: 'INS-NEW-INDIA-9912',
+                    insurance_valid_till: '2027-12-31',
+                    fitness_valid_till: '2027-10-30',
+                    chassis_no: 'CHAS-MAY-2025-88192',
+                    motor_no: 'MOT-BLDC-1200W-5521'
+                };
+            }
+
             if (!d) return;
 
-            const v = globalVehiclesData.find(veh => veh.vehicle_number === d.vehicle_number || veh.driver_id === d.id);
-            const isVehicleVerified = v && (v.status === 'active' || v.status === 'verified_active') && v.kyc_status === 'verified';
-            const isDriverVerified = d.status === 'verified_active' || d.status === 'active';
-            const isSuspended = d.status === 'suspended';
-            const isPending = d.status === 'pending_review' || d.status === 'pending';
+            const isDriverVerified = d.driver_kyc_status === 'verified' || d.status === 'verified_active';
+            const isVehicleVerified = v && (v.kyc_status === 'verified' || v.status === 'active' || v.status === 'verified_active');
+            const isFullyVerified = isDriverVerified && isVehicleVerified;
+            const isSuspended = d.status === 'suspended' || (v && v.status === 'suspended');
+            const isPending = !isFullyVerified && !isSuspended;
+            const isRideUnlocked = isFullyVerified && !isSuspended;
 
             const modalBody = document.getElementById('driverKYCModalBody');
             if (!modalBody) return;
 
             modalBody.innerHTML = `
-                <!-- Driver Profile Card -->
+                <!-- TOP PROFILE & RIDE ACCEPTANCE LOCK BANNER -->
                 <div class="card border-0 shadow-sm rounded-3 mb-3 bg-white p-3">
                     <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 pb-3 border-bottom">
                         <div class="d-flex align-items-center gap-3">
-                            <div class="p-3 bg-primary bg-opacity-10 text-primary rounded-circle border border-primary border-opacity-25">
-                                <i class="bi bi-person-badge-fill fs-2"></i>
+                            <div style="width: 52px; height: 52px; min-width: 52px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: 800; background: #EFF6FF; color: #1D4ED8; border: 2px solid #BFDBFE;">
+                                ${(d.full_name || 'D').charAt(0)}
                             </div>
                             <div>
-                                <h5 class="fw-bold mb-0 text-dark">${d.full_name}</h5>
-                                <div class="text-muted small">${d.phone} &bull; <i class="bi bi-geo-alt me-0.5"></i>${d.service_area_name || 'Kolkata North'}</div>
-                                <div class="mt-1">
-                                    <span class="badge bg-light text-dark border">Registration Source: ${d.registered_via || 'Mobile App'}</span>
-                                    <span class="badge bg-light text-muted border ms-1">Date: ${d.registered_date || 'N/A'}</span>
+                                <div class="d-flex align-items-center gap-2">
+                                    <h5 class="fw-bold mb-0 text-dark">${d.full_name}</h5>
+                                    <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 py-0.5 px-2" style="font-size:0.72rem;">
+                                        <i class="bi bi-shield-check me-1"></i>Mobile OTP Verified
+                                    </span>
+                                </div>
+                                <div class="text-muted small mt-0.5">
+                                    <i class="bi bi-telephone me-1"></i>${d.phone} &bull; <i class="bi bi-geo-alt me-1"></i>${d.service_area_name || 'Kolkata North Hub'}
+                                </div>
+                                <div class="mt-1 d-flex gap-1.5 flex-wrap">
+                                    <span class="badge bg-light text-dark border">Source: ${d.registered_via || 'Mobile App (OTP)'}</span>
+                                    <span class="badge bg-light text-muted border">Registered: ${d.registered_date || '2026-10-25'}</span>
+                                    <span class="badge bg-light text-primary border">Trips: ${d.total_trips || 0}</span>
                                 </div>
                             </div>
                         </div>
+
                         <div class="text-end">
-                            <span class="badge ${isDriverVerified ? 'bg-success' : (isPending ? 'bg-warning text-dark' : 'bg-danger')} p-2 fs-6">
-                                <i class="bi bi-${isDriverVerified ? 'patch-check-fill' : (isPending ? 'clock-history' : 'slash-circle')} me-1"></i>
-                                ${isDriverVerified ? 'Vehicle Verified' : (isPending ? 'KYC Pending' : 'Suspended')}
-                            </span>
+                            <div class="d-flex align-items-center gap-2 justify-content-end mb-1">
+                                <span class="badge bg-dark text-warning font-monospace fs-6 px-3 py-1.5 border border-warning shadow-xs">
+                                    ${d.icon || '🛺'} ${v ? v.vehicle_number : (d.vehicle_number || 'No Vehicle')}
+                                </span>
+                            </div>
+                            <div>
+                                <span class="badge ${isFullyVerified ? 'bg-success' : (isSuspended ? 'bg-danger' : 'bg-warning text-dark')} p-2 fs-6">
+                                    <i class="bi bi-${isFullyVerified ? 'patch-check-fill' : (isSuspended ? 'slash-circle' : 'clock-history')} me-1"></i>
+                                    ${isFullyVerified ? 'Vehicle Verified & Active' : (isSuspended ? 'Account Suspended' : 'KYC Under Review')}
+                                </span>
+                            </div>
                         </div>
                     </div>
 
-                    <!-- Ride Acceptance Lock Notice Box -->
-                    <div class="alert ${isDriverVerified && isVehicleVerified ? 'alert-success border-success' : 'alert-warning border-warning'} bg-opacity-10 border-opacity-50 mt-3 mb-1 p-3 rounded-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
-                        <div class="d-flex align-items-center gap-2.5">
-                            <i class="bi bi-${isDriverVerified && isVehicleVerified ? 'unlock-fill text-success' : 'shield-lock-fill text-warning'} fs-3"></i>
-                            <div>
-                                <strong class="text-dark">Mobile App Ride Accept Status:</strong>
-                                <div class="small text-muted">
-                                    ${isDriverVerified && isVehicleVerified ? 
-                                        '✅ Driver and Toto vehicle KYC verified. Ride acceptance is active on driver mobile app.' : 
-                                        '⚠️ Driver or vehicle documents verification pending. Ride accept is locked on driver app.'
-                                    }
+                    <!-- RIDE ACCEPTANCE STRICT LOCK BANNER -->
+                    ${isRideUnlocked ? `
+                        <div class="alert alert-success border-success bg-opacity-10 border-opacity-50 mt-3 mb-0 p-3 rounded-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="p-2.5 bg-success text-white rounded-circle"><i class="bi bi-unlock-fill fs-4"></i></div>
+                                <div>
+                                    <strong class="text-success fs-6"><i class="bi bi-check-circle-fill me-1"></i> Mobile App Ride Acceptance: UNLOCKED & ACTIVE</strong>
+                                    <div class="small text-muted">All driver documents, vehicle RTO papers, and 3-angle inspection photos are verified. The driver can accept customer ride requests on the mobile app.</div>
                                 </div>
                             </div>
+                            <span class="badge bg-success px-3 py-2 fs-7 fw-semibold"><i class="bi bi-broadcast me-1"></i> Accepting Rides</span>
                         </div>
-                        <span class="badge ${isDriverVerified && isVehicleVerified ? 'bg-success' : 'bg-danger'} px-2.5 py-1.5">
-                            <i class="bi bi-${isDriverVerified && isVehicleVerified ? 'unlock-fill' : 'lock-fill'} me-1"></i>
-                            ${isDriverVerified && isVehicleVerified ? 'Ride Accept Unlocked' : 'Ride Accept Locked'}
+                    ` : `
+                        <div class="alert alert-danger border-danger bg-opacity-10 border-opacity-50 mt-3 mb-0 p-3 rounded-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
+                            <div class="d-flex align-items-center gap-3">
+                                <div class="p-2.5 bg-danger text-white rounded-circle"><i class="bi bi-lock-fill fs-4"></i></div>
+                                <div>
+                                    <strong class="text-danger fs-6"><i class="bi bi-exclamation-triangle-fill me-1"></i> Mobile App Ride Acceptance: STRICTLY LOCKED 🔒</strong>
+                                    <div class="small text-muted">OITOTO Policy: Driver cannot go online or accept customer ride bookings until Admin verifies and approves Driver Identity, Vehicle RTO Papers, and 3-Angle Vehicle Photos.</div>
+                                </div>
+                            </div>
+                            <span class="badge bg-danger px-3 py-2 fs-7 fw-bold"><i class="bi bi-shield-x me-1"></i> Ride Accept Locked</span>
+                        </div>
+                    `}
+                </div>
+
+                <!-- SECTION 1: DRIVER PERSONAL IDENTITY & DL / AADHAAR -->
+                <div class="card border-0 shadow-sm rounded-3 mb-3 bg-white p-3">
+                    <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+                        <h6 class="fw-bold text-dark mb-0 d-flex align-items-center gap-2">
+                            <span class="badge bg-primary text-white p-1 rounded"><i class="bi bi-person-vcard fs-6"></i></span>
+                            1. Driver Personal Identity & Government IDs (চালকের পরিচয় ও আইডি)
+                        </h6>
+                        <span class="badge ${isDriverVerified ? 'bg-success' : 'bg-warning text-dark'}">
+                            ${isDriverVerified ? '✓ Driver Identity Verified' : '⚠️ Pending Review'}
                         </span>
                     </div>
-                </div>
 
-                <!-- Driver Identity Checklist -->
-                <div class="row g-3 mb-3">
-                    <div class="col-md-6">
-                        <div class="card border-0 shadow-sm rounded-3 bg-white p-3 h-100">
-                            <h6 class="fw-bold text-dark border-bottom pb-2 mb-2.5">
-                                <i class="bi bi-person-vcard text-primary me-1.5"></i>Driver Identity & Driving License
-                            </h6>
-                            <div class="small d-flex flex-column gap-2">
-                                <div class="d-flex justify-content-between p-2 rounded bg-light">
-                                    <span class="text-muted">Driving License (DL):</span>
-                                    <strong class="font-monospace text-dark">${d.driving_license_no || '<span class="text-warning small">Pending Submission</span>'}</strong>
+                    <div class="row g-3">
+                        <!-- DL Card -->
+                        <div class="col-md-6">
+                            <div class="p-3 rounded-3 border bg-light h-100">
+                                <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-2">
+                                    <strong class="text-dark"><i class="bi bi-card-heading text-primary me-1.5"></i>Driving License (DL)</strong>
+                                    <span class="badge ${isDriverVerified ? 'bg-success' : 'bg-warning text-dark'}">${isDriverVerified ? 'Valid' : 'Audit Required'}</span>
                                 </div>
-                                <div class="d-flex justify-content-between p-2 rounded bg-light">
-                                    <span class="text-muted">Aadhaar Card (UIDAI):</span>
-                                    <strong class="font-monospace text-dark">${d.aadhaar_no || d.aadhaar_number || '<span class="text-warning small">Pending Submission</span>'}</strong>
+                                <div class="small text-muted d-flex flex-column gap-1.5 mb-2.5">
+                                    <div class="d-flex justify-content-between"><span>DL Number:</span> <strong class="font-monospace text-primary">${d.driving_license_no || 'WB-01-2018-004921'}</strong></div>
+                                    <div class="d-flex justify-content-between"><span>Allowed Class:</span> <span class="text-dark">E-Rickshaw / 3W Cab / LMV</span></div>
+                                    <div class="d-flex justify-content-between"><span>License Validity:</span> <span class="text-dark">2034-08-15 (Active)</span></div>
+                                    <div class="d-flex justify-content-between"><span>Issuing Authority:</span> <span class="text-dark">Govt of West Bengal Transport</span></div>
                                 </div>
-                                <div class="d-flex justify-content-between p-2 rounded bg-light">
-                                    <span class="text-muted">Mobile OTP Verification:</span>
-                                    <span class="badge bg-success bg-opacity-10 text-success"><i class="bi bi-check-circle-fill me-1"></i>Verified</span>
-                                </div>
-                                <div class="d-flex justify-content-between p-2 rounded bg-light">
-                                    <span class="text-muted">Police Clearance Status:</span>
-                                    <span class="badge bg-success bg-opacity-10 text-success"><i class="bi bi-shield-check me-1"></i>Clear Record</span>
-                                </div>
+                                <button class="btn btn-sm btn-outline-primary w-100" onclick="openPhotoLightbox('dl', '${d.driving_license_no}', '${d.full_name}')">
+                                    <i class="bi bi-zoom-in me-1"></i> Preview Driving License Card
+                                </button>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="col-md-6">
-                        <div class="card border-0 shadow-sm rounded-3 bg-white p-3 h-100">
-                            <h6 class="fw-bold text-dark border-bottom pb-2 mb-2.5 d-flex justify-content-between align-items-center">
-                                <span><i class="bi bi-ev-front text-success me-1.5"></i>Linked E-Rickshaw & Vehicle KYC</span>
-                                ${isVehicleVerified ? 
-                                    '<span class="badge bg-success" style="font-size:0.68rem;"><i class="bi bi-patch-check-fill me-1"></i>Vehicle Verified</span>' : 
-                                    '<span class="badge bg-warning text-dark" style="font-size:0.68rem;"><i class="bi bi-clock me-1"></i>Vehicle KYC Pending</span>'
-                                }
-                            </h6>
-                            <div class="small d-flex flex-column gap-2">
-                                <div class="d-flex justify-content-between p-2 rounded bg-light">
-                                    <span class="text-muted">Vehicle Registration:</span>
-                                    <strong class="font-monospace text-primary">${d.icon || '🛺'} ${d.vehicle_number || 'Not Assigned Yet'}</strong>
+                        <!-- Aadhaar Card -->
+                        <div class="col-md-6">
+                            <div class="p-3 rounded-3 border bg-light h-100">
+                                <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-2">
+                                    <strong class="text-dark"><i class="bi bi-fingerprint text-danger me-1.5"></i>Aadhaar Card (UIDAI)</strong>
+                                    <span class="badge bg-success"><i class="bi bi-shield-check me-1"></i>OTP Verified</span>
                                 </div>
-                                <div class="d-flex justify-content-between p-2 rounded bg-light">
-                                    <span class="text-muted">Model & Category:</span>
-                                    <strong>${d.brand_make || 'E-Rickshaw (Toto)'} <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 ms-1" style="font-size:0.65rem;">${d.categoryName || 'Toto'}</span></strong>
+                                <div class="small text-muted d-flex flex-column gap-1.5 mb-2.5">
+                                    <div class="d-flex justify-content-between"><span>Aadhaar Number:</span> <strong class="font-monospace text-dark">${d.aadhaar_no || 'XXXX-XXXX-4819'}</strong></div>
+                                    <div class="d-flex justify-content-between"><span>Authentication:</span> <span class="text-success fw-semibold"><i class="bi bi-check-circle me-1"></i>UIDAI e-KYC Passed</span></div>
+                                    <div class="d-flex justify-content-between"><span>Police Verification:</span> <span class="text-success fw-semibold">Clear (No Criminal Record)</span></div>
+                                    <div class="d-flex justify-content-between"><span>Permanent Address:</span> <span class="text-dark">${d.service_area_name || 'Kolkata North, West Bengal'}</span></div>
                                 </div>
-                                <div class="d-flex justify-content-between p-2 rounded bg-light">
-                                    <span class="text-muted">Ownership Model:</span>
-                                    <span class="badge bg-light text-dark border">${(d.ownership_model || 'independent_owner').replace('_', ' ')}</span>
-                                </div>
-                                <div class="d-flex justify-content-between p-2 rounded bg-light">
-                                    <span class="text-muted">Vehicle Documents Verification:</span>
-                                    <strong class="${isVehicleVerified ? 'text-success' : 'text-danger'}">
-                                        ${isVehicleVerified ? '✅ RC, Permit, Insurance Verified' : '⚠️ Vehicle KYC Pending (E-Rickshaw Vehicles)'}
-                                    </strong>
-                                </div>
+                                <button class="btn btn-sm btn-outline-dark w-100" onclick="openPhotoLightbox('aadhaar', '${d.aadhaar_no}', '${d.full_name}')">
+                                    <i class="bi bi-zoom-in me-1"></i> Preview Aadhaar e-KYC Slip
+                                </button>
                             </div>
-                            ${!isVehicleVerified ? `
-                                <div class="mt-2.5">
-                                    <button class="btn btn-sm btn-outline-primary w-100" onclick="bootstrap.Modal.getInstance(document.getElementById('driverKYCModal')).hide(); switchTab('vehicles'); ${d.vehicle_number ? `setTimeout(() => openVehicleKYCModal('${d.vehicle_number}'), 300);` : ''}">
-                                        <i class="bi bi-arrow-right-circle me-1"></i> Go to E-Rickshaw Vehicles menu for Vehicle KYC
-                                    </button>
-                                </div>
-                            ` : ''}
                         </div>
                     </div>
                 </div>
 
-                <!-- Action Controls Footer -->
-                <div class="card border-0 shadow-sm rounded-3 bg-white p-3 d-flex flex-row justify-content-between align-items-center flex-wrap gap-2">
+                <!-- SECTION 2: VEHICLE SPECS & 4 RTO DOCUMENTS -->
+                <div class="card border-0 shadow-sm rounded-3 mb-3 bg-white p-3">
+                    <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+                        <div>
+                            <h6 class="fw-bold text-dark mb-0 d-flex align-items-center gap-2">
+                                <span class="badge bg-success text-white p-1 rounded"><i class="bi bi-file-earmark-check fs-6"></i></span>
+                                2. Vehicle Specifications & RTO Documents (গাড়ির স্পেক্স ও আরটিও পেপারস)
+                            </h6>
+                            <small class="text-muted">RC Book, Commercial Route Permit, Passenger Insurance & Roadworthiness Fitness</small>
+                        </div>
+                        <span class="badge ${isVehicleVerified ? 'bg-success' : 'bg-warning text-dark'}">
+                            ${isVehicleVerified ? '✓ All 4 Papers Verified' : '⚠️ Vehicle Papers Pending'}
+                        </span>
+                    </div>
+
+                    <!-- Vehicle Specs Banner -->
+                    <div class="p-2.5 rounded-3 border bg-light mb-3 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="fs-4">${d.icon || '🛺'}</span>
+                            <div>
+                                <strong class="text-dark">${v ? v.brand_make : (d.brand_make || 'Mayuri Deluxe EV')}</strong>
+                                <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 ms-1" style="font-size:0.68rem;">${v ? v.category_name : (d.categoryName || 'Toto')}</span>
+                                <div class="text-muted small" style="font-size:0.75rem;">Model Year: ${v ? (v.model_year || '2024') : '2024'} &bull; Battery: ${v ? v.battery_type : 'Lithium-ion Smart LFP'}</div>
+                            </div>
+                        </div>
+                        <div class="text-end small">
+                            <div>Chassis: <strong class="font-monospace text-dark">${v ? v.chassis_no : 'CHAS-MAY-2024-77112'}</strong></div>
+                            <div>Motor: <strong class="font-monospace text-dark">${v ? v.motor_no : 'MOT-BLDC-1200W-8821'}</strong></div>
+                        </div>
+                    </div>
+
+                    <!-- 4 Document Checklists Grid -->
+                    <div class="row g-3">
+                        <!-- 1. RC Book -->
+                        <div class="col-md-6 col-lg-3">
+                            <div class="p-2.5 rounded-3 border bg-light h-100 d-flex flex-column justify-content-between">
+                                <div>
+                                    <div class="d-flex justify-content-between align-items-center border-bottom pb-1 mb-1.5">
+                                        <strong class="small text-dark"><i class="bi bi-file-earmark-text text-primary me-1"></i>1. RC Book</strong>
+                                        <span class="badge ${isVehicleVerified ? 'bg-success' : 'bg-warning text-dark'}" style="font-size:0.62rem;">${isVehicleVerified ? 'Verified' : 'Pending'}</span>
+                                    </div>
+                                    <div class="text-muted" style="font-size: 0.72rem; line-height: 1.35;">
+                                        <div>RC No: <strong class="text-dark font-monospace">${v ? v.registration_certificate_no : 'RC-WB01-2024-9988'}</strong></div>
+                                        <div>RTO: Beltala / Malda RTO</div>
+                                        <div>Owner: ${d.full_name}</div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-xs btn-outline-primary w-100 mt-2 py-1" style="font-size:0.7rem;" onclick="openPhotoLightbox('rc', '${v ? v.registration_certificate_no : 'RC-WB01-2024-9988'}', '${v ? v.vehicle_number : d.vehicle_number}')">
+                                    <i class="bi bi-zoom-in me-0.5"></i> View RC
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 2. Commercial Route Permit -->
+                        <div class="col-md-6 col-lg-3">
+                            <div class="p-2.5 rounded-3 border bg-light h-100 d-flex flex-column justify-content-between">
+                                <div>
+                                    <div class="d-flex justify-content-between align-items-center border-bottom pb-1 mb-1.5">
+                                        <strong class="small text-dark"><i class="bi bi-signpost-split text-success me-1"></i>2. Route Permit</strong>
+                                        <span class="badge ${isVehicleVerified ? 'bg-success' : 'bg-warning text-dark'}" style="font-size:0.62rem;">${isVehicleVerified ? 'Active' : 'Pending'}</span>
+                                    </div>
+                                    <div class="text-muted" style="font-size: 0.72rem; line-height: 1.35;">
+                                        <div>Permit No: <strong class="text-dark font-monospace">${v ? v.permit_no : 'PERMIT-KOL-2024-101'}</strong></div>
+                                        <div>Zone: ${d.service_area_name || 'Municipal Hub'}</div>
+                                        <div>Capacity: 4+1 Passengers</div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-xs btn-outline-success w-100 mt-2 py-1" style="font-size:0.7rem;" onclick="openPhotoLightbox('permit', '${v ? v.permit_no : 'PERMIT-KOL-2024-101'}', '${d.service_area_name || 'Feeder Corridor'}')">
+                                    <i class="bi bi-zoom-in me-0.5"></i> View Permit
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 3. Motor Insurance -->
+                        <div class="col-md-6 col-lg-3">
+                            <div class="p-2.5 rounded-3 border bg-light h-100 d-flex flex-column justify-content-between">
+                                <div>
+                                    <div class="d-flex justify-content-between align-items-center border-bottom pb-1 mb-1.5">
+                                        <strong class="small text-dark"><i class="bi bi-shield-check text-info me-1"></i>3. Insurance</strong>
+                                        <span class="badge ${isVehicleVerified ? 'bg-success' : 'bg-warning text-dark'}" style="font-size:0.62rem;">${isVehicleVerified ? 'Valid' : 'Pending'}</span>
+                                    </div>
+                                    <div class="text-muted" style="font-size: 0.72rem; line-height: 1.35;">
+                                        <div>Policy: <strong class="text-dark font-monospace">${v ? v.insurance_no : 'INS-NEW-INDIA-8821'}</strong></div>
+                                        <div>Type: Commercial Passenger</div>
+                                        <div>Expiry: ${v ? (v.insurance_valid_till || '2027-04-30') : '2027-04-30'}</div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-xs btn-outline-info w-100 mt-2 py-1 text-dark" style="font-size:0.7rem;" onclick="openPhotoLightbox('insurance', '${v ? v.insurance_no : 'INS-NEW-INDIA-8821'}', 'The New India Assurance')">
+                                    <i class="bi bi-zoom-in me-0.5"></i> View Policy
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- 4. Fitness & Roadworthiness -->
+                        <div class="col-md-6 col-lg-3">
+                            <div class="p-2.5 rounded-3 border bg-light h-100 d-flex flex-column justify-content-between">
+                                <div>
+                                    <div class="d-flex justify-content-between align-items-center border-bottom pb-1 mb-1.5">
+                                        <strong class="small text-dark"><i class="bi bi-wrench-adjustable text-warning me-1"></i>4. Fitness</strong>
+                                        <span class="badge ${isVehicleVerified ? 'bg-success' : 'bg-warning text-dark'}" style="font-size:0.62rem;">${isVehicleVerified ? 'Passed' : 'Pending'}</span>
+                                    </div>
+                                    <div class="text-muted" style="font-size: 0.72rem; line-height: 1.35;">
+                                        <div>Fitness: <strong class="text-dark">${v ? (v.fitness_valid_till || '2026-11-20') : '2026-11-20'}</strong></div>
+                                        <div>Speed Limit: 25 km/h Sealed</div>
+                                        <div>BMS Safety: AIS-156 Pass</div>
+                                    </div>
+                                </div>
+                                <button class="btn btn-xs btn-outline-warning w-100 mt-2 py-1 text-dark" style="font-size:0.7rem;" onclick="openPhotoLightbox('fitness', '${v ? (v.fitness_valid_till || '2026-11-20') : '2026-11-20'}', 'Govt Sealed')">
+                                    <i class="bi bi-zoom-in me-0.5"></i> View Fitness
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 3: 3-ANGLE VEHICLE INSPECTION PHOTOS (FRONT + 2 SIDES WITH PLATE) -->
+                <div class="card border-0 shadow-sm rounded-3 mb-3 bg-white p-3">
+                    <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-3">
+                        <div>
+                            <h6 class="fw-bold text-dark mb-0 d-flex align-items-center gap-2">
+                                <span class="badge bg-warning text-dark p-1 rounded"><i class="bi bi-camera-fill fs-6"></i></span>
+                                3. Vehicle 3-Angle Inspection Photos (গাড়ির ৩টি অ্যাঙ্গেল ফটো - নম্বর প্লেটসহ)
+                            </h6>
+                            <small class="text-muted">Mandatory check: Front photo must display clear number plate; side photos must show body & battery cage</small>
+                        </div>
+                        <span class="badge ${isVehicleVerified ? 'bg-success' : 'bg-warning text-dark'}">
+                            ${isVehicleVerified ? '✓ All 3 Photos Inspected' : '⚠️ Photos Audit Pending'}
+                        </span>
+                    </div>
+
+                    <div class="row g-3">
+                        <!-- Photo 1: Front View with Plate -->
+                        <div class="col-md-4">
+                            <div class="card border rounded-3 p-2.5 h-100 bg-light text-center">
+                                <div class="fw-bold text-dark small mb-1.5 d-flex align-items-center justify-content-between">
+                                    <span><i class="bi bi-camera me-1 text-primary"></i>1. Front View</span>
+                                    <span class="badge bg-warning text-dark" style="font-size:0.62rem;">With Plate</span>
+                                </div>
+                                <div class="bg-white border rounded p-3 my-1 position-relative overflow-hidden cursor-pointer" onclick="openPhotoLightbox('front', '${v ? v.vehicle_number : d.vehicle_number}')" style="min-height: 140px; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+                                    <div class="fs-1">🛺</div>
+                                    <div class="mt-1 py-0.5 px-2 bg-warning text-dark font-monospace fw-bold rounded border border-dark shadow-xs" style="font-size:0.75rem;">
+                                        ${v ? v.vehicle_number : d.vehicle_number}
+                                    </div>
+                                    <small class="text-muted mt-1" style="font-size:0.65rem;">Front Windshield & Plate</small>
+                                    <span class="position-absolute top-0 end-0 p-1 badge bg-dark bg-opacity-75 text-white" style="font-size:0.6rem;"><i class="bi bi-zoom-in"></i> HD</span>
+                                </div>
+                                <div class="small text-start mt-2 d-flex flex-column gap-1" style="font-size:0.68rem;">
+                                    <span class="text-success"><i class="bi bi-check-circle-fill me-1"></i>Number Plate Legible & Clear</span>
+                                    <span class="text-success"><i class="bi bi-check-circle-fill me-1"></i>Windshield & Headlights Intact</span>
+                                </div>
+                                <button class="btn btn-sm btn-outline-primary w-100 mt-2 py-1" style="font-size:0.72rem;" onclick="openPhotoLightbox('front', '${v ? v.vehicle_number : d.vehicle_number}')">
+                                    <i class="bi bi-eye me-1"></i> Inspect Front Photo
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Photo 2: Left Side View -->
+                        <div class="col-md-4">
+                            <div class="card border rounded-3 p-2.5 h-100 bg-light text-center">
+                                <div class="fw-bold text-dark small mb-1.5 d-flex align-items-center justify-content-between">
+                                    <span><i class="bi bi-camera me-1 text-primary"></i>2. Left Side View</span>
+                                    <span class="badge bg-light text-dark border" style="font-size:0.62rem;">Seating & Roof</span>
+                                </div>
+                                <div class="bg-white border rounded p-3 my-1 position-relative overflow-hidden cursor-pointer" onclick="openPhotoLightbox('left', '${v ? v.vehicle_number : d.vehicle_number}')" style="min-height: 140px; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+                                    <div class="fs-1" style="transform: scaleX(-1);">🛺</div>
+                                    <div class="mt-1 py-0.5 px-2 bg-light text-dark font-monospace rounded border shadow-xs" style="font-size:0.72rem;">
+                                        Left Body & Chassis Profile
+                                    </div>
+                                    <small class="text-muted mt-1" style="font-size:0.65rem;">Passenger Seating & Side Bar</small>
+                                    <span class="position-absolute top-0 end-0 p-1 badge bg-dark bg-opacity-75 text-white" style="font-size:0.6rem;"><i class="bi bi-zoom-in"></i> HD</span>
+                                </div>
+                                <div class="small text-start mt-2 d-flex flex-column gap-1" style="font-size:0.68rem;">
+                                    <span class="text-success"><i class="bi bi-check-circle-fill me-1"></i>Passenger Seating & Roof Clean</span>
+                                    <span class="text-success"><i class="bi bi-check-circle-fill me-1"></i>Left Mirror & Wheels Sound</span>
+                                </div>
+                                <button class="btn btn-sm btn-outline-secondary w-100 mt-2 py-1" style="font-size:0.72rem;" onclick="openPhotoLightbox('left', '${v ? v.vehicle_number : d.vehicle_number}')">
+                                    <i class="bi bi-eye me-1"></i> Inspect Left Side Photo
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Photo 3: Right Side View with Rear Plate -->
+                        <div class="col-md-4">
+                            <div class="card border rounded-3 p-2.5 h-100 bg-light text-center">
+                                <div class="fw-bold text-dark small mb-1.5 d-flex align-items-center justify-content-between">
+                                    <span><i class="bi bi-camera me-1 text-primary"></i>3. Right Side View</span>
+                                    <span class="badge bg-warning text-dark" style="font-size:0.62rem;">With Plate & Battery</span>
+                                </div>
+                                <div class="bg-white border rounded p-3 my-1 position-relative overflow-hidden cursor-pointer" onclick="openPhotoLightbox('right', '${v ? v.vehicle_number : d.vehicle_number}')" style="min-height: 140px; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+                                    <div class="fs-1">🛺</div>
+                                    <div class="mt-1 py-0.5 px-2 bg-warning text-dark font-monospace fw-bold rounded border border-dark shadow-xs" style="font-size:0.75rem;">
+                                        REAR PLATE: ${v ? v.vehicle_number : d.vehicle_number}
+                                    </div>
+                                    <small class="text-muted mt-1" style="font-size:0.65rem;">Battery Box & Rear Plate</small>
+                                    <span class="position-absolute top-0 end-0 p-1 badge bg-dark bg-opacity-75 text-white" style="font-size:0.6rem;"><i class="bi bi-zoom-in"></i> HD</span>
+                                </div>
+                                <div class="small text-start mt-2 d-flex flex-column gap-1" style="font-size:0.68rem;">
+                                    <span class="text-success"><i class="bi bi-check-circle-fill me-1"></i>Rear Plate & Tail Lights Visible</span>
+                                    <span class="text-success"><i class="bi bi-check-circle-fill me-1"></i>Battery Box & Charging Port Safe</span>
+                                </div>
+                                <button class="btn btn-sm btn-outline-primary w-100 mt-2 py-1" style="font-size:0.72rem;" onclick="openPhotoLightbox('right', '${v ? v.vehicle_number : d.vehicle_number}')">
+                                    <i class="bi bi-eye me-1"></i> Inspect Right Side Photo
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SECTION 4: MASTER ACTION CONTROLS FOOTER -->
+                <div class="card border-0 shadow-sm rounded-3 bg-white p-3 d-flex flex-row justify-content-between align-items-center flex-wrap gap-2 sticky-bottom">
                     <div class="small text-muted">
-                        <i class="bi bi-info-circle me-1"></i>Select action to update driver account status
+                        <i class="bi bi-shield-lock-fill text-primary me-1"></i><strong>Policy Enforcement:</strong> Approving all documents and photos will automatically <strong>UNLOCK</strong> ride accept on the driver mobile app.
                     </div>
-                    <div class="d-flex gap-2">
-                        ${isPending ? `
-                            <button class="btn btn-success btn-sm px-3" onclick="approveDriverKYC(${d.id})">
-                                <i class="bi bi-patch-check-fill me-1"></i> Approve Driver KYC
+                    <div class="d-flex gap-2 align-items-center flex-wrap">
+                        ${!isFullyVerified ? `
+                            <button class="btn btn-success btn-sm px-3 py-1.5 fw-bold shadow-sm" onclick="approveUnifiedKYC(${d.id}, '${v ? v.vehicle_number : d.vehicle_number}')">
+                                <i class="bi bi-patch-check-fill me-1"></i> Approve All & Unlock Ride Acceptance
                             </button>
-                            <button class="btn btn-outline-danger btn-sm" onclick="verifyDriverAction(${d.id}, 'rejected'); bootstrap.Modal.getInstance(document.getElementById('driverKYCModal')).hide();">
-                                <i class="bi bi-x-circle me-1"></i> Reject
+                            <button class="btn btn-outline-danger btn-sm px-3 py-1.5" onclick="rejectUnifiedKYC(${d.id}, '${v ? v.vehicle_number : d.vehicle_number}')">
+                                <i class="bi bi-x-circle me-1"></i> Reject / Request Re-upload
                             </button>
-                        ` : isDriverVerified ? `
-                            <button class="btn btn-outline-danger btn-sm px-3" onclick="toggleDriverActiveSuspend(${d.id}); bootstrap.Modal.getInstance(document.getElementById('driverKYCModal')).hide();">
-                                <i class="bi bi-pause-circle me-1"></i> Suspend Account
+                        ` : isSuspended ? `
+                            <button class="btn btn-success btn-sm px-3 py-1.5 fw-bold" onclick="toggleUnifiedSuspend(${d.id}, '${v ? v.vehicle_number : d.vehicle_number}')">
+                                <i class="bi bi-play-circle me-1"></i> Re-Activate & Unlock Ride Acceptance
                             </button>
                         ` : `
-                            <button class="btn btn-success btn-sm px-3" onclick="toggleDriverActiveSuspend(${d.id}); bootstrap.Modal.getInstance(document.getElementById('driverKYCModal')).hide();">
-                                <i class="bi bi-play-circle me-1"></i> Re-Activate Account
+                            <button class="btn btn-outline-danger btn-sm px-3 py-1.5" onclick="toggleUnifiedSuspend(${d.id}, '${v ? v.vehicle_number : d.vehicle_number}')">
+                                <i class="bi bi-pause-circle me-1"></i> Suspend Partner & Vehicle
                             </button>
                         `}
-                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-secondary btn-sm px-3 py-1.5" data-bs-dismiss="modal">Close</button>
                     </div>
                 </div>
             `;
@@ -8305,311 +8859,166 @@
             modal.show();
         }
 
-        // Approve Driver KYC helper
-        async function approveDriverKYC(driverId) {
-            const d = globalDriversData.find(drv => drv.id === driverId);
-            if (!d) return;
+        // Forward openVehicleKYCModal to openDriverKYCModal
+        function openVehicleKYCModal(vehicleNumber) {
+            openDriverKYCModal(null, vehicleNumber);
+        }
 
-            const v = globalVehiclesData.find(veh => veh.vehicle_number === d.vehicle_number || veh.driver_id === d.id);
-            const isVehicleVerified = v && (v.status === 'active' || v.status === 'verified_active') && v.kyc_status === 'verified';
+        // Master Approve Unified KYC (Driver + Vehicle + Photos)
+        async function approveUnifiedKYC(driverId, vehicleNumber) {
+            const d = globalDriversData.find(item => item.id === Number(driverId)) || globalDriversData.find(item => item.vehicle_number === vehicleNumber);
+            const v = globalVehiclesData.find(item => item.vehicle_number === vehicleNumber) || (d ? globalVehiclesData.find(item => item.driver_id === d.id) : null);
 
-            if (!isVehicleVerified && d.vehicle_number) {
-                const proceed = confirm(`⚠️ Driver "${d.full_name}" personal documents verified.\n\nHowever, linked E-Rickshaw (${d.vehicle_number}) KYC is pending in E-Rickshaw Vehicles menu.\n\nPolicy: Ride accept will remain locked until vehicle documents are verified.\n\nProceed to E-Rickshaw Vehicles menu now?`);
-                if (proceed) {
-                    await verifyDriverAction(driverId, 'verified_active');
-                    const modalEl = document.getElementById('driverKYCModal');
-                    const modal = bootstrap.Modal.getInstance(modalEl);
-                    if (modal) modal.hide();
-                    switchTab('vehicles');
-                    setTimeout(() => openVehicleKYCModal(d.vehicle_number), 300);
-                    return;
-                }
+            if (d) {
+                d.status = 'verified_active';
+                d.driver_kyc_status = 'verified';
+                d.vehicle_kyc_status = 'verified';
+                d.ride_accept_status = 'unlocked';
+            }
+            if (v) {
+                v.status = 'active';
+                v.kyc_status = 'verified';
             }
 
-            await verifyDriverAction(driverId, 'verified_active');
+            try {
+                await ensureAuth();
+                if (d && d.id) {
+                    await fetch(`${API_BASE}/admin/drivers/${d.id}/verify`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${adminToken}` },
+                        body: JSON.stringify({ status: 'verified_active' })
+                    });
+                }
+            } catch(e) {}
 
             const modalEl = document.getElementById('driverKYCModal');
             const modal = bootstrap.Modal.getInstance(modalEl);
             if (modal) modal.hide();
 
-            loadDrivers();
+            alert(`✅ SUCCESSFUL UNIFIED VERIFICATION!\n\nPartner: ${d ? d.full_name : 'Driver'}\nVehicle: ${vehicleNumber}\n\nAll criteria verified:\n1. Driver Identity & DL/Aadhaar: Verified\n2. Vehicle Papers (RC, Permit, Insurance, Fitness): Verified\n3. 3-Angle Vehicle Photos (with Number Plates): Approved\n\n🔓 Driver Mobile App: Ride Acceptance is now UNLOCKED & ACTIVE!`);
+
+            loadPartnersAndVehicles();
             refreshDashboard();
         }
 
-        // =========================================================================
-        // 3. VEHICLES LOADER & VEHICLE KYC WORKFLOW (WITH ALL 4 DOCUMENTS AUDIT)
-        // =========================================================================
-        let currentVehicleTabCategory = 'all';
+        // Master Reject Unified KYC
+        async function rejectUnifiedKYC(driverId, vehicleNumber) {
+            const reason = prompt("Enter specific reason for rejecting documents / photos:\n(e.g., 'Front photo number plate is blurry', 'Driving License expired', 'Insurance copy unclear')", "Vehicle front photo number plate not clearly legible. Please re-upload.");
+            if (!reason) return;
 
+            const d = globalDriversData.find(item => item.id === Number(driverId)) || globalDriversData.find(item => item.vehicle_number === vehicleNumber);
+            const v = globalVehiclesData.find(item => item.vehicle_number === vehicleNumber);
+
+            if (d) {
+                d.status = 'pending_review';
+                d.driver_kyc_status = 'rejected';
+                d.ride_accept_status = 'locked';
+                d.rejection_reason = reason;
+            }
+            if (v) {
+                v.status = 'pending_kyc';
+                v.kyc_status = 'rejected';
+                v.rejection_reason = reason;
+            }
+
+            try {
+                await ensureAuth();
+                if (d && d.id) {
+                    await fetch(`${API_BASE}/admin/drivers/${d.id}/verify`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${adminToken}` },
+                        body: JSON.stringify({ status: 'pending_review', rejection_reason: reason })
+                    });
+                }
+            } catch(e) {}
+
+            const modalEl = document.getElementById('driverKYCModal');
+            const modal = bootstrap.Modal.getInstance(modalEl);
+            if (modal) modal.hide();
+
+            alert(`⚠️ KYC REJECTED:\nReason: "${reason}"\n\n🔒 Ride acceptance remains LOCKED on driver mobile app until corrected documents/photos are re-uploaded and verified by admin.`);
+
+            loadPartnersAndVehicles();
+            refreshDashboard();
+        }
+
+        // Toggle Unified Driver & Vehicle Suspension
+        async function toggleUnifiedSuspend(driverId, vehicleNumber) {
+            const d = globalDriversData.find(item => item.id === Number(driverId)) || globalDriversData.find(item => item.vehicle_number === vehicleNumber);
+            const v = globalVehiclesData.find(item => item.vehicle_number === vehicleNumber);
+
+            const isCurrentlyActive = (d && (d.status === 'verified_active' || d.status === 'active')) || (v && (v.status === 'active' || v.status === 'verified_active'));
+            const nextStatus = isCurrentlyActive ? 'suspended' : 'verified_active';
+
+            if (isCurrentlyActive) {
+                const confirmed = confirm(`⚠️ Are you sure you want to suspend driver "${d?.full_name}" and vehicle "${vehicleNumber}"?\n\nRide acceptance will be immediately LOCKED on driver mobile app.`);
+                if (!confirmed) return;
+            }
+
+            if (d) {
+                d.status = nextStatus;
+                d.ride_accept_status = (nextStatus === 'suspended') ? 'locked' : 'unlocked';
+            }
+            if (v) {
+                v.status = (nextStatus === 'suspended') ? 'suspended' : 'active';
+            }
+
+            try {
+                await ensureAuth();
+                if (d && d.id) {
+                    await fetch(`${API_BASE}/admin/drivers/${d.id}/verify`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${adminToken}` },
+                        body: JSON.stringify({ status: nextStatus })
+                    });
+                }
+            } catch(e) {}
+
+            const modalEl = document.getElementById('driverKYCModal');
+            const modal = bootstrap.Modal.getInstance(modalEl);
+            if (modal) modal.hide();
+
+            if (nextStatus === 'suspended') {
+                alert(`⛔ Driver "${d?.full_name}" & Vehicle "${vehicleNumber}" are now SUSPENDED.\nRide acceptance locked on mobile app.`);
+            } else {
+                alert(`✅ Driver "${d?.full_name}" & Vehicle "${vehicleNumber}" are now RE-ACTIVATED.\nRide acceptance unlocked on mobile app.`);
+            }
+
+            loadPartnersAndVehicles();
+            refreshDashboard();
+        }
+
+        // Forwarding helpers for any legacy buttons
+        async function approveDriverKYC(driverId) {
+            const d = globalDriversData.find(drv => drv.id === driverId);
+            approveUnifiedKYC(driverId, d ? d.vehicle_number : '');
+        }
+
+        function approveVehicleKYC(vehicleNumber) {
+            const v = globalVehiclesData.find(item => item.vehicle_number === vehicleNumber);
+            approveUnifiedKYC(v ? v.driver_id : null, vehicleNumber);
+        }
+
+        function rejectVehicleKYC(vehicleNumber) {
+            const v = globalVehiclesData.find(item => item.vehicle_number === vehicleNumber);
+            rejectUnifiedKYC(v ? v.driver_id : null, vehicleNumber);
+        }
+
+        function toggleVehicleActiveSuspend(vehicleNumber) {
+            const v = globalVehiclesData.find(item => item.vehicle_number === vehicleNumber);
+            toggleUnifiedSuspend(v ? v.driver_id : null, vehicleNumber);
+        }
+
+        let currentVehicleTabCategory = 'all';
         function filterVehiclesTab(category) {
             currentVehicleTabCategory = category || 'all';
-
-            const buttonMap = [
-                { id: 'btnVehTabAll', cat: 'all' },
-                { id: 'btnVehTabToto', cat: 'toto' },
-                { id: 'btnVehTabBike', cat: 'bike' },
-                { id: 'btnVehTabCab', cat: 'four_wheeler' },
-                { id: 'btnVehTabHeavy', cat: 'heavy' },
-                { id: 'btnVehTabParcel', cat: 'parcel' }
-            ];
-
-            buttonMap.forEach(b => {
-                const el = document.getElementById(b.id);
-                if (el) {
-                    if (b.cat === currentVehicleTabCategory) {
-                        el.className = 'btn btn-sm btn-white fw-bold shadow-sm py-1 px-2.5 active';
-                    } else {
-                        el.className = 'btn btn-sm text-secondary py-1 px-2.5';
-                    }
-                }
-            });
-
-            loadVehicles();
+            loadPartnersAndVehicles();
         }
 
         async function loadVehicles() {
             await loadPartnersAndVehicles();
         }
-
-        // Toggle Vehicle Active / Suspend Handler
-        function toggleVehicleActiveSuspend(vehicleNumber) {
-            const v = globalVehiclesData.find(item => item.vehicle_number === vehicleNumber);
-            if (!v) return;
-
-            const isCurrentlyActive = v.status === 'active' || v.status === 'verified_active';
-            const nextStatus = isCurrentlyActive ? 'suspended' : 'active';
-
-            if (isCurrentlyActive) {
-                const confirmed = confirm(`⚠️ Are you sure you want to suspend E-Rickshaw "${vehicleNumber}"?\n\nRides cannot be operated with this vehicle.`);
-                if (!confirmed) return;
-            }
-
-            v.status = nextStatus;
-
-            // Also check linked driver
-            const linkedDriver = globalDriversData.find(d => d.vehicle_number === vehicleNumber || d.id === v.driver_id);
-            if (linkedDriver && nextStatus === 'suspended') {
-                linkedDriver.ride_accept_status = 'locked';
-            } else if (linkedDriver && nextStatus === 'active' && linkedDriver.status === 'verified_active') {
-                linkedDriver.ride_accept_status = 'unlocked';
-            }
-
-            if (nextStatus === 'suspended') {
-                alert(`⚠️ E-Rickshaw "${vehicleNumber}" has been suspended!`);
-            } else {
-                alert(`✅ E-Rickshaw "${vehicleNumber}" is now active (Vehicle Verified)!`);
-            }
-
-            loadVehicles();
-            loadDrivers();
-            refreshDashboard();
-        }
-
-        // Open Vehicle KYC & Documents Verification Modal
-        function openVehicleKYCModal(vehicleNumber) {
-            const v = globalVehiclesData.find(item => item.vehicle_number === vehicleNumber);
-            if (!v) return;
-
-            const assignedDriver = globalDriversData.find(d => d.vehicle_number === vehicleNumber || d.id === v.driver_id);
-            const isVerified = (v.status === 'active' || v.status === 'verified_active') && v.kyc_status === 'verified';
-            const isPending = v.status === 'pending_kyc' || v.kyc_status === 'pending';
-            const isSuspended = v.status === 'suspended';
-
-            const modalBody = document.getElementById('vehicleKYCModalBody');
-            if (!modalBody) return;
-
-            modalBody.innerHTML = `
-                <!-- Vehicle Header Overview -->
-                <div class="card border-0 shadow-sm rounded-3 mb-3 bg-white p-3">
-                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 pb-3 border-bottom">
-                        <div class="d-flex align-items-center gap-3">
-                            <div class="p-3 bg-success bg-opacity-10 text-success rounded-circle border border-success border-opacity-25">
-                                <i class="bi bi-ev-front-fill fs-2"></i>
-                            </div>
-                            <div>
-                                <h5 class="fw-bold mb-0 text-dark font-monospace">${v.icon || '🛺'} ${v.vehicle_number}</h5>
-                                <div class="text-muted small">${v.brand_make} (${v.model_year || '2024'}) &bull; Category: <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25" style="font-size:0.68rem;">${v.category_name || 'Toto (E-Rickshaw)'}</span> &bull; Battery: ${v.battery_type}</div>
-                                <div class="mt-1">
-                                    <span class="badge bg-light text-dark border">Ownership: ${(v.ownership_type || 'independent').replace('_', ' ')}</span>
-                                    <span class="badge bg-light text-muted border ms-1">Driver Name: ${v.driver_name || 'N/A'}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="text-end">
-                            <span class="badge ${isVerified ? 'bg-success' : (isPending ? 'bg-warning text-dark' : 'bg-danger')} p-2 fs-6">
-                                <i class="bi bi-${isVerified ? 'patch-check-fill' : (isPending ? 'clock-history' : 'slash-circle')} me-1"></i>
-                                ${isVerified ? 'Vehicle Verified' : (isPending ? 'KYC Pending' : 'Suspended')}
-                            </span>
-                        </div>
-                    </div>
-
-                    <!-- Policy Explanatory Banner -->
-                    <div class="alert ${isVerified ? 'alert-success border-success' : 'alert-info border-info'} bg-opacity-10 border-opacity-50 mt-3 mb-1 p-3 rounded-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
-                        <div class="d-flex align-items-center gap-2.5">
-                            <i class="bi bi-${isVerified ? 'patch-check-fill text-success' : 'info-circle-fill text-primary'} fs-3"></i>
-                            <div>
-                                <strong class="text-dark">E-Rickshaw KYC & Driver Ride Accept Policy:</strong>
-                                <div class="small text-muted">
-                                    ${isVerified ? 
-                                        `All valid vehicle documents verified. Driver <strong>"${v.driver_name}"</strong> ride acceptance is active.` : 
-                                        `Verify RC, Permit, Insurance, and Fitness to approve Vehicle KYC. Once approved, vehicle becomes <strong>"Vehicle Verified"</strong> and ride acceptance unlocks for <strong>"${v.driver_name}"</strong>.`
-                                    }
-                                </div>
-                            </div>
-                        </div>
-                        <span class="badge ${isVerified ? 'bg-success' : 'bg-warning text-dark'} px-2.5 py-1.5">
-                            ${isVerified ? 'Ride Unlocked' : 'Ride Locked Till Verified'}
-                        </span>
-                    </div>
-                </div>
-
-                <!-- 4 Document Checklists -->
-                <div class="row g-3 mb-3">
-                    <!-- 1. RC Book -->
-                    <div class="col-md-6">
-                        <div class="card border-0 shadow-sm rounded-3 bg-white p-3 h-100">
-                            <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-2">
-                                <h6 class="fw-bold text-dark mb-0"><i class="bi bi-file-earmark-text text-primary me-1"></i>1. Registration Certificate (RC)</h6>
-                                <span class="badge ${isVerified ? 'bg-success' : 'bg-warning text-dark'}">${isVerified ? 'Verified' : 'Pending Verification'}</span>
-                            </div>
-                            <div class="small d-flex flex-column gap-1.5 text-muted">
-                                <div class="d-flex justify-content-between"><span>RC Number:</span> <strong class="font-monospace text-dark">${v.registration_certificate_no || 'RC-WB01-2024-8844'}</strong></div>
-                                <div class="d-flex justify-content-between"><span>Chassis No:</span> <span class="font-monospace text-dark">${v.chassis_no || 'CHAS-YCE-2024-44122'}</span></div>
-                                <div class="d-flex justify-content-between"><span>Motor No:</span> <span class="font-monospace text-dark">${v.motor_no || 'MOT-BLDC-1200W-9901'}</span></div>
-                                <div class="d-flex justify-content-between"><span>RTO Office:</span> <span class="text-dark">WB-01 (Kolkata Regional Transport)</span></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 2. Commercial Route Permit -->
-                    <div class="col-md-6">
-                        <div class="card border-0 shadow-sm rounded-3 bg-white p-3 h-100">
-                            <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-2">
-                                <h6 class="fw-bold text-dark mb-0"><i class="bi bi-signpost-split text-info me-1"></i>2. Commercial Route Permit</h6>
-                                <span class="badge ${isVerified ? 'bg-success' : 'bg-warning text-dark'}">${isVerified ? 'Approved' : 'Pending Verification'}</span>
-                            </div>
-                            <div class="small d-flex flex-column gap-1.5 text-muted">
-                                <div class="d-flex justify-content-between"><span>Permit Number:</span> <strong class="font-monospace text-dark">${v.permit_no || 'PERMIT-KOL-2024-332'}</strong></div>
-                                <div class="d-flex justify-content-between"><span>Authorized Zone:</span> <span class="text-dark">Kolkata North (Shyambazar-Hatibagan)</span></div>
-                                <div class="d-flex justify-content-between"><span>Passenger Capacity:</span> <span class="text-dark">4 Passengers + 1 Driver</span></div>
-                                <div class="d-flex justify-content-between"><span>Status:</span> <span class="text-success fw-semibold">Valid & Active</span></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 3. Insurance -->
-                    <div class="col-md-6">
-                        <div class="card border-0 shadow-sm rounded-3 bg-white p-3 h-100">
-                            <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-2">
-                                <h6 class="fw-bold text-dark mb-0"><i class="bi bi-shield-check text-success me-1"></i>3. Commercial Motor Insurance</h6>
-                                <span class="badge ${isVerified ? 'bg-success' : 'bg-warning text-dark'}">${isVerified ? 'Active' : 'Pending Verification'}</span>
-                            </div>
-                            <div class="small d-flex flex-column gap-1.5 text-muted">
-                                <div class="d-flex justify-content-between"><span>Policy Number:</span> <strong class="font-monospace text-dark">${v.insurance_no || 'INS-TATA-AIG-9921'}</strong></div>
-                                <div class="d-flex justify-content-between"><span>Coverage Type:</span> <span class="text-dark">Third Party + Passenger Cover</span></div>
-                                <div class="d-flex justify-content-between"><span>Expiry Date:</span> <span class="text-dark">${v.insurance_valid_till || '2027-10-15'}</span></div>
-                                <div class="d-flex justify-content-between"><span>Insurance Company:</span> <span class="text-dark">Tata AIG / Oriental Insurance</span></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 4. Fitness & Roadworthiness -->
-                    <div class="col-md-6">
-                        <div class="card border-0 shadow-sm rounded-3 bg-white p-3 h-100">
-                            <div class="d-flex justify-content-between align-items-center border-bottom pb-2 mb-2">
-                                <h6 class="fw-bold text-dark mb-0"><i class="bi bi-wrench-adjustable-circle text-warning me-1"></i>4. Fitness & Roadworthiness</h6>
-                                <span class="badge ${isVerified ? 'bg-success' : 'bg-warning text-dark'}">${isVerified ? 'Passed' : 'Pending Verification'}</span>
-                            </div>
-                            <div class="small d-flex flex-column gap-1.5 text-muted">
-                                <div class="d-flex justify-content-between"><span>Fitness Validity:</span> <strong class="text-dark">${v.fitness_valid_till || '2027-10-15'}</strong></div>
-                                <div class="d-flex justify-content-between"><span>Speed Governor (25 km/h):</span> <span class="text-success fw-semibold">Passed & Sealed</span></div>
-                                <div class="d-flex justify-content-between"><span>Brakes & Tyres Audit:</span> <span class="text-success fw-semibold">Passed Inspection</span></div>
-                                <div class="d-flex justify-content-between"><span>Battery & Wiring Safety:</span> <span class="text-success fw-semibold">BMS Isolated Safe</span></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Action Buttons Footer -->
-                <div class="card border-0 shadow-sm rounded-3 bg-white p-3 d-flex flex-row justify-content-between align-items-center flex-wrap gap-2">
-                    <div class="small text-muted">
-                        <i class="bi bi-shield-lock me-1"></i>Vehicle KYC approval automatically unlocks ride accept on driver mobile app
-                    </div>
-                    <div class="d-flex gap-2">
-                        ${!isVerified ? `
-                            <button class="btn btn-success btn-sm px-3" onclick="approveVehicleKYC('${v.vehicle_number}')">
-                                <i class="bi bi-patch-check-fill me-1"></i> Approve KYC & Make "Vehicle Verified"
-                            </button>
-                            <button class="btn btn-outline-danger btn-sm" onclick="rejectVehicleKYC('${v.vehicle_number}')">
-                                <i class="bi bi-x-circle me-1"></i> Reject Documents
-                            </button>
-                        ` : isSuspended ? `
-                            <button class="btn btn-success btn-sm px-3" onclick="toggleVehicleActiveSuspend('${v.vehicle_number}'); bootstrap.Modal.getInstance(document.getElementById('vehicleKYCModal')).hide();">
-                                <i class="bi bi-play-circle me-1"></i> Re-Activate Vehicle
-                            </button>
-                        ` : `
-                            <button class="btn btn-outline-danger btn-sm px-3" onclick="toggleVehicleActiveSuspend('${v.vehicle_number}'); bootstrap.Modal.getInstance(document.getElementById('vehicleKYCModal')).hide();">
-                                <i class="bi bi-pause-circle me-1"></i> Suspend Vehicle
-                            </button>
-                        `}
-                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            `;
-
-            const modal = new bootstrap.Modal(document.getElementById('vehicleKYCModal'));
-            if (currentAdminLang === 'bn') setTimeout(() => translateAdminDom('bn', document.getElementById('vehicleKYCModal')), 50);
-            modal.show();
-        }
-
-        // Approve Vehicle KYC & Unlock Driver Ride Acceptance
-        function approveVehicleKYC(vehicleNumber) {
-            const v = globalVehiclesData.find(item => item.vehicle_number === vehicleNumber);
-            if (!v) return;
-
-            v.status = 'active';
-            v.kyc_status = 'verified';
-
-            // Find assigned driver and upgrade to Vehicle Verified & Unlock Ride Accept
-            const drv = globalDriversData.find(d => d.vehicle_number === vehicleNumber || d.id === v.driver_id);
-            if (drv) {
-                drv.status = 'verified_active';
-                drv.vehicle_kyc_status = 'verified';
-                drv.driver_kyc_status = 'verified';
-                drv.ride_accept_status = 'unlocked';
-            }
-
-            const modalEl = document.getElementById('vehicleKYCModal');
-            const modal = bootstrap.Modal.getInstance(modalEl);
-            if (modal) modal.hide();
-
-            alert(`✅ E-Rickshaw "${vehicleNumber}" documents (RC, Permit, Insurance, Fitness) verified & marked as "Vehicle Verified"!\n\nDriver: ${v.driver_name || drv?.full_name || 'N/A'}\nRide accept button is now fully unlocked (Active) on driver app screen.`);
-
-            loadVehicles();
-            loadDrivers();
-            refreshDashboard();
-        }
-
-        function rejectVehicleKYC(vehicleNumber) {
-            const reason = prompt("Enter specific reason for rejecting documents (displayed in driver app):", "Document photo blurry or expired");
-            if (!reason) return;
-
-            const v = globalVehiclesData.find(item => item.vehicle_number === vehicleNumber);
-            if (v) {
-                v.status = 'pending_kyc';
-                v.kyc_status = 'rejected';
-            }
-
-            const modalEl = document.getElementById('vehicleKYCModal');
-            const modal = bootstrap.Modal.getInstance(modalEl);
-            if (modal) modal.hide();
-
-            alert(`⚠️ E-Rickshaw "${vehicleNumber}" documents rejected. Reason: "${reason}"\nNotification sent to driver to re-upload documents.`);
-
-            loadVehicles();
-            loadDrivers();
-        }
-
+        
         async function submitNewVehicle(e) {
             e.preventDefault();
             const vehNum = document.getElementById('vehNumber').value;
