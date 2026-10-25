@@ -1728,225 +1728,139 @@
                 </div>
             </section>
 
-            <!-- TAB 2: UNIFIED PARTNERS & VEHICLES (DRIVER PARTNERS & MULTI-MOBILITY FLEET) -->
+            <!-- TAB 2: UNIFIED PARTNERS & VEHICLES MASTER HUB -->
             <section id="tab-partnersVehicles" style="display: none;">
                 <!-- Backward compatibility anchor targets -->
                 <div id="tab-drivers" style="display: none;"></div>
                 <div id="tab-vehicles" style="display: none;"></div>
 
-                <!-- Unified Header & Sub-Tab Switcher Bar -->
-                <div class="card-custom mb-3 p-2.5">
-                    <div class="d-flex align-items-center justify-content-between flex-wrap gap-2">
-                        <div class="d-flex align-items-center gap-2.5">
-                            <span class="badge bg-oi-green p-2 rounded-3 shadow-xs fs-5">
-                                <i class="bi bi-people-fill text-white"></i>
-                            </span>
-                            <div>
-                                <div class="d-flex align-items-center gap-2">
-                                    <h5 class="fw-bold mb-0 text-dark" id="partnersVehiclesTitle">Partners & Vehicles</h5>
-                                    <span class="badge bg-success bg-opacity-10 text-success fw-bold" style="font-size: 0.72rem;">Unified Fleet Hub</span>
-                                </div>
-                                <small class="text-muted" id="partnersVehiclesSubtitle">Manage all Driver Partners, KYC Verification, and Multi-Category Vehicle Fleet in one place</small>
+                <!-- 1. Top KPI Summary Cards -->
+                <div class="row g-2.5 mb-3">
+                    <div class="col-xl-3 col-md-6">
+                        <div class="stat-card stat-card-accent-blue" onclick="setPartnerFilter('')" style="cursor: pointer;" title="Click to view all partners & fleet">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <span class="stat-lbl">Total Partners & Fleet</span>
+                                <div class="stat-icon blue"><i class="bi bi-people-fill"></i></div>
                             </div>
+                            <div class="stat-val" id="metricTotalPartners">6</div>
+                            <small class="text-primary"><i class="bi bi-geo-alt"></i> Pan-India Active Operations</small>
                         </div>
+                    </div>
 
-                        <!-- Top Interactive Sub-Tab Switcher -->
-                        <div class="d-flex align-items-center gap-1.5 p-1 bg-light rounded-pill border shadow-xs" role="tablist">
-                            <button type="button" class="btn btn-sm rounded-pill px-3 py-1.5 fw-bold d-inline-flex align-items-center gap-1.5 transition-all active bg-dark text-white" id="btnSubTabDrivers" onclick="switchPartnersSubTab('drivers')">
-                                <i class="bi bi-person-badge-fill"></i>
-                                <span id="txtSubTabDrivers">Driver Partners</span>
-                                <span class="badge bg-success rounded-pill px-2 py-0.5" id="badgePartnersDriversCount">6</span>
-                            </button>
-                            <button type="button" class="btn btn-sm rounded-pill px-3 py-1.5 fw-bold d-inline-flex align-items-center gap-1.5 transition-all text-secondary" id="btnSubTabVehicles" onclick="switchPartnersSubTab('vehicles')">
-                                <i class="bi bi-ev-front-fill"></i>
-                                <span id="txtSubTabVehicles">E-Rickshaw & Fleet</span>
-                                <span class="badge bg-primary rounded-pill px-2 py-0.5" id="badgePartnersVehiclesCount">6</span>
-                            </button>
+                    <div class="col-xl-3 col-md-6">
+                        <div class="stat-card stat-card-accent-green" onclick="setPartnerFilter('verified_active')" style="cursor: pointer;" title="Click to view verified active partners">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <span class="stat-lbl">Verified & On-Road</span>
+                                <div class="stat-icon green"><i class="bi bi-patch-check-fill text-success"></i></div>
+                            </div>
+                            <div class="stat-val text-success" id="metricVerifiedPartners">5</div>
+                            <small class="text-success"><i class="bi bi-unlock-fill"></i> Ride Accept Fully Active</small>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-md-6">
+                        <div class="stat-card stat-card-accent-yellow" onclick="setPartnerFilter('pending_review')" style="cursor: pointer;" title="Click to view partners with pending paperwork">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <span class="stat-lbl">KYC & Docs Pending</span>
+                                <div class="stat-icon yellow"><i class="bi bi-clock-history text-warning"></i></div>
+                            </div>
+                            <div class="stat-val text-warning" id="metricPendingPartners">1</div>
+                            <small class="text-danger"><i class="bi bi-lock-fill"></i> Personal or Vehicle Papers Pending</small>
+                        </div>
+                    </div>
+
+                    <div class="col-xl-3 col-md-6">
+                        <div class="stat-card stat-card-accent-red" onclick="setPartnerFilter('suspended')" style="cursor: pointer;" title="Click to view suspended partners">
+                            <div class="d-flex align-items-center justify-content-between">
+                                <span class="stat-lbl">Suspended / Inactive</span>
+                                <div class="stat-icon red"><i class="bi bi-slash-circle text-danger"></i></div>
+                            </div>
+                            <div class="stat-val text-secondary" id="metricSuspendedPartners">0</div>
+                            <small class="text-muted"><i class="bi bi-shield-x"></i> Off-Road & Blocked Accounts</small>
                         </div>
                     </div>
                 </div>
 
-                <!-- SUB-PANE 1: DRIVER PARTNERS -->
-                <div id="pane-partners-drivers">
-                    <!-- 1. Top Driver KPI Metric Summary Cards (Fleet Summary at a glance) -->
-                    <div class="row g-2.5 mb-3">
-                        <div class="col-xl-3 col-md-6">
-                            <div class="stat-card stat-card-accent-blue" onclick="setDriverFilter('')" style="cursor: pointer;" title="Click to view all drivers">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <span class="stat-lbl">Total Driver Fleet</span>
-                                    <div class="stat-icon blue"><i class="bi bi-people-fill"></i></div>
-                                </div>
-                                <div class="stat-val" id="metricTotalDrivers">6</div>
-                                <small class="text-primary"><i class="bi bi-geo-alt"></i> Kolkata Metro Feeder Fleet</small>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-3 col-md-6">
-                            <div class="stat-card stat-card-accent-green" onclick="setDriverFilter('verified_active')" style="cursor: pointer;" title="Click to view approved verified drivers">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <span class="stat-lbl">Vehicle Verified</span>
-                                    <div class="stat-icon green"><i class="bi bi-patch-check-fill text-success"></i></div>
-                                </div>
-                                <div class="stat-val text-success" id="metricVerifiedDrivers">5</div>
-                                <small class="text-success"><i class="bi bi-unlock-fill"></i> Ride Accept Fully Active</small>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-3 col-md-6">
-                            <div class="stat-card stat-card-accent-yellow" onclick="setDriverFilter('pending_review')" style="cursor: pointer;" title="Click to view drivers with KYC pending">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <span class="stat-lbl">KYC Pending</span>
-                                    <div class="stat-icon yellow"><i class="bi bi-clock-history text-warning"></i></div>
-                                </div>
-                                <div class="stat-val text-warning" id="metricPendingDrivers">1</div>
-                                <small class="text-danger"><i class="bi bi-lock-fill"></i> New App Sign-ups (Rides Locked)</small>
-                            </div>
-                        </div>
-
-                        <div class="col-xl-3 col-md-6">
-                            <div class="stat-card stat-card-accent-red" onclick="setDriverFilter('suspended')" style="cursor: pointer;" title="Click to view suspended drivers">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <span class="stat-lbl">Suspended Drivers</span>
-                                    <div class="stat-icon red"><i class="bi bi-slash-circle text-danger"></i></div>
-                                </div>
-                                <div class="stat-val text-secondary" id="metricSuspendedDrivers">0</div>
-                                <small class="text-muted"><i class="bi bi-shield-x"></i> On-Road Suspension Control</small>
-                            </div>
+                <!-- 2. Policy Notice Alert Ribbon -->
+                <div class="alert alert-info border-info border-opacity-25 bg-info bg-opacity-10 py-2 px-3 rounded-3 mb-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
+                    <div class="d-flex align-items-center gap-2">
+                        <i class="bi bi-shield-check text-primary fs-5 flex-shrink-0"></i>
+                        <div class="small">
+                            <strong class="text-dark">Unified 2-Tier Partner & Vehicle Verification Policy:</strong>
+                            <span class="text-muted">A driver partner is authorized for live on-road ride dispatch only when both personal documents (License, Aadhaar) and vehicle papers (RC, Route Permit, Insurance) are marked <strong class="text-success">"Verified"</strong>.</span>
                         </div>
                     </div>
-
-                    <!-- 2. Compact Policy Alert Ribbon -->
-                    <div class="alert alert-info border-info border-opacity-25 bg-info bg-opacity-10 py-2 px-3 rounded-3 mb-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
-                        <div class="d-flex align-items-center gap-2">
-                            <i class="bi bi-shield-lock-fill text-primary fs-5 flex-shrink-0"></i>
-                            <div class="small">
-                                <strong class="text-dark">Mobile App Driver Onboarding Policy:</strong>
-                                <span class="text-muted">Until both driver personal documents and Toto vehicle papers are verified as <strong class="text-success">"Vehicle Verified"</strong> ride acceptance will remain locked on the driver's app.</span>
-                            </div>
-                        </div>
-                        <span class="badge bg-primary px-2.5 py-1" style="font-size: 0.72rem;"><i class="bi bi-shield-check me-1"></i> 2-Tier KYC Enforced</span>
-                    </div>
-
-                    <!-- 3. Driver Partners Table Card -->
-                    <div class="card-custom">
-                        <div class="card-header-custom d-flex justify-content-between align-items-center flex-wrap gap-2 py-2 px-3">
-                            <div class="d-flex align-items-center gap-2 flex-wrap">
-                                <div class="d-flex align-items-center gap-1.5">
-                                    <span class="badge bg-oi-green p-1.5 rounded"><i class="bi bi-person-badge-fill text-white"></i></span>
-                                    <div>
-                                        <h6 class="fw-bold mb-0" style="font-size: 0.92rem;">E-Rickshaw Driver Partners & KYC Registry</h6>
-                                        <small class="text-muted" style="font-size: 0.72rem;">Onboarding, document verification & live ride permissions</small>
-                                    </div>
-                                </div>
-                                <!-- Quick Filter Pills -->
-                                <div class="d-flex align-items-center gap-1 ms-lg-3 flex-wrap">
-                                    <button type="button" class="btn btn-sm btn-dark py-0.5 px-2 fw-semibold" id="pillFilterAll" onclick="setDriverFilter('')" style="font-size:0.75rem;">All Drivers (<span id="countAll">6</span>)</button>
-                                    <button type="button" class="btn btn-sm btn-light border py-0.5 px-2 text-success fw-semibold" id="pillFilterVerified" onclick="setDriverFilter('verified_active')" style="font-size:0.75rem;"><i class="bi bi-patch-check-fill me-0.5"></i>Verified (<span id="countVerified">5</span>)</button>
-                                    <button type="button" class="btn btn-sm btn-light border py-0.5 px-2 text-warning fw-semibold" id="pillFilterPending" onclick="setDriverFilter('pending_review')" style="font-size:0.75rem;"><i class="bi bi-clock-history me-0.5"></i>Pending (<span id="countPending">1</span>)</button>
-                                    <button type="button" class="btn btn-sm btn-light border py-0.5 px-2 text-danger fw-semibold" id="pillFilterSuspended" onclick="setDriverFilter('suspended')" style="font-size:0.75rem;"><i class="bi bi-slash-circle me-0.5"></i>Suspended (<span id="countSuspended">0</span>)</button>
-                                </div>
-                            </div>
-                            <div class="d-flex align-items-center gap-2 flex-wrap">
-                                <!-- Live Search -->
-                                <div class="input-group input-group-sm" style="width: 210px;">
-                                    <span class="input-group-text bg-light border-end-0 py-1"><i class="bi bi-search text-muted"></i></span>
-                                    <input type="text" class="form-control border-start-0 py-1" id="driverSearchInput" placeholder="Search driver or Toto reg..." oninput="loadDrivers()" style="font-size:0.78rem;">
-                                </div>
-                                <!-- Dropdown filter -->
-                                <select class="form-select form-select-sm py-1" id="driverStatusFilter" style="width: 170px; font-size: 0.78rem;" onchange="syncDriverFilterDropdown()">
-                                    <option value="">All Statuses</option>
-                                    <option value="verified_active">Vehicle Verified</option>
-                                    <option value="pending_review">KYC Pending</option>
-                                    <option value="suspended">Suspended</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="table-responsive">
-                            <table class="table table-custom table-hover align-middle mb-0" style="font-size: 0.8rem;">
-                                <thead>
-                                    <tr>
-                                        <th class="text-nowrap" style="min-width: 190px;">Driver Profile & Onboarding</th>
-                                        <th class="text-nowrap" style="min-width: 140px;">Contact & City</th>
-                                        <th class="text-nowrap" style="min-width: 150px;">Assigned E-Rickshaw</th>
-                                        <th class="text-nowrap" style="min-width: 90px;">Ownership</th>
-                                        <th class="text-nowrap" style="min-width: 100px;">Wallet & Trips</th>
-                                        <th class="text-nowrap text-center" style="min-width: 135px;">Vehicle Verification</th>
-                                        <th class="text-nowrap text-center" style="min-width: 155px;">Ride Accept Status</th>
-                                        <th class="text-nowrap text-end" style="min-width: 145px;">Action Controls</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="driversTable">
-                                    <tr><td colspan="8" class="text-center py-4 text-muted">Loading drivers...</td></tr>
-                                </tbody>
-                            </table>
-                        </div>
+                    <div class="d-flex align-items-center gap-2">
+                        <button class="btn btn-sm btn-oi-green py-1 px-2.5 shadow-sm fw-semibold" data-bs-toggle="modal" data-bs-target="#newVehicleModal" style="font-size: 0.78rem;">
+                            <i class="bi bi-plus-lg me-1"></i> Register New Vehicle
+                        </button>
                     </div>
                 </div>
 
-                <!-- SUB-PANE 2: E-RICKSHAW VEHICLES & FLEET -->
-                <div id="pane-partners-vehicles" style="display: none;">
-                    <!-- Policy Notice: Vehicle KYC Verification Hub -->
-                    <div class="alert alert-success border-success border-opacity-25 bg-success bg-opacity-10 py-2.5 px-3 rounded-3 mb-3 d-flex align-items-center justify-content-between flex-wrap gap-2">
-                        <div class="d-flex align-items-center gap-2.5">
-                            <i class="bi bi-patch-check-fill text-success fs-4"></i>
-                            <div>
-                                <strong class="text-dark">E-Rickshaw Vehicle KYC & Route Permit Verification Hub:</strong>
-                                <div class="text-muted small">
-                                    Verify and approve Registration Certificate (RC), Commercial Route Permit, Fitness Audit & Insurance Policy for every Toto vehicle here. 
-                                    The vehicle <strong class="text-success">"Vehicle Verified"</strong> must be verified for ride acceptance to unlock on the driver's app screen.
+                <!-- 3. Master Unified Partners & Vehicles Table Card -->
+                <div class="card-custom">
+                    <div class="card-header-custom d-flex justify-content-between align-items-center flex-wrap gap-2 py-2 px-3">
+                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                            <div class="d-flex align-items-center gap-1.5">
+                                <span class="badge bg-oi-green p-1.5 rounded"><i class="bi bi-people-fill text-white"></i></span>
+                                <div>
+                                    <h6 class="fw-bold mb-0" style="font-size: 0.92rem;" id="lblUnifiedTableHeading">Partners & Vehicles Master Registry</h6>
+                                    <small class="text-muted" style="font-size: 0.72rem;">Driver onboarding, vehicle fleet allocation, KYC verification & live operations</small>
                                 </div>
                             </div>
+                            <!-- Quick Filter Pills -->
+                            <div class="d-flex align-items-center gap-1 ms-lg-3 flex-wrap">
+                                <button type="button" class="btn btn-sm btn-dark py-0.5 px-2 fw-semibold" id="pillPartnerFilterAll" onclick="setPartnerFilter('')" style="font-size:0.75rem;">All (<span id="countPartnerAll">6</span>)</button>
+                                <button type="button" class="btn btn-sm btn-light border py-0.5 px-2 text-success fw-semibold" id="pillPartnerFilterVerified" onclick="setPartnerFilter('verified_active')" style="font-size:0.75rem;"><i class="bi bi-patch-check-fill me-0.5"></i>Verified Active (<span id="countPartnerVerified">5</span>)</button>
+                                <button type="button" class="btn btn-sm btn-light border py-0.5 px-2 text-warning fw-semibold" id="pillPartnerFilterPending" onclick="setPartnerFilter('pending_review')" style="font-size:0.75rem;"><i class="bi bi-clock-history me-0.5"></i>KYC Pending (<span id="countPartnerPending">1</span>)</button>
+                                <button type="button" class="btn btn-sm btn-light border py-0.5 px-2 text-danger fw-semibold" id="pillPartnerFilterSuspended" onclick="setPartnerFilter('suspended')" style="font-size:0.75rem;"><i class="bi bi-slash-circle me-0.5"></i>Suspended (<span id="countPartnerSuspended">0</span>)</button>
+                            </div>
                         </div>
-                        <span class="badge bg-success px-2.5 py-1.5"><i class="bi bi-file-earmark-check-fill me-1"></i> Vehicle KYC Hub</span>
+
+                        <div class="d-flex align-items-center gap-2 flex-wrap">
+                            <!-- Category Filter Dropdown -->
+                            <select class="form-select form-select-sm py-1" id="partnerCategoryFilter" style="width: 145px; font-size: 0.78rem;" onchange="loadPartnersAndVehicles()">
+                                <option value="">All Categories</option>
+                                <option value="toto">🛺 Toto (E-Rickshaw)</option>
+                                <option value="bike">🏍️ Bike</option>
+                                <option value="four_wheeler">🚗 Cab</option>
+                                <option value="heavy">🚛 Heavy Loader</option>
+                                <option value="parcel">📦 Parcel</option>
+                            </select>
+
+                            <!-- Live Search Input -->
+                            <div class="input-group input-group-sm" style="width: 240px;">
+                                <span class="input-group-text bg-light border-end-0 py-1"><i class="bi bi-search text-muted"></i></span>
+                                <input type="text" class="form-control border-start-0 py-1" id="partnerSearchInput" placeholder="Search driver, phone, plate..." oninput="loadPartnersAndVehicles()" style="font-size:0.78rem;">
+                            </div>
+
+                            <!-- Status Dropdown filter -->
+                            <select class="form-select form-select-sm py-1" id="partnerStatusFilter" style="width: 155px; font-size: 0.78rem;" onchange="syncPartnerFilterDropdown()">
+                                <option value="">All Statuses</option>
+                                <option value="verified_active">Verified Active</option>
+                                <option value="pending_review">KYC Pending</option>
+                                <option value="suspended">Suspended</option>
+                            </select>
+                        </div>
                     </div>
 
-                    <div class="card-custom">
-                        <div class="card-header-custom d-flex justify-content-between align-items-center flex-wrap gap-2">
-                            <div>
-                                <h6 class="fw-bold mb-0">Multi-Category Fleet Inventory & Vehicle KYC Management</h6>
-                                <small class="text-muted">Registered Toto, Bike, Cab, Heavy Loader and Parcel Courier fleet & KYC verification</small>
-                            </div>
-                            <div class="d-flex align-items-center gap-2">
-                                <button class="btn btn-sm btn-oi-green" data-bs-toggle="modal" data-bs-target="#newVehicleModal">
-                                    <i class="bi bi-plus-lg"></i> Register New Vehicle
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Multi-Mobility Fleet Category Filter Pills -->
-                        <div class="px-3 py-2 bg-light border-bottom d-flex align-items-center justify-content-between flex-wrap gap-2">
-                            <div class="d-flex align-items-center gap-1.5 flex-wrap">
-                                <span class="small fw-bold text-dark me-1"><i class="bi bi-funnel-fill text-primary"></i> Category Filter:</span>
-                                <div class="btn-group btn-group-sm" role="group">
-                                    <button type="button" class="btn btn-sm btn-white fw-bold shadow-sm py-1 px-2.5 active" id="btnVehTabAll" onclick="filterVehiclesTab('all')">All Fleet (6)</button>
-                                    <button type="button" class="btn btn-sm text-secondary py-1 px-2.5" id="btnVehTabToto" onclick="filterVehiclesTab('toto')">🛺 Toto (2)</button>
-                                    <button type="button" class="btn btn-sm text-secondary py-1 px-2.5" id="btnVehTabBike" onclick="filterVehiclesTab('bike')">🏍️ Bike (1)</button>
-                                    <button type="button" class="btn btn-sm text-secondary py-1 px-2.5" id="btnVehTabCab" onclick="filterVehiclesTab('four_wheeler')">🚗 Cab (1)</button>
-                                    <button type="button" class="btn btn-sm text-secondary py-1 px-2.5" id="btnVehTabHeavy" onclick="filterVehiclesTab('heavy')">🚛 Heavy (1)</button>
-                                    <button type="button" class="btn btn-sm text-secondary py-1 px-2.5" id="btnVehTabParcel" onclick="filterVehiclesTab('parcel')">📦 Parcel (1)</button>
-                                </div>
-                            </div>
-                            <span class="badge bg-white text-muted border font-monospace" id="lblVehTabCount">Showing 6 Vehicles</span>
-                        </div>
-
-                        <div class="table-responsive">
-                            <table class="table table-custom table-hover align-middle mb-0">
-                                <thead>
-                                    <tr>
-                                        <th>Vehicle & Category</th>
-                                        <th>Ownership</th>
-                                        <th>Assigned Driver</th>
-                                        <th>Vehicle KYC Documents</th>
-                                        <th>Battery / Spec</th>
-                                        <th>Vehicle Status</th>
-                                        <th class="text-end">Action & KYC Options</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="vehiclesTable">
-                                    <tr><td colspan="7" class="text-center py-4 text-muted">Loading vehicles...</td></tr>
-                                </tbody>
-                            </table>
-                        </div>
+                    <div class="table-responsive">
+                        <table class="table table-custom table-hover align-middle mb-0" style="font-size: 0.8rem;">
+                            <thead>
+                                <tr>
+                                    <th class="text-nowrap" style="min-width: 190px;">Driver Partner Profile</th>
+                                    <th class="text-nowrap" style="min-width: 170px;">Vehicle & Category</th>
+                                    <th class="text-nowrap" style="min-width: 180px;">Documents & KYC Papers</th>
+                                    <th class="text-nowrap" style="min-width: 140px;">Contact & Hub</th>
+                                    <th class="text-nowrap text-center" style="min-width: 120px;">Partner Status</th>
+                                    <th class="text-nowrap text-center" style="min-width: 115px;">Ride Accept</th>
+                                    <th class="text-nowrap text-end" style="min-width: 190px;">Action Controls</th>
+                                </tr>
+                            </thead>
+                            <tbody id="partnersVehiclesTable">
+                                <tr><td colspan="7" class="text-center py-4 text-muted">Loading partners and vehicles...</td></tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </section>
@@ -5451,13 +5365,11 @@
             return headers;
         }
 
-        function switchTab(tabId, subTab) {
+        
+        function switchTab(tabId) {
             let actualTabId = tabId;
-            let actualSubTab = subTab;
-
             if (tabId === 'drivers' || tabId === 'vehicles') {
                 actualTabId = 'partnersVehicles';
-                actualSubTab = tabId;
             }
 
             document.querySelectorAll('section[id^="tab-"]').forEach(el => el.style.display = 'none');
@@ -5488,9 +5400,7 @@
             if (titleEl) titleEl.textContent = titles[actualTabId] || 'Oi Toto Admin';
 
             if (actualTabId === 'partnersVehicles') {
-                switchPartnersSubTab(actualSubTab || 'drivers');
-                loadDrivers();
-                loadVehicles();
+                loadPartnersAndVehicles();
             }
             if (actualTabId === 'dashboard') {
                 refreshDashboard();
@@ -5515,53 +5425,14 @@
             }
         }
 
+        // Backward compatibility stubs
         function switchPartnersSubTab(sub) {
-            const paneDrivers = document.getElementById('pane-partners-drivers');
-            const paneVehicles = document.getElementById('pane-partners-vehicles');
-            const btnDrivers = document.getElementById('btnSubTabDrivers');
-            const btnVehicles = document.getElementById('btnSubTabVehicles');
-
-            if (sub === 'vehicles') {
-                if (paneDrivers) paneDrivers.style.display = 'none';
-                if (paneVehicles) paneVehicles.style.display = 'block';
-                if (btnDrivers) {
-                    btnDrivers.classList.remove('active', 'bg-dark', 'text-white');
-                    btnDrivers.classList.add('text-secondary');
-                }
-                if (btnVehicles) {
-                    btnVehicles.classList.add('active', 'bg-dark', 'text-white');
-                    btnVehicles.classList.remove('text-secondary');
-                }
-                loadVehicles();
-            } else {
-                if (paneDrivers) paneDrivers.style.display = 'block';
-                if (paneVehicles) paneVehicles.style.display = 'none';
-                if (btnDrivers) {
-                    btnDrivers.classList.add('active', 'bg-dark', 'text-white');
-                    btnDrivers.classList.remove('text-secondary');
-                }
-                if (btnVehicles) {
-                    btnVehicles.classList.remove('active', 'bg-dark', 'text-white');
-                    btnVehicles.classList.add('text-secondary');
-                }
-                loadDrivers();
-            }
-            updatePartnersBadges();
-            if (currentAdminLang === 'bn') {
-                setTimeout(() => translateAdminDom('bn'), 60);
-            }
+            loadPartnersAndVehicles();
         }
-
         function updatePartnersBadges() {
-            const driversCount = Array.isArray(globalDriversData) ? globalDriversData.length : 6;
-            const vehiclesCount = Array.isArray(globalVehiclesData) ? globalVehiclesData.length : 6;
-            const bDrivers = document.getElementById('badgePartnersDriversCount');
-            const bVehicles = document.getElementById('badgePartnersVehiclesCount');
-            const bSidebar = document.getElementById('sidebarPartnersCount');
-            if (bDrivers) bDrivers.textContent = driversCount;
-            if (bVehicles) bVehicles.textContent = vehiclesCount;
-            if (bSidebar) bSidebar.textContent = driversCount + vehiclesCount;
+            updatePartnerKPIs();
         }
+
 
         let dashboardTotoMarkers = [];
         let dashboardMapFilter = 'all';
@@ -7900,19 +7771,17 @@
             }
         ];
 
-        // 2. Drivers Loader (with safe offline fallback, dynamic KPI metrics & sleek compact design)
-        async function loadDrivers() {
-            let drivers = globalDriversData;
-
+        
+        // Master Loader for Partners and Vehicles Unified Hub
+        async function loadPartnersAndVehicles() {
             try {
                 await ensureAuth();
-                const filterStatus = document.getElementById('driverStatusFilter')?.value || '';
+                const filterStatus = document.getElementById('partnerStatusFilter')?.value || '';
                 const res = await fetch(`${API_BASE}/admin/drivers?status=${filterStatus}`, {
                     headers: { 'Authorization': `Bearer ${adminToken}` }
                 });
                 const json = await res.json();
                 if (json.success && Array.isArray(json.data) && json.data.length > 0) {
-                    drivers = json.data;
                     if (!filterStatus) {
                         globalDriversData = json.data;
                     } else {
@@ -7923,170 +7792,263 @@
                         });
                     }
                 }
-            } catch (e) {
-                // Keep local globalDriversData
-            }
+            } catch (e) {}
 
-            // Update Top Driver Metric Cards & Pill Counts dynamically using latest globalDriversData
+            try {
+                const resV = await fetch(`${API_BASE}/vehicles`);
+                const jsonV = await resV.json();
+                if (jsonV.success && Array.isArray(jsonV.data) && jsonV.data.length > 0) {
+                    globalVehiclesData = jsonV.data;
+                }
+            } catch (e) {}
+
+            updatePartnerKPIs();
+            renderUnifiedPartnersVehiclesTable();
+        }
+
+        function updatePartnerKPIs() {
             const totalDriversCount = globalDriversData.length;
             const verifiedDriversCount = globalDriversData.filter(d => d.status === 'verified_active' || d.status === 'active').length;
             const pendingDriversCount = globalDriversData.filter(d => d.status === 'pending_review' || d.status === 'pending').length;
             const suspendedDriversCount = globalDriversData.filter(d => d.status === 'suspended').length;
 
-            const elMetricTotal = document.getElementById('metricTotalDrivers');
-            if (elMetricTotal) elMetricTotal.textContent = `${totalDriversCount}`;
-            const elMetricVerified = document.getElementById('metricVerifiedDrivers');
-            if (elMetricVerified) elMetricVerified.textContent = `${verifiedDriversCount}`;
-            const elMetricPending = document.getElementById('metricPendingDrivers');
-            if (elMetricPending) elMetricPending.textContent = `${pendingDriversCount}`;
-            const elMetricSuspended = document.getElementById('metricSuspendedDrivers');
-            if (elMetricSuspended) elMetricSuspended.textContent = `${suspendedDriversCount}`;
+            const setTxt = (id, val) => { const el = document.getElementById(id); if (el) el.textContent = val; };
+            setTxt('metricTotalPartners', totalDriversCount);
+            setTxt('metricVerifiedPartners', verifiedDriversCount);
+            setTxt('metricPendingPartners', pendingDriversCount);
+            setTxt('metricSuspendedPartners', suspendedDriversCount);
 
-            const elCountAll = document.getElementById('countAll');
-            if (elCountAll) elCountAll.textContent = totalDriversCount;
-            const elCountVerified = document.getElementById('countVerified');
-            if (elCountVerified) elCountVerified.textContent = verifiedDriversCount;
-            const elCountPending = document.getElementById('countPending');
-            if (elCountPending) elCountPending.textContent = pendingDriversCount;
-            const elCountSuspended = document.getElementById('countSuspended');
-            if (elCountSuspended) elCountSuspended.textContent = suspendedDriversCount;
-            updatePartnersBadges();
+            setTxt('countPartnerAll', totalDriversCount);
+            setTxt('countPartnerVerified', verifiedDriversCount);
+            setTxt('countPartnerPending', pendingDriversCount);
+            setTxt('countPartnerSuspended', suspendedDriversCount);
 
-            // Status Filter
-            const filter = document.getElementById('driverStatusFilter')?.value || '';
-            if (filter) {
-                drivers = drivers.filter(d => {
-                    if (filter === 'verified_active') return d.status === 'verified_active' || d.status === 'active';
-                    return d.status === filter;
+            setTxt('sidebarPartnersCount', totalDriversCount + (globalVehiclesData?.length || 0));
+        }
+
+        function setPartnerFilter(status) {
+            const sel = document.getElementById('partnerStatusFilter');
+            if (sel) sel.value = status;
+            updatePartnerFilterPills(status);
+            loadPartnersAndVehicles();
+        }
+
+        function syncPartnerFilterDropdown() {
+            const status = document.getElementById('partnerStatusFilter')?.value || '';
+            updatePartnerFilterPills(status);
+            loadPartnersAndVehicles();
+        }
+
+        function updatePartnerFilterPills(status) {
+            const pills = [
+                { id: 'pillPartnerFilterAll', val: '' },
+                { id: 'pillPartnerFilterVerified', val: 'verified_active' },
+                { id: 'pillPartnerFilterPending', val: 'pending_review' },
+                { id: 'pillPartnerFilterSuspended', val: 'suspended' }
+            ];
+            pills.forEach(p => {
+                const el = document.getElementById(p.id);
+                if (!el) return;
+                if (p.val === status) {
+                    el.className = 'btn btn-sm btn-dark py-0.5 px-2 fw-semibold';
+                } else {
+                    const colorClass = p.val === 'verified_active' ? 'text-success' : (p.val === 'pending_review' ? 'text-warning' : (p.val === 'suspended' ? 'text-danger' : 'text-dark'));
+                    el.className = `btn btn-sm btn-light border py-0.5 px-2 fw-semibold ${colorClass}`;
+                }
+            });
+        }
+
+        function renderUnifiedPartnersVehiclesTable() {
+            const tbody = document.getElementById('partnersVehiclesTable');
+            if (!tbody) return;
+
+            const searchQ = (document.getElementById('partnerSearchInput')?.value || '').toLowerCase().trim();
+            const statusFilter = document.getElementById('partnerStatusFilter')?.value || '';
+            const catFilter = document.getElementById('partnerCategoryFilter')?.value || '';
+
+            let list = [...globalDriversData];
+
+            if (statusFilter) {
+                list = list.filter(d => {
+                    if (statusFilter === 'verified_active') return d.status === 'verified_active' || d.status === 'active';
+                    if (statusFilter === 'pending_review') return d.status === 'pending_review' || d.status === 'pending';
+                    if (statusFilter === 'suspended') return d.status === 'suspended';
+                    return d.status === statusFilter;
                 });
             }
 
-            // Live Search Filter
-            const search = (document.getElementById('driverSearchInput')?.value || '').toLowerCase().trim();
-            if (search) {
-                drivers = drivers.filter(d => 
-                    (d.full_name || '').toLowerCase().includes(search) ||
-                    (d.phone || '').includes(search) ||
-                    (d.driving_license_no || '').toLowerCase().includes(search) ||
-                    (d.vehicle_number || '').toLowerCase().includes(search) ||
-                    (d.service_area_name || '').toLowerCase().includes(search)
-                );
+            if (catFilter) {
+                list = list.filter(d => (d.category || 'toto') === catFilter);
             }
 
-            const tbody = document.getElementById('driversTable');
-            if (!tbody) return;
+            if (searchQ) {
+                list = list.filter(d => {
+                    const text = [
+                        d.full_name,
+                        d.phone,
+                        d.vehicle_number,
+                        d.brand_make,
+                        d.driving_license_no,
+                        d.aadhaar_no,
+                        d.service_area_name
+                    ].filter(Boolean).join(' ').toLowerCase();
+                    return text.includes(searchQ);
+                });
+            }
 
-            if (drivers.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="8" class="text-center py-4 text-muted"><i class="bi bi-inbox fs-4 d-block mb-1"></i>No driver records match filter/search</td></tr>`;
+            if (list.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-muted"><i class="bi bi-inbox fs-4 d-block mb-1"></i>No partners or vehicles match the selected filter</td></tr>`;
                 return;
             }
 
-            tbody.innerHTML = drivers.map(d => {
-                const isVerified = d.status === 'verified_active' || d.status === 'active';
+            tbody.innerHTML = list.map(d => {
+                const v = globalVehiclesData.find(veh => veh.vehicle_number === d.vehicle_number || veh.driver_id === d.id);
+                const isDriverVerified = d.status === 'verified_active' || d.status === 'active';
                 const isSuspended = d.status === 'suspended';
                 const isPending = d.status === 'pending_review' || d.status === 'pending';
+                const isVehicleVerified = v && (v.status === 'active' || v.status === 'verified_active') && v.kyc_status === 'verified';
 
-                // Status Badge rendering
+                // Status Badge
                 let statusBadge = '';
-                if (isVerified) {
-                    statusBadge = `<span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-1 fw-semibold text-nowrap" style="font-size:0.75rem;"><i class="bi bi-patch-check-fill me-1 text-success"></i>Vehicle Verified</span>`;
+                if (isDriverVerified) {
+                    statusBadge = `<span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2 py-1 fw-semibold text-nowrap" style="font-size:0.75rem;"><i class="bi bi-patch-check-fill me-1"></i>Active</span>`;
                 } else if (isPending) {
-                    statusBadge = `<span class="badge bg-warning bg-opacity-10 text-warning-emphasis border border-warning border-opacity-25 px-2 py-1 fw-semibold text-nowrap" style="font-size:0.75rem; background-color:#FEF3C7 !important; color:#92400E !important;"><i class="bi bi-clock-history me-1 text-warning"></i>KYC Pending</span>`;
+                    statusBadge = `<span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 px-2 py-1 fw-semibold text-nowrap" style="font-size:0.75rem; background-color:#FEF3C7 !important; color:#92400E !important;"><i class="bi bi-clock-history me-1"></i>KYC Pending</span>`;
                 } else if (isSuspended) {
-                    statusBadge = `<span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 px-2 py-1 fw-semibold text-nowrap" style="font-size:0.75rem;"><i class="bi bi-slash-circle me-1 text-danger"></i>Suspended</span>`;
+                    statusBadge = `<span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 px-2 py-1 fw-semibold text-nowrap" style="font-size:0.75rem;"><i class="bi bi-slash-circle me-1"></i>Suspended</span>`;
                 } else {
                     statusBadge = `<span class="badge bg-secondary px-2 py-1 text-nowrap">${(d.status || '').replace('_', ' ')}</span>`;
                 }
 
-                // Ride Accept Status (Lock vs Unlock)
+                // Ride Accept Badge
                 let rideAcceptBadge = '';
-                if (isVerified) {
-                    rideAcceptBadge = `<span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 py-1 px-2 text-nowrap" style="font-size:0.73rem;"><i class="bi bi-unlock-fill me-1"></i>Ride Active</span>`;
-                } else if (isPending) {
-                    rideAcceptBadge = `<span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 py-1 px-2 text-nowrap" style="font-size:0.73rem;" title="Ride requests locked until all personal and vehicle KYC documents are verified"><i class="bi bi-lock-fill me-1"></i>Ride Locked (KYC)</span>`;
+                if (isDriverVerified && isVehicleVerified) {
+                    rideAcceptBadge = `<span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 py-1 px-2 text-nowrap" style="font-size:0.72rem;"><i class="bi bi-unlock-fill me-1"></i>Ride Active</span>`;
                 } else if (isSuspended) {
-                    rideAcceptBadge = `<span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 py-1 px-2 text-nowrap" style="font-size:0.73rem;" title="Ride accept blocked due to account suspension"><i class="bi bi-pause-circle me-1"></i>Ride Blocked</span>`;
-                }
-
-                // Action Column Controls
-                let actionButtons = '';
-                if (isVerified) {
-                    actionButtons = `
-                        <button class="btn btn-sm btn-outline-danger py-0.5 px-2" style="font-size:0.74rem;" onclick="toggleDriverActiveSuspend(${d.id})" title="Suspend driver">
-                            <i class="bi bi-pause-circle me-0.5"></i>Suspend
-                        </button>
-                        <button class="btn btn-sm btn-light border py-0.5 px-2" style="font-size:0.74rem;" onclick="openDriverKYCModal(${d.id})" title="View driver and KYC profile">
-                            <i class="bi bi-eye"></i> Details
-                        </button>
-                    `;
-                } else if (isSuspended) {
-                    actionButtons = `
-                        <button class="btn btn-sm btn-success py-0.5 px-2" style="font-size:0.74rem;" onclick="toggleDriverActiveSuspend(${d.id})" title="Reactivate driver">
-                            <i class="bi bi-play-circle me-0.5"></i>Active
-                        </button>
-                        <button class="btn btn-sm btn-light border py-0.5 px-2" style="font-size:0.74rem;" onclick="openDriverKYCModal(${d.id})" title="View driver and KYC profile">
-                            <i class="bi bi-eye"></i> Details
-                        </button>
-                    `;
+                    rideAcceptBadge = `<span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary border-opacity-25 py-1 px-2 text-nowrap" style="font-size:0.72rem;"><i class="bi bi-pause-circle me-1"></i>Ride Blocked</span>`;
                 } else {
-                    // Pending Review / New Mobile App Signup
-                    actionButtons = `
-                        <button class="btn btn-sm btn-oi-green py-0.5 px-2" style="font-size:0.74rem;" onclick="openDriverKYCModal(${d.id})" title="Verify KYC documents and vehicle">
-                            <i class="bi bi-shield-check me-0.5"></i>Verify KYC
-                        </button>
-                        <button class="btn btn-sm btn-light border py-0.5 px-2" style="font-size:0.74rem;" onclick="openDriverKYCModal(${d.id})" title="View profile">
-                            <i class="bi bi-eye"></i> Details
-                        </button>
-                    `;
+                    rideAcceptBadge = `<span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 py-1 px-2 text-nowrap" style="font-size:0.72rem;" title="Ride accept locked until driver and vehicle docs are verified"><i class="bi bi-lock-fill me-1"></i>Ride Locked</span>`;
                 }
 
                 return `
                     <tr>
+                        <!-- 1. Driver Profile -->
                         <td class="text-nowrap py-2">
                             <div class="d-flex align-items-center gap-2">
-                                <div style="width:32px;height:32px;min-width:32px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:0.82rem;font-weight:700;background:#EFF6FF;color:#1D4ED8;border:1px solid #BFDBFE;flex-shrink:0;">
+                                <div style="width:34px;height:34px;min-width:34px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:0.85rem;font-weight:700;background:#EFF6FF;color:#1D4ED8;border:1px solid #BFDBFE;flex-shrink:0;">
                                     ${(d.full_name || 'D').charAt(0)}
                                 </div>
-                                <div style="line-height: 1.2;">
-                                    <div class="fw-bold text-dark text-nowrap" style="font-size:0.83rem;">${d.full_name}</div>
+                                <div style="line-height: 1.25;">
+                                    <div class="fw-bold text-dark text-nowrap" style="font-size:0.84rem;">${d.full_name}</div>
                                     <div class="d-flex align-items-center gap-1 text-nowrap mt-0.5">
                                         <small class="text-muted font-monospace" style="font-size:0.7rem;">DL: ${d.driving_license_no || 'N/A'}</small>
-                                        ${d.registered_via && d.registered_via.includes('Mobile App') ? 
-                                            `<span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 py-0 px-1" style="font-size: 0.62rem;"><i class="bi bi-phone"></i> App</span>` : 
-                                            `<span class="badge bg-light text-muted border py-0 px-1" style="font-size: 0.62rem;">Portal</span>`
-                                        }
+                                        <span class="badge bg-light text-muted border py-0 px-1" style="font-size: 0.62rem;">${d.registered_via && d.registered_via.includes('App') ? '📱 App' : '🌐 Web'}</span>
                                     </div>
                                 </div>
                             </div>
                         </td>
+
+                        <!-- 2. Vehicle & Category -->
+                        <td class="text-nowrap py-2">
+                            ${d.vehicle_number ? `
+                                <div style="line-height: 1.25;">
+                                    <span class="fw-bold font-monospace text-primary" style="font-size:0.83rem;">${d.icon || '🛺'} ${d.vehicle_number}</span> 
+                                    <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25" style="font-size:0.63rem;">${d.categoryName || d.category || 'Toto'}</span>
+                                    <div class="text-muted small mt-0.5" style="font-size:0.71rem;">${d.brand_make || ''} &bull; <span class="badge bg-light text-dark border py-0 px-1" style="font-size:0.65rem;">${(d.ownership_model || '').replace('_', ' ')}</span></div>
+                                </div>
+                            ` : `<span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 py-1 px-1.5" style="font-size:0.72rem;"><i class="bi bi-exclamation-triangle me-1"></i>No Vehicle Assigned</span>`}
+                        </td>
+
+                        <!-- 3. Documents & KYC Papers (Driver + Vehicle) -->
+                        <td class="text-nowrap py-2">
+                            <div class="d-flex flex-column gap-1">
+                                <div class="d-flex align-items-center gap-1">
+                                    ${isDriverVerified ? 
+                                        `<span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 py-0.5 px-1.5 d-inline-flex align-items-center gap-1" style="font-size:0.68rem;"><i class="bi bi-patch-check-fill"></i> Driver KYC Verified</span>` : 
+                                        `<span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 py-0.5 px-1.5 d-inline-flex align-items-center gap-1" style="font-size:0.68rem; background-color:#FEF3C7 !important; color:#92400E !important;"><i class="bi bi-clock-history"></i> Driver KYC Pending</span>`
+                                    }
+                                </div>
+                                <div class="d-flex align-items-center gap-1">
+                                    ${v ? (isVehicleVerified ? 
+                                        `<span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 py-0.5 px-1.5 d-inline-flex align-items-center gap-1" style="font-size:0.68rem;"><i class="bi bi-file-earmark-check-fill"></i> RC & Permit Verified</span>` : 
+                                        `<span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 py-0.5 px-1.5 d-inline-flex align-items-center gap-1" style="font-size:0.68rem; background-color:#FEF3C7 !important; color:#92400E !important;"><i class="bi bi-file-earmark-text"></i> RC/Permit Pending</span>`) : 
+                                        `<span class="badge bg-light text-muted border py-0.5 px-1.5" style="font-size:0.68rem;">No RC Linked</span>`
+                                    }
+                                </div>
+                                <small class="text-muted font-monospace" style="font-size:0.68rem;">${v?.registration_certificate_no ? `RC: ${v.registration_certificate_no}` : (d.aadhaar_no ? `UID: ${d.aadhaar_no}` : '')}</small>
+                            </div>
+                        </td>
+
+                        <!-- 4. Contact & Hub -->
                         <td class="text-nowrap py-2">
                             <div class="fw-semibold text-dark" style="font-size:0.82rem; line-height: 1.2;">${d.phone}</div>
                             <small class="text-muted" style="font-size:0.71rem;"><i class="bi bi-geo-alt me-0.5"></i>${d.service_area_name || 'Kolkata'}</small>
+                            <div class="fw-bold text-success font-monospace mt-0.5" style="font-size:0.74rem;">₹${parseFloat(d.current_balance || 0).toFixed(2)} <span class="text-muted fw-normal">(${d.total_trips || 0} Trips)</span></div>
                         </td>
-                        <td class="text-nowrap py-2">
-                            ${d.vehicle_number ? `
-                                <div style="line-height: 1.2;"><span class="fw-bold font-monospace text-primary" style="font-size:0.82rem;">${d.icon || '🛺'} ${d.vehicle_number}</span> <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25" style="font-size:0.62rem;">${d.categoryName || 'Toto'}</span></div>
-                                <small class="text-muted" style="font-size:0.71rem;">${d.brand_make || ''}</small>
-                            ` : '<span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 py-0.5 px-1.5" style="font-size:0.7rem;">Not Assigned</span>'}
-                        </td>
-                        <td class="text-nowrap py-2">
-                            <span class="badge bg-light text-dark border py-1 px-1.5" style="font-size:0.71rem;">${(d.ownership_model || '').replace('_', ' ')}</span>
-                        </td>
-                        <td class="text-nowrap py-2">
-                            <div class="fw-bold text-success font-monospace" style="font-size:0.83rem; line-height: 1.2;">₹${parseFloat(d.current_balance || 0).toFixed(2)}</div>
-                            <small class="text-muted" style="font-size:0.7rem;">${d.total_trips || 0} Trips</small>
-                        </td>
+
+                        <!-- 5. Partner Status -->
                         <td class="text-center text-nowrap py-2">${statusBadge}</td>
+
+                        <!-- 6. Ride Accept -->
                         <td class="text-center text-nowrap py-2">${rideAcceptBadge}</td>
+
+                        <!-- 7. Action Controls (All in row) -->
                         <td class="text-end text-nowrap py-2">
                             <div class="d-inline-flex gap-1 align-items-center">
-                                ${actionButtons}
+                                <!-- Verify Docs button -->
+                                <button class="btn btn-sm ${!isDriverVerified || !isVehicleVerified ? 'btn-oi-green fw-bold shadow-xs' : 'btn-light border'} py-0.5 px-2" style="font-size:0.74rem;" onclick="openDriverKYCModal(${d.id})" title="Verify driver and vehicle documents">
+                                    <i class="bi bi-shield-check me-0.5"></i>Verify Docs
+                                </button>
+                                <!-- Suspend / Activate button -->
+                                <button class="btn btn-sm ${isSuspended ? 'btn-success fw-bold' : 'btn-outline-danger'} py-0.5 px-2" style="font-size:0.74rem;" onclick="toggleDriverActiveSuspend(${d.id})" title="${isSuspended ? 'Reactivate partner' : 'Suspend partner'}">
+                                    <i class="bi bi-${isSuspended ? 'play-circle' : 'pause-circle'} me-0.5"></i>${isSuspended ? 'Active' : 'Suspend'}
+                                </button>
+                                <!-- RC papers button -->
+                                ${d.vehicle_number ? `
+                                    <button class="btn btn-sm btn-outline-primary py-0.5 px-1.5" style="font-size:0.74rem;" onclick="openVehicleKYCModal('${d.vehicle_number}')" title="Inspect Vehicle RC, Route Permit, Insurance">
+                                        <i class="bi bi-file-earmark-text"></i> RC
+                                    </button>
+                                ` : ''}
+                                <!-- Delete button -->
+                                <button class="btn btn-sm btn-outline-danger py-0.5 px-1.5" style="font-size:0.74rem;" onclick="deleteDriverPartner(${d.id})" title="Delete Partner Account">
+                                    <i class="bi bi-trash"></i>
+                                </button>
                             </div>
                         </td>
                     </tr>
                 `;
             }).join('');
         }
+
+        async function deleteDriverPartner(id) {
+            const d = globalDriversData.find(drv => drv.id === id);
+            if (!d) return;
+
+            if (!confirm(`Are you sure you want to delete partner "${d.full_name}"?\nThis will permanently remove driver profile and unassign vehicle (${d.vehicle_number || 'None'}).`)) {
+                return;
+            }
+
+            try {
+                await ensureAuth();
+                await fetch(`${API_BASE}/admin/drivers/${id}`, {
+                    method: 'DELETE',
+                    headers: getAuthHeaders()
+                });
+            } catch(e) {}
+
+            globalDriversData = globalDriversData.filter(drv => drv.id !== id);
+            loadPartnersAndVehicles();
+            refreshDashboard();
+            alert(`✓ Partner "${d.full_name}" deleted successfully.`);
+        }
+
+        // Keep loadDrivers() and loadVehicles() forwarding to loadPartnersAndVehicles()
+        async function loadDrivers() {
+            await loadPartnersAndVehicles();
+        }
+
+        
+
 
         // Quick Filter Pills Click Handler
         function setDriverFilter(status) {
@@ -8406,127 +8368,7 @@
         }
 
         async function loadVehicles() {
-            let vehicles = globalVehiclesData;
-            try {
-                const res = await fetch(`${API_BASE}/vehicles`);
-                const json = await res.json();
-                if (json.success && Array.isArray(json.data) && json.data.length > 0) {
-                    vehicles = json.data;
-                }
-            } catch (e) {
-                // Keep local globalVehiclesData
-            }
-
-            // Filter by vehicle category if selected
-            if (currentVehicleTabCategory && currentVehicleTabCategory !== 'all') {
-                vehicles = vehicles.filter(v => (v.category || 'toto') === currentVehicleTabCategory);
-            }
-
-            const lblCount = document.getElementById('lblVehTabCount');
-            if (lblCount) {
-                lblCount.textContent = `Showing ${vehicles.length} of ${globalVehiclesData.length} Vehicles`;
-            }
-            updatePartnersBadges();
-
-            const tbody = document.getElementById('vehiclesTable');
-            if (!tbody) return;
-
-            if (vehicles.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-muted"><i class="bi bi-inbox fs-4 d-block mb-1"></i>No vehicles found in this category</td></tr>`;
-                return;
-            }
-
-            tbody.innerHTML = vehicles.map(v => {
-                const isVerified = (v.status === 'active' || v.status === 'verified_active') && v.kyc_status === 'verified';
-                const isPending = v.status === 'pending_kyc' || v.kyc_status === 'pending';
-                const isSuspended = v.status === 'suspended';
-
-                // Status Badge
-                let statusBadge = '';
-                if (isVerified) {
-                    statusBadge = `<span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 px-2.5 py-1.5 fw-semibold" style="font-size:0.78rem;"><i class="bi bi-patch-check-fill me-1"></i>Vehicle Verified</span>`;
-                } else if (isPending) {
-                    statusBadge = `<span class="badge bg-warning bg-opacity-10 text-warning-emphasis border border-warning border-opacity-25 px-2.5 py-1.5 fw-semibold" style="font-size:0.78rem; background:#FEF3C7 !important; color:#92400E !important;"><i class="bi bi-clock-history me-1"></i>KYC Pending</span>`;
-                } else if (isSuspended) {
-                    statusBadge = `<span class="badge bg-danger bg-opacity-10 text-danger border border-danger border-opacity-25 px-2.5 py-1.5 fw-semibold" style="font-size:0.78rem;"><i class="bi bi-slash-circle me-1"></i>Suspended</span>`;
-                } else {
-                    statusBadge = `<span class="badge bg-secondary px-2.5 py-1.5">${(v.status || '').replace('_', ' ')}</span>`;
-                }
-
-                // Document Badges (RC, Permit, Insurance, Fitness)
-                const rcBadge = isVerified ? 
-                    `<span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 me-1 mb-1" style="font-size:0.7rem;"><i class="bi bi-check2-circle me-0.5"></i>RC Verified</span>` : 
-                    `<span class="badge bg-warning bg-opacity-10 text-warning-emphasis border border-warning border-opacity-25 me-1 mb-1" style="font-size:0.7rem; background:#FEF3C7 !important; color:#92400E !important;"><i class="bi bi-clock me-0.5"></i>RC Pending</span>`;
-                
-                const permitBadge = isVerified ? 
-                    `<span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 me-1 mb-1" style="font-size:0.7rem;"><i class="bi bi-check2-circle me-0.5"></i>Permit Valid</span>` : 
-                    `<span class="badge bg-warning bg-opacity-10 text-warning-emphasis border border-warning border-opacity-25 me-1 mb-1" style="font-size:0.7rem; background:#FEF3C7 !important; color:#92400E !important;"><i class="bi bi-clock me-0.5"></i>Permit Pending</span>`;
-
-                const insBadge = isVerified ? 
-                    `<span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 me-1 mb-1" style="font-size:0.7rem;"><i class="bi bi-check2-circle me-0.5"></i>Insurance Active</span>` : 
-                    `<span class="badge bg-warning bg-opacity-10 text-warning-emphasis border border-warning border-opacity-25 me-1 mb-1" style="font-size:0.7rem; background:#FEF3C7 !important; color:#92400E !important;"><i class="bi bi-clock me-0.5"></i>Insurance Pending</span>`;
-
-                const fitBadge = isVerified ? 
-                    `<span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 me-1 mb-1" style="font-size:0.7rem;"><i class="bi bi-check2-circle me-0.5"></i>Fitness Passed</span>` : 
-                    `<span class="badge bg-warning bg-opacity-10 text-warning-emphasis border border-warning border-opacity-25 me-1 mb-1" style="font-size:0.7rem; background:#FEF3C7 !important; color:#92400E !important;"><i class="bi bi-clock me-0.5"></i>Fitness Pending</span>`;
-
-                // Action Column
-                let actions = '';
-                if (isPending) {
-                    actions = `
-                        <button class="btn btn-sm btn-oi-green me-1 py-1 px-2" onclick="openVehicleKYCModal('${v.vehicle_number}')" title="Verify and approve vehicle documents">
-                            <i class="bi bi-shield-check me-1"></i>Verify KYC
-                        </button>
-                        <button class="btn btn-sm btn-light border py-1 px-2" onclick="openVehicleKYCModal('${v.vehicle_number}')" title="Audit documents">
-                            <i class="bi bi-file-earmark-text me-1"></i>Papers
-                        </button>
-                    `;
-                } else if (isVerified) {
-                    actions = `
-                        <button class="btn btn-sm btn-outline-danger me-1 py-1 px-2" onclick="toggleVehicleActiveSuspend('${v.vehicle_number}')" title="Suspend vehicle">
-                            <i class="bi bi-pause-circle me-1"></i>Suspend
-                        </button>
-                        <button class="btn btn-sm btn-light border py-1 px-2" onclick="openVehicleKYCModal('${v.vehicle_number}')" title="Audit Documents">
-                            <i class="bi bi-file-earmark-text me-1"></i>Papers
-                        </button>
-                    `;
-                } else if (isSuspended) {
-                    actions = `
-                        <button class="btn btn-sm btn-success me-1 py-1 px-2" onclick="toggleVehicleActiveSuspend('${v.vehicle_number}')" title="Reactivate vehicle">
-                            <i class="bi bi-play-circle me-1"></i>Active
-                        </button>
-                        <button class="btn btn-sm btn-light border py-1 px-2" onclick="openVehicleKYCModal('${v.vehicle_number}')" title="Audit Documents">
-                            <i class="bi bi-file-earmark-text me-1"></i>Papers
-                        </button>
-                    `;
-                }
-
-                const catBadge = `<span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 ms-1" style="font-size:0.68rem;">${v.category_name || 'Toto (E-Rickshaw)'}</span>`;
-
-                return `
-                    <tr>
-                        <td>
-                            <div class="fw-bold font-monospace text-primary">${v.icon || '🛺'} ${v.vehicle_number} ${catBadge}</div>
-                            <small class="text-muted">${v.brand_make} (${v.model_year || '2024'})</small>
-                        </td>
-                        <td><span class="badge bg-light text-dark border">${(v.ownership_type || '').replace('_', ' ')}</span></td>
-                        <td>
-                            ${v.driver_name ? `
-                                <div class="fw-semibold text-dark">${v.driver_name}</div>
-                                <small class="text-muted"><i class="bi bi-person-badge me-0.5"></i>ID: #${v.driver_id || 'N/A'}</small>
-                            ` : '<span class="text-muted fst-italic">Unassigned</span>'}
-                        </td>
-                        <td>
-                            <div class="d-flex flex-wrap" style="max-width: 280px;">
-                                ${rcBadge} ${permitBadge} ${insBadge} ${fitBadge}
-                            </div>
-                        </td>
-                        <td><span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25" style="font-size:0.75rem;">${v.battery_type}</span></td>
-                        <td>${statusBadge}</td>
-                        <td class="text-end">${actions}</td>
-                    </tr>
-                `;
-            }).join('');
+            await loadPartnersAndVehicles();
         }
 
         // Toggle Vehicle Active / Suspend Handler
