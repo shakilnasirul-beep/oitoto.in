@@ -517,7 +517,8 @@
 
             // Attempt backend API if running
             try {
-                const res = await fetch('http://localhost:8000/api/v1/auth/admin-login', {
+                const apiBase = window.location.origin.includes('localhost') ? 'http://localhost:8000/api/v1' : window.location.origin + '/api/v1';
+                const res = await fetch(`${apiBase}/auth/admin-login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ phone_or_email: userId, password: password })
