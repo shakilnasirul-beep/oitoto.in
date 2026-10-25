@@ -77,8 +77,31 @@ class Request
     public function getBearerToken(): ?string
     {
         $auth = $this->getHeader('authorization');
-        if ($auth && preg_match('/Bearer\s+(.*)$/i', $auth, $matches)) {
-            return trim($matches[1]);
+        if (!$auth) {
+            $auth = $this->getHeader('x-authorization') ?? $this->getHeader('x-admin-token');
+        }
+        if (!$auth && isset($_SERVER['HTTP_AUTHORIZATION'])) {
+            $auth = $_SERVER['HTTP_AUTHORIZATION'];
+        }
+        if (!$auth && isset($_SERVER['REDIRECT_HTTP_AUTHORIZATION'])) {
+            $auth = $_SERVER['REDIRECT_HTTP_AUTHORIZATION'];
+        }
+        if (!$auth && function_exists('apache_request_headers')) {
+            $apacheHeaders = apache_request_headers();
+            $auth = $apacheHeaders['Authorization'] ?? $apacheHeaders['authorization'] ?? $apacheHeaders['X-Authorization'] ?? $apacheHeaders['x-authorization'] ?? null;
+        }
+        if (!$auth && function_exists('getallheaders')) {
+            $allHeaders = getallheaders();
+            $auth = $allHeaders['Authorization'] ?? $allHeaders['authorization'] ?? $allHeaders['X-Authorization'] ?? $allHeaders['x-authorization'] ?? null;
+        }
+        if (!$auth) {
+            $auth = $this->get('token') ?? $this->queryParams['token'] ?? null;
+        }
+        if ($auth) {
+            if (preg_match('/Bearer\s+(.*)$/i', $auth, $matches)) {
+                return trim($matches[1]);
+            }
+            return trim($auth);
         }
         return null;
     }

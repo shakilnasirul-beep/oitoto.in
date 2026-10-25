@@ -133,11 +133,42 @@ class ServiceAreaController
     public function destroy(Request $request): void
     {
         $id = (int)$request->param('id');
+        if ($id <= 0) {
+            Response::error('Invalid service area ID.', 400);
+            return;
+        }
+
         $db = Database::getConnection();
+        try {
+            $db->beginTransaction();
 
-        $stmt = $db->prepare("DELETE FROM service_areas WHERE id = ?");
-        $stmt->execute([$id]);
+            // 1. Delete associated fare rules
+            $stmt = $db->prepare("DELETE FROM fare_rules WHERE service_area_id = ?");
+            $stmt->execute([$id]);
 
-        Response::success(null, 'Service area deleted successfully.');
+            // 2. Unassign vehicles from this area
+            $stmt = $db->prepare("UPDATE vehicles SET service_area_id = NULL WHERE service_area_id = ?");
+            $stmt->execute([$id]);
+
+            // 3. Unassign drivers from this area
+            $stmt = $db->prepare("UPDATE driver_profiles SET service_area_id = NULL WHERE service_area_id = ?");
+            $stmt->execute([$id]);
+
+            // 4. Unassign bookings
+            $stmt = $db->prepare("UPDATE bookings SET service_area_id = NULL WHERE service_area_id = ?");
+            $stmt->execute([$id]);
+
+            // 5. Delete the service area
+            $stmt = $db->prepare("DELETE FROM service_areas WHERE id = ?");
+            $stmt->execute([$id]);
+
+            $db->commit();
+            Response::success(null, 'Service area deleted successfully.');
+        } catch (\Exception $e) {
+            if ($db->inTransaction()) {
+                $db->rollBack();
+            }
+            Response::error('Failed to delete service area: ' . $e->getMessage(), 500);
+        }
     }
 }

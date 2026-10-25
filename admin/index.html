@@ -5360,6 +5360,9 @@
         // Auto authenticate demo super admin if token not present
         async function ensureAuth() {
             if (!adminToken) {
+                adminToken = localStorage.getItem('oitoto_admin_token') || '';
+            }
+            if (!adminToken) {
                 try {
                     const res = await fetch(`${API_BASE}/auth/admin-login`, {
                         method: 'POST',
@@ -5367,7 +5370,7 @@
                         body: JSON.stringify({ phone_or_email: '9876543210', password: 'Admin@OiToto2026' })
                     });
                     const json = await res.json();
-                    if (json.success && json.data.token) {
+                    if (json.success && json.data && json.data.token) {
                         adminToken = json.data.token;
                         localStorage.setItem('oitoto_admin_token', adminToken);
                     }
@@ -5375,6 +5378,18 @@
                     console.error("Auto login failed", e);
                 }
             }
+            return adminToken;
+        }
+
+        function getAuthHeaders(extra = {}) {
+            const token = adminToken || localStorage.getItem('oitoto_admin_token') || '';
+            const headers = { ...extra };
+            if (token) {
+                headers['Authorization'] = `Bearer ${token}`;
+                headers['X-Authorization'] = `Bearer ${token}`;
+                headers['X-Admin-Token'] = token;
+            }
+            return headers;
         }
 
         function switchTab(tabId) {
@@ -9255,7 +9270,7 @@
             try {
                 const res = await fetch(`${API_BASE}/service-areas`);
                 const json = await res.json();
-                if (json.success && Array.isArray(json.data) && json.data.length > 0) {
+                if (json.success && Array.isArray(json.data)) {
                     globalServiceAreas = json.data.map(item => ({
                         ...item,
                         id: Number(item.id),
@@ -9722,14 +9737,14 @@
 
             try {
                 await ensureAuth();
-                const url = isEdit ? `${API_BASE}/service-areas/${zoneId}` : `${API_BASE}/service-areas`;
+                const token = adminToken || localStorage.getItem('oitoto_admin_token') || '';
+                const url = isEdit 
+                    ? `${API_BASE}/service-areas/${zoneId}?token=${encodeURIComponent(token)}` 
+                    : `${API_BASE}/service-areas?token=${encodeURIComponent(token)}`;
                 const method = isEdit ? 'PUT' : 'POST';
                 await fetch(url, {
                     method: method,
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${adminToken}`
-                    },
+                    headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
                     body: JSON.stringify({
                         name,
                         city,
@@ -9769,12 +9784,10 @@
 
             try {
                 await ensureAuth();
-                await fetch(`${API_BASE}/service-areas/${id}`, {
+                const token = adminToken || localStorage.getItem('oitoto_admin_token') || '';
+                await fetch(`${API_BASE}/service-areas/${id}?token=${encodeURIComponent(token)}`, {
                     method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${adminToken}`
-                    },
+                    headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
                     body: JSON.stringify({ is_active: newActive ? 1 : 0 })
                 });
             } catch (err) {}
@@ -9793,20 +9806,32 @@
             const confirmMsg = `Are you sure you want to delete service zone "${zone.name}"?\nThis will remove ${zone.routes?.length || 0} sub-zone route corridors.`;
             if (!confirm(confirmMsg)) return;
 
+            try {
+                await ensureAuth();
+                const token = adminToken || localStorage.getItem('oitoto_admin_token') || '';
+                const url = `${API_BASE}/service-areas/${id}?token=${encodeURIComponent(token)}`;
+                const res = await fetch(url, {
+                    method: 'DELETE',
+                    headers: getAuthHeaders()
+                });
+                const resJson = await res.json();
+                if (resJson.success) {
+                    globalServiceAreas = globalServiceAreas.filter(a => Number(a.id) !== Number(id));
+                    localStorage.setItem('oitoto_service_areas', JSON.stringify(globalServiceAreas));
+                    renderServiceAreasTable();
+                    alert(`✓ Service Zone "${zone.name}" deleted successfully.`);
+                    return;
+                } else {
+                    console.warn("Server delete warning:", resJson.message);
+                }
+            } catch (err) {
+                console.error("Delete request error:", err);
+            }
+
+            // Fallback for offline / demo mode
             globalServiceAreas = globalServiceAreas.filter(a => Number(a.id) !== Number(id));
             localStorage.setItem('oitoto_service_areas', JSON.stringify(globalServiceAreas));
             renderServiceAreasTable();
-
-            try {
-                await ensureAuth();
-                await fetch(`${API_BASE}/service-areas/${id}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Authorization': `Bearer ${adminToken}`
-                    }
-                });
-            } catch (err) {}
-
             alert(`✓ Service Zone "${zone.name}" deleted successfully.`);
         }
 

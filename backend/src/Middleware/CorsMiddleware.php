@@ -16,7 +16,7 @@ class CorsMiddleware
         
         header("Access-Control-Allow-Origin: {$origin}");
         header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-        header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization, X-Device-Id, X-App-Version, X-Language");
+        header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept, Authorization, X-Authorization, X-Admin-Token, X-Device-Id, X-App-Version, X-Language");
         if ($origin !== '*') {
             header("Access-Control-Allow-Credentials: true");
         }
