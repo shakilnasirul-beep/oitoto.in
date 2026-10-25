@@ -145,6 +145,8 @@ $router->group('/api/v1', function(Router $r) {
     $r->get('/admin/dashboard-stats', [AdminController::class, 'dashboardStats'], [AuthMiddleware::class, RoleMiddleware::allow('admin', 'super_admin')]);
     $r->get('/admin/drivers', [AdminController::class, 'drivers'], [AuthMiddleware::class, RoleMiddleware::allow('admin', 'super_admin')]);
     $r->post('/admin/drivers/{id}/verify', [AdminController::class, 'verifyDriver'], [AuthMiddleware::class, RoleMiddleware::allow('admin', 'super_admin')]);
+    $r->delete('/admin/drivers/{id}', [AdminController::class, 'deleteDriver'], [AuthMiddleware::class, RoleMiddleware::allow('admin', 'super_admin')]);
+    $r->post('/admin/drivers/{id}/delete', [AdminController::class, 'deleteDriver'], [AuthMiddleware::class, RoleMiddleware::allow('admin', 'super_admin')]);
     $r->post('/admin/documents/{id}/verify', [AdminController::class, 'verifyDocument'], [AuthMiddleware::class, RoleMiddleware::allow('admin', 'super_admin')]);
     $r->post('/admin/vehicles/{id}/verify', [AdminController::class, 'verifyVehicle'], [AuthMiddleware::class, RoleMiddleware::allow('admin', 'super_admin')]);
     $r->get('/admin/bookings', [AdminController::class, 'bookings'], [AuthMiddleware::class, RoleMiddleware::allow('admin', 'super_admin')]);

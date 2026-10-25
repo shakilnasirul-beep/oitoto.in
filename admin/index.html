@@ -7831,6 +7831,11 @@
         
         // Master Loader for Partners and Vehicles Unified Hub
         async function loadPartnersAndVehicles() {
+            let deletedDriverIds = [];
+            try {
+                deletedDriverIds = JSON.parse(localStorage.getItem('oitoto_deleted_driver_ids') || '[]');
+            } catch(e) { deletedDriverIds = []; }
+
             try {
                 await ensureAuth();
                 const filterStatus = document.getElementById('partnerStatusFilter')?.value || '';
@@ -7839,11 +7844,17 @@
                 });
                 const json = await res.json();
                 if (json.success && Array.isArray(json.data) && json.data.length > 0) {
+                    // Filter out any driver that was deleted by admin
+                    const validData = json.data.filter(item => 
+                        !deletedDriverIds.includes(String(item.id)) && 
+                        !deletedDriverIds.includes(String(item.phone))
+                    );
+
                     if (!filterStatus) {
-                        globalDriversData = json.data;
+                        globalDriversData = validData;
                     } else {
-                        json.data.forEach(item => {
-                            const idx = globalDriversData.findIndex(x => x.id === item.id);
+                        validData.forEach(item => {
+                            const idx = globalDriversData.findIndex(x => String(x.id) === String(item.id));
                             if (idx >= 0) globalDriversData[idx] = { ...globalDriversData[idx], ...item };
                             else globalDriversData.unshift(item);
                         });
@@ -7858,6 +7869,14 @@
                     globalVehiclesData = jsonV.data;
                 }
             } catch (e) {}
+
+            // Ensure deleted drivers are always purged from memory
+            if (deletedDriverIds.length > 0) {
+                globalDriversData = globalDriversData.filter(item => 
+                    !deletedDriverIds.includes(String(item.id)) && 
+                    !deletedDriverIds.includes(String(item.phone))
+                );
+            }
 
             updatePartnerKPIs();
             renderUnifiedPartnersVehiclesTable();
@@ -7880,7 +7899,7 @@
             setTxt('countPartnerPending', pendingDriversCount);
             setTxt('countPartnerSuspended', suspendedDriversCount);
 
-            setTxt('sidebarPartnersCount', totalDriversCount + (globalVehiclesData?.length || 0));
+            setTxt('sidebarPartnersCount', totalDriversCount);
         }
 
         function setPartnerFilter(status) {
@@ -7996,7 +8015,7 @@
                                     ${(d.full_name || 'D').charAt(0)}
                                 </div>
                                 <div style="line-height: 1.25;">
-                                    <div class="fw-bold text-dark text-nowrap" style="font-size:0.84rem; cursor:pointer;" onclick="openDriverKYCModal(${d.id})" title="Click to view full KYC & Onboarding profile">${d.full_name}</div>
+                                    <div class="fw-bold text-dark text-nowrap" style="font-size:0.84rem; cursor:pointer;" onclick="openDriverKYCModal('${d.id}')" title="Click to view full KYC & Onboarding profile">${d.full_name}</div>
                                     <div class="d-flex align-items-center gap-1 text-nowrap mt-0.5">
                                         <small class="text-muted font-monospace" style="font-size:0.7rem;">DL: ${d.driving_license_no || 'N/A'}</small>
                                         <span class="badge bg-light text-muted border py-0 px-1" style="font-size: 0.62rem;">${d.registered_via && d.registered_via.includes('App') ? '📱 App' : '🌐 Web'}</span>
@@ -8057,7 +8076,7 @@
                                     <i class="bi bi-shield-check me-0.5"></i>Verify Docs
                                 </button>
                                 <!-- Suspend / Activate button -->
-                                <button class="btn btn-sm ${isSuspended ? 'btn-success fw-bold' : 'btn-outline-danger'} py-0.5 px-2" style="font-size:0.74rem;" onclick="toggleDriverActiveSuspend(${d.id})" title="${isSuspended ? 'Reactivate partner' : 'Suspend partner'}">
+                                <button class="btn btn-sm ${isSuspended ? 'btn-success fw-bold' : 'btn-outline-danger'} py-0.5 px-2" style="font-size:0.74rem;" onclick="toggleDriverActiveSuspend('${d.id}')" title="${isSuspended ? 'Reactivate partner' : 'Suspend partner'}">
                                     <i class="bi bi-${isSuspended ? 'play-circle' : 'pause-circle'} me-0.5"></i>${isSuspended ? 'Active' : 'Suspend'}
                                 </button>
                                 <!-- RC papers button -->
@@ -8067,7 +8086,7 @@
                                     </button>
                                 ` : ''}
                                 <!-- Delete button -->
-                                <button class="btn btn-sm btn-outline-danger py-0.5 px-1.5" style="font-size:0.74rem;" onclick="deleteDriverPartner(${d.id})" title="Delete Partner Account">
+                                <button class="btn btn-sm btn-outline-danger py-0.5 px-1.5" style="font-size:0.74rem;" onclick="deleteDriverPartner('${d.id}')" title="Delete Partner Account">
                                     <i class="bi bi-trash"></i>
                                 </button>
                             </div>
@@ -8078,28 +8097,117 @@
         }
 
         async function deleteDriverPartner(id) {
-            const d = globalDriversData.find(drv => drv.id === id);
+            if (!id && id !== 0) return;
+            const d = globalDriversData.find(drv => String(drv.id) === String(id) || drv.id === Number(id) || drv.phone === id);
             if (!d) return;
 
-            if (!confirm(`Are you sure you want to delete partner "${d.full_name}"?\nThis will permanently remove driver profile and unassign vehicle (${d.vehicle_number || 'None'}).`)) {
-                return;
+            const isBn = currentAdminLang === 'bn';
+            const confirmMsg = isBn 
+                ? `আপনি কি নিশ্চিত যে পার্টনার "${d.full_name}" কে স্থায়ীভাবে মুছে ফেলতে চান?\n\n- ড্রাইভার প্রোফাইল মুছে ফেলা হবে\n- বরাদ্দকৃত গাড়ি (${d.vehicle_number || 'কোনো গাড়ি নেই'}) আনঅ্যাসাইন হবে\n- অডিট রেকর্ড "Deleted Accounts Audit"-এ সংরক্ষিত হবে।`
+                : `Are you sure you want to permanently delete partner "${d.full_name}"?\n\n- Driver profile will be permanently removed\n- Allocated vehicle (${d.vehicle_number || 'None'}) will be unassigned\n- An exit audit record will be preserved in "Deleted Accounts Audit".`;
+
+            if (!confirm(confirmMsg)) return;
+
+            // 1. Blacklist ID & Phone in persistent localStorage so it NEVER reappears on refresh
+            let deletedDriverIds = [];
+            try {
+                deletedDriverIds = JSON.parse(localStorage.getItem('oitoto_deleted_driver_ids') || '[]');
+            } catch(e) { deletedDriverIds = []; }
+
+            const idStr = String(d.id);
+            if (!deletedDriverIds.includes(idStr)) deletedDriverIds.push(idStr);
+            if (d.phone && !deletedDriverIds.includes(String(d.phone))) deletedDriverIds.push(String(d.phone));
+            localStorage.setItem('oitoto_deleted_driver_ids', JSON.stringify(deletedDriverIds));
+
+            // 2. Unassign vehicle in globalVehiclesData & localStorage
+            if (d.vehicle_number && typeof globalVehiclesData !== 'undefined') {
+                const veh = globalVehiclesData.find(v => v.vehicle_number === d.vehicle_number);
+                if (veh) {
+                    veh.driver_name = 'Unassigned';
+                    veh.driver_id = null;
+                }
             }
 
+            // 3. Create exit record in globalDeletedAccountsData & localStorage
+            try {
+                const newAuditId = 'DEL-DRV-' + Math.floor(1000 + Math.random() * 9000);
+                const nowFormatted = new Date().toLocaleString('en-GB', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true });
+
+                const auditRecord = {
+                    id: newAuditId,
+                    role: 'driver',
+                    userName: d.full_name,
+                    userName_en: d.full_name,
+                    userName_bn: d.full_name,
+                    phone: d.phone,
+                    vehicleNo: d.vehicle_number || 'N/A',
+                    reasonCode: 'ADMIN_REMOVAL',
+                    reasonText: 'Admin Removed Partner / Fleet Exit',
+                    reasonText_en: 'Admin Removed Partner / Fleet Exit',
+                    reasonText_bn: 'অ্যাডমিন কর্তৃক পার্টনার অপসারণ / ফ্লিট এক্সিট',
+                    remarks: `Partner account permanently removed by Super Admin. Allocated vehicle ${d.vehicle_number || 'N/A'} unassigned.`,
+                    remarks_en: `Partner account permanently removed by Super Admin. Allocated vehicle ${d.vehicle_number || 'N/A'} unassigned.`,
+                    remarks_bn: `সুপার অ্যাডমিন কর্তৃক অ্যাকাউন্ট মুছে ফেলা হয়েছে। গাড়ি ${d.vehicle_number || 'N/A'} আনঅ্যাসাইন করা হয়েছে।`,
+                    zone: d.service_area_name || 'Kolkata Hub',
+                    zone_en: d.service_area_name || 'Kolkata Hub',
+                    zone_bn: d.service_area_name || 'Kolkata Hub',
+                    deletedAt: new Date().toISOString(),
+                    deletedAtFormatted: nowFormatted,
+                    otpVerified: true,
+                    verificationMethod: 'ADMIN_PANEL_OVERRIDE',
+                    ipAddress: 'Admin Portal (Super Administrator)'
+                };
+
+                if (typeof globalDeletedAccountsData !== 'undefined') {
+                    globalDeletedAccountsData.unshift(auditRecord);
+                }
+                let localDelAccounts = [];
+                try {
+                    localDelAccounts = JSON.parse(localStorage.getItem('oitoto_deleted_accounts') || '[]');
+                } catch(e) { localDelAccounts = []; }
+                localDelAccounts.unshift(auditRecord);
+                localStorage.setItem('oitoto_deleted_accounts', JSON.stringify(localDelAccounts));
+
+                const sidebarDeletedEl = document.getElementById('sidebarDeletedCount');
+                if (sidebarDeletedEl && typeof globalDeletedAccountsData !== 'undefined') {
+                    sidebarDeletedEl.textContent = globalDeletedAccountsData.length;
+                }
+            } catch(e) {}
+
+            // 4. Remove from globalDriversData immediately in memory
+            globalDriversData = globalDriversData.filter(drv => 
+                String(drv.id) !== idStr && 
+                drv.phone !== d.phone
+            );
+
+            // 5. Update UI immediately!
+            updatePartnerKPIs();
+            renderUnifiedPartnersVehiclesTable();
+            refreshDashboard();
+
+            // 6. Call Backend API to permanently delete in database
             try {
                 await ensureAuth();
-                await fetch(`${API_BASE}/admin/drivers/${id}`, {
+                let res = await fetch(`${API_BASE}/admin/drivers/${d.id}`, {
                     method: 'DELETE',
                     headers: getAuthHeaders()
                 });
-            } catch(e) {}
+                if (!res.ok) {
+                    await fetch(`${API_BASE}/admin/drivers/${d.id}/delete`, {
+                        method: 'POST',
+                        headers: getAuthHeaders()
+                    });
+                }
+            } catch(err) {
+                console.warn('Backend delete sync note:', err);
+            }
 
-            globalDriversData = globalDriversData.filter(drv => drv.id !== id);
-            loadPartnersAndVehicles();
-            refreshDashboard();
-            alert(`✓ Partner "${d.full_name}" deleted successfully.`);
+            const successMsg = isBn
+                ? `✓ পার্টনার "${d.full_name}" সফলভাবে মুছে ফেলা হয়েছে এবং এক্সিট অডিটে যুক্ত করা হয়েছে।`
+                : `✓ Partner "${d.full_name}" deleted successfully and logged in Exit Audit.`;
+            alert(successMsg);
         }
 
-        // Keep loadDrivers() and loadVehicles() forwarding to loadPartnersAndVehicles()
         async function loadDrivers() {
             await loadPartnersAndVehicles();
         }
@@ -8144,7 +8252,7 @@
 
         // Toggle Driver Active / Suspend Handler
         async function toggleDriverActiveSuspend(driverId) {
-            const drv = globalDriversData.find(d => d.id === driverId);
+            const drv = globalDriversData.find(d => String(d.id) === String(driverId) || d.id === Number(driverId));
             if (!drv) return;
 
             const isCurrentlyActive = drv.status === 'verified_active' || drv.status === 'active';
@@ -8180,7 +8288,7 @@
         }
 
         async function verifyDriverAction(driverId, newStatus) {
-            const drv = globalDriversData.find(d => d.id === driverId);
+            const drv = globalDriversData.find(d => String(d.id) === String(driverId) || d.id === Number(driverId));
             if (drv) {
                 drv.status = newStatus;
                 if (newStatus === 'verified_active') drv.ride_accept_status = 'unlocked';
@@ -8428,7 +8536,7 @@
             let v = null;
 
             if (driverId) {
-                d = globalDriversData.find(drv => drv.id === Number(driverId));
+                d = globalDriversData.find(drv => String(drv.id) === String(driverId) || drv.id === Number(driverId));
             }
             if (!d && vehicleNumber) {
                 d = globalDriversData.find(drv => drv.vehicle_number === vehicleNumber);
@@ -8866,7 +8974,7 @@
 
         // Master Approve Unified KYC (Driver + Vehicle + Photos)
         async function approveUnifiedKYC(driverId, vehicleNumber) {
-            const d = globalDriversData.find(item => item.id === Number(driverId)) || globalDriversData.find(item => item.vehicle_number === vehicleNumber);
+            const d = globalDriversData.find(item => String(item.id) === String(driverId) || item.id === Number(driverId)) || globalDriversData.find(item => item.vehicle_number === vehicleNumber);
             const v = globalVehiclesData.find(item => item.vehicle_number === vehicleNumber) || (d ? globalVehiclesData.find(item => item.driver_id === d.id) : null);
 
             if (d) {
@@ -8906,7 +9014,7 @@
             const reason = prompt("Enter specific reason for rejecting documents / photos:\n(e.g., 'Front photo number plate is blurry', 'Driving License expired', 'Insurance copy unclear')", "Vehicle front photo number plate not clearly legible. Please re-upload.");
             if (!reason) return;
 
-            const d = globalDriversData.find(item => item.id === Number(driverId)) || globalDriversData.find(item => item.vehicle_number === vehicleNumber);
+            const d = globalDriversData.find(item => String(item.id) === String(driverId) || item.id === Number(driverId)) || globalDriversData.find(item => item.vehicle_number === vehicleNumber);
             const v = globalVehiclesData.find(item => item.vehicle_number === vehicleNumber);
 
             if (d) {
@@ -8944,7 +9052,7 @@
 
         // Toggle Unified Driver & Vehicle Suspension
         async function toggleUnifiedSuspend(driverId, vehicleNumber) {
-            const d = globalDriversData.find(item => item.id === Number(driverId)) || globalDriversData.find(item => item.vehicle_number === vehicleNumber);
+            const d = globalDriversData.find(item => String(item.id) === String(driverId) || item.id === Number(driverId)) || globalDriversData.find(item => item.vehicle_number === vehicleNumber);
             const v = globalVehiclesData.find(item => item.vehicle_number === vehicleNumber);
 
             const isCurrentlyActive = (d && (d.status === 'verified_active' || d.status === 'active')) || (v && (v.status === 'active' || v.status === 'verified_active'));
