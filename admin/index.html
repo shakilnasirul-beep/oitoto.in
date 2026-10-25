@@ -2896,23 +2896,23 @@
                                         <label class="form-label small fw-bold text-dark mb-0" style="font-size: 0.72rem;" id="lblSzName">Service Zone Name *</label>
                                         <span class="badge bg-success bg-opacity-10 text-success fw-normal" style="font-size: 0.62rem;" id="badgeSzPrimary">Primary Hub</span>
                                     </div>
-                                    <input type="text" id="szName" class="form-control form-control-sm py-1" style="font-size: 0.76rem;" placeholder="e.g. Samsi Main Service Zone" required>
+                                    <input type="text" id="szName" class="form-control form-control-sm py-1" style="font-size: 0.76rem;" placeholder="Enter Service Zone Name (e.g. Malda Town / Samsi Hub / Kolkata North)" required>
                                 </div>
 
                                 <!-- Row 2: City, State & Preset (Compact 3-column row) -->
                                 <div class="row g-1.5 mb-1.5">
                                     <div class="col-4">
                                         <label class="form-label small fw-semibold text-dark mb-0.5" style="font-size: 0.7rem;" id="lblSzCity">City / Town *</label>
-                                        <input type="text" id="szCity" class="form-control form-control-sm py-0.5" style="font-size: 0.74rem;" placeholder="e.g. Samsi" required>
+                                        <input type="text" id="szCity" class="form-control form-control-sm py-0.5" style="font-size: 0.74rem;" placeholder="Enter City / Town Name (e.g. Malda / Kolkata)" required>
                                     </div>
                                     <div class="col-4">
                                         <label class="form-label small fw-semibold text-dark mb-0.5" style="font-size: 0.7rem;" id="lblSzState">State *</label>
-                                        <input type="text" id="szState" class="form-control form-control-sm py-0.5" style="font-size: 0.74rem;" placeholder="e.g. West Bengal" required>
+                                        <input type="text" id="szState" class="form-control form-control-sm py-0.5" style="font-size: 0.74rem;" placeholder="Enter State Name (e.g. West Bengal)" required>
                                     </div>
                                     <div class="col-4">
                                         <label class="form-label small fw-semibold text-success mb-0.5" style="font-size: 0.7rem;" id="lblSzPreset">Preset Hub</label>
                                         <select id="szPresetSelect" class="form-select form-select-sm py-0.5 px-1" onchange="applyZonePreset(this.value)" style="font-size: 0.72rem;">
-                                            <option value="" id="optPresetDefault">-- Preset Hub --</option>
+                                            <option value="" id="optPresetDefault">-- Preset Hub (Optional) --</option>
                                             <optgroup label="Samsi & Malda Hubs">
                                                 <option value="samsi_hub">Samsi Hub (Main)</option>
                                                 <option value="motiganj_samsi">Motiganj Corridor</option>
@@ -2936,16 +2936,16 @@
                                     <div class="d-flex align-items-center justify-content-between gap-1 mb-1">
                                         <div class="input-group input-group-sm">
                                             <span class="input-group-text bg-light border-end-0 py-0 px-1.5 text-muted"><i class="bi bi-search" style="font-size: 0.65rem;"></i></span>
-                                            <input type="text" id="szMapSearch" class="form-control border-start-0 py-0 px-1.5" placeholder="Search map: e.g. Samsi, Motiganj, Malda..." style="font-size: 0.72rem;" onkeydown="if(event.key==='Enter'){event.preventDefault();searchZoneLocation();}">
-                                            <button type="button" class="btn btn-dark btn-sm py-0 px-2" style="font-size: 0.72rem;" onclick="searchZoneLocation()" id="btnSzFind">Find</button>
+                                            <input type="text" id="szMapSearch" class="form-control border-start-0 py-0 px-1.5" placeholder="Enter place name to search: e.g. Malda, Samsi, Kolkata, Howrah..." style="font-size: 0.72rem;" onkeydown="if(event.key==='Enter'){event.preventDefault();searchZoneLocation();}">
+                                            <button type="button" class="btn btn-dark btn-sm py-0 px-2.5" style="font-size: 0.72rem;" onclick="searchZoneLocation()" id="btnSzFind">Find</button>
                                         </div>
                                         <button type="button" class="btn btn-sm btn-outline-success py-0 px-2 rounded-pill flex-shrink-0" style="font-size: 0.68rem;" onclick="detectZoneGps()" title="Auto detect device GPS">
                                             <i class="bi bi-crosshair"></i> <span id="btnSzGpsText">GPS</span>
                                         </button>
                                     </div>
 
-                                    <!-- Compact 120px Map (PC Friendly) -->
-                                    <div id="szMapPicker" style="height: 120px; border-radius: 5px; border: 1px solid #CBD5E1; overflow: hidden; position: relative;"></div>
+                                    <!-- Compact 160px Map -->
+                                    <div id="szMapPicker" style="height: 160px; border-radius: 6px; border: 1px solid #CBD5E1; overflow: hidden; position: relative;"></div>
 
                                     <div class="d-flex align-items-center justify-content-between mt-1 small text-muted" style="font-size: 0.67rem;">
                                         <span id="szPickedCoordsIndicator"><i class="bi bi-mouse-fill text-success me-1"></i> <span id="lblMapHint">Click anywhere on map to drop pin & set coordinates.</span></span>
@@ -2957,15 +2957,15 @@
                                 <div class="row g-1.5">
                                     <div class="col-3">
                                         <label class="form-label small fw-semibold text-dark mb-0.5" style="font-size: 0.68rem;" id="lblSzLat">Latitude *</label>
-                                        <input type="number" step="any" id="szLat" class="form-control form-control-sm font-monospace py-0.5 px-1.5" style="font-size: 0.72rem;" placeholder="25.3950" onchange="updatePickerFromInputs()" required>
+                                        <input type="number" step="any" id="szLat" class="form-control form-control-sm font-monospace py-0.5 px-1.5" style="font-size: 0.72rem;" placeholder="e.g. 25.3950" onchange="updatePickerFromInputs()" required>
                                     </div>
                                     <div class="col-3">
                                         <label class="form-label small fw-semibold text-dark mb-0.5" style="font-size: 0.68rem;" id="lblSzLng">Longitude *</label>
-                                        <input type="number" step="any" id="szLng" class="form-control form-control-sm font-monospace py-0.5 px-1.5" style="font-size: 0.72rem;" placeholder="88.0070" onchange="updatePickerFromInputs()" required>
+                                        <input type="number" step="any" id="szLng" class="form-control form-control-sm font-monospace py-0.5 px-1.5" style="font-size: 0.72rem;" placeholder="e.g. 88.0070" onchange="updatePickerFromInputs()" required>
                                     </div>
                                     <div class="col-3">
                                         <label class="form-label small fw-semibold text-dark mb-0.5" style="font-size: 0.68rem;" id="lblSzRadius">Radius (km) *</label>
-                                        <input type="number" step="0.5" id="szRadius" class="form-control form-control-sm py-0.5 px-1.5" style="font-size: 0.72rem;" value="5.0" onchange="updatePickerFromInputs()" required>
+                                        <input type="number" step="0.5" id="szRadius" class="form-control form-control-sm py-0.5 px-1.5" style="font-size: 0.72rem;" value="5.0" placeholder="e.g. 5.0" onchange="updatePickerFromInputs()" required>
                                         <input type="hidden" id="szMaxRadius" value="10.0">
                                         <input type="hidden" id="szCompliance" value="approved">
                                     </div>
@@ -2990,17 +2990,17 @@
                                         <small class="text-muted" style="font-size: 0.66rem;" id="lblSzRoutesSub">From ➔ To corridors, direction & fixed fares</small>
                                     </div>
                                     <div class="d-flex align-items-center gap-1">
-                                        <button type="button" class="btn btn-xs btn-light border py-0.5 px-1.5 text-dark" onclick="loadSamsiDefaultRoutes()" style="font-size: 0.67rem;" title="1-Click populate Samsi routes">
-                                            <i class="bi bi-lightning-charge-fill text-warning"></i> <span id="btnLoadSamsiText">Samsi Routes</span>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary py-0.5 px-2 rounded-pill" onclick="clearAllRoutes()" title="Clear all route rows" style="font-size: 0.68rem;" id="btnClearRoutesBtn">
+                                            <i class="bi bi-x-circle me-1"></i> <span id="btnClearRoutesText">Clear</span>
                                         </button>
-                                        <button type="button" class="btn btn-sm btn-outline-success py-0.5 px-2 rounded-pill" style="font-size: 0.7rem;" onclick="addRouteRow()" id="btnAddRouteBtn">
-                                            <i class="bi bi-plus-circle me-1"></i> Add Route
+                                        <button type="button" class="btn btn-sm btn-outline-success py-0.5 px-2.5 rounded-pill" style="font-size: 0.7rem;" onclick="addRouteRow()" id="btnAddRouteBtn">
+                                            <i class="bi bi-plus-circle me-1"></i> <span id="btnAddRouteText">Add Route</span>
                                         </button>
                                     </div>
                                 </div>
 
-                                <!-- Dynamic Routes Container (Compact height 215px) -->
-                                <div id="szRoutesContainer" class="p-1 border rounded bg-white" style="height: 215px; overflow-y: auto;">
+                                <!-- Dynamic Routes Container (Compact height 255px) -->
+                                <div id="szRoutesContainer" class="p-1 border rounded bg-white" style="height: 255px; overflow-y: auto;">
                                     <!-- Populated dynamically by addRouteRow() -->
                                 </div>
 
@@ -8801,30 +8801,33 @@
                 modalSubtitle: 'Geofence Hub, Map Pin Dropper & Sub-Zone Routes',
                 hubHeading: '1. Service Zone & Map Location',
                 zoneNameLabel: 'Service Zone Name *',
-                zoneNamePlaceholder: 'e.g. Samsi Main Service Zone',
+                zoneNamePlaceholder: 'Enter Service Zone Name (e.g. Malda Town / Samsi Hub / Kolkata North)',
                 primaryHubBadge: 'Primary Hub',
                 cityLabel: 'City / Town *',
-                cityPlaceholder: 'e.g. Samsi',
+                cityPlaceholder: 'Enter City / Town Name (e.g. Malda / Kolkata)',
                 stateLabel: 'State *',
-                statePlaceholder: 'e.g. West Bengal',
+                statePlaceholder: 'Enter State Name (e.g. West Bengal)',
                 presetLabel: 'Preset Hub',
-                presetDefault: '-- Preset Hub --',
-                mapSearchPlaceholder: 'Search map: e.g. Samsi, Motiganj, Malda...',
+                presetDefault: '-- Preset Hub (Optional) --',
+                mapSearchPlaceholder: 'Enter place name to search: e.g. Malda, Samsi, Kolkata, Howrah...',
                 btnFind: 'Find',
                 btnGps: 'GPS',
                 mapHint: 'Click anywhere on map to drop pin & set coordinates.',
                 latLabel: 'Latitude *',
+                latPlaceholder: 'e.g. 25.3950 (or click map)',
                 lngLabel: 'Longitude *',
+                lngPlaceholder: 'e.g. 88.0070 (or click map)',
                 radiusLabel: 'Radius (km) *',
+                radiusPlaceholder: 'e.g. 5.0',
                 statusLabel: 'Status *',
                 statusActive: 'Active',
                 statusInactive: 'Inactive',
                 routesHeading: 'Sub-Zones & Route Corridors',
                 routesSub: 'From ➔ To corridors, direction & fixed fares',
                 btnAddRoute: '+ Add Route',
-                btnLoadSamsi: 'Samsi Routes',
-                fromPlaceholder: 'From',
-                toPlaceholder: 'To',
+                btnClearRoutes: 'Clear',
+                fromPlaceholder: 'Enter From Landmark',
+                toPlaceholder: 'Enter To Landmark',
                 farePlaceholder: 'Fare',
                 tipText: 'These sub-zone corridors calculate upfront fixed fares between key stops.',
                 btnCancel: 'Cancel',
@@ -8856,30 +8859,33 @@
                 modalSubtitle: 'জিওফেন্স হাব, ম্যাপ পিন ড্রপার ও সাব-জোন রুট',
                 hubHeading: '১. সার্ভিস জোন ও ম্যাপ লোকেশন',
                 zoneNameLabel: 'সার্ভিস জোনের নাম *',
-                zoneNamePlaceholder: 'যেমন: সামসী মেইন সার্ভিস জোন',
+                zoneNamePlaceholder: 'সার্ভিস জোনের নাম লিখুন (যেমন: মালদা টাউন / সামসী হাব / কলকাতা)',
                 primaryHubBadge: 'প্রধান হাব',
-                cityLabel: 'শহর / থানা *',
-                cityPlaceholder: 'যেমন: সামসী',
+                cityLabel: 'শহর / টাউন *',
+                cityPlaceholder: 'শহরের নাম লিখুন (যেমন: মালদা / কলকাতা)',
                 stateLabel: 'রাজ্য *',
-                statePlaceholder: 'যেমন: পশ্চিমবঙ্গ',
+                statePlaceholder: 'রাজ্যের নাম লিখুন (যেমন: পশ্চিমবঙ্গ)',
                 presetLabel: 'প্রিসেট হাব',
-                presetDefault: '-- প্রিসেট হাব --',
-                mapSearchPlaceholder: 'ম্যাপে খুঁজুন: যেমন: Samsi, Motiganj, Malda...',
+                presetDefault: '-- প্রিসেট হাব (ঐচ্ছিক) --',
+                mapSearchPlaceholder: 'ম্যাপে স্থান খুঁজুন: যেমন মালদা, সামসী, কলকাতা, হাওড়া...',
                 btnFind: 'খুঁজুন',
                 btnGps: 'জিপিএস',
                 mapHint: 'ম্যাপে ক্লিক করলেই কোঅর্ডিনেট বসে যাবে।',
-                latLabel: 'ল্যাটিটিউড *',
-                lngLabel: 'লঙ্গিটিউড *',
+                latLabel: 'অক্ষাংশ (Latitude) *',
+                latPlaceholder: 'অক্ষাংশ (বা ম্যাপে ক্লিক করুন)',
+                lngLabel: 'দ্রাঘিমাংশ (Longitude) *',
+                lngPlaceholder: 'দ্রাঘিমাংশ (বা ম্যাপে ক্লিক করুন)',
                 radiusLabel: 'পরিধি (কিমি) *',
+                radiusPlaceholder: 'পরিধি কিমি',
                 statusLabel: 'স্ট্যাটাস *',
-                statusActive: 'অ্যাক্টিভ',
-                statusInactive: 'ইনঅ্যাক্টিভ',
+                statusActive: 'সক্রিয় (Active)',
+                statusInactive: 'নিষ্ক্রিয় (Inactive)',
                 routesHeading: 'সাব-জোন ও রুট করিডোর',
-                routesSub: 'করিডোর রুট (কোথা থেকে ➔ কোথায়), দিক ও ভাড়া',
+                routesSub: 'করিডোর রুট (প্রস্থান ➔ গন্তব্য), দিক ও নির্দিষ্ট ভাড়া',
                 btnAddRoute: '+ রুট যোগ',
-                btnLoadSamsi: 'সামসীর রুট',
-                fromPlaceholder: 'শুরু (From)',
-                toPlaceholder: 'গন্তব্য (To)',
+                btnClearRoutes: 'ক্লিয়ার',
+                fromPlaceholder: 'প্রস্থান স্টপ / ল্যান্ডমার্ক লিখুন',
+                toPlaceholder: 'গন্তব্য স্টপ / ল্যান্ডমার্ক লিখুন',
                 farePlaceholder: 'ভাড়া',
                 tipText: 'টিপস: এই সাব-জোনগুলো গ্রাহক ও চালকের অ্যাপে নির্দিষ্ট ভাড়ার জন্য ব্যবহৃত হবে।',
                 btnCancel: 'বাতিল',
@@ -8999,9 +9005,9 @@
 
             setTxt('lblSzRoutesHeading', t.routesHeading);
             setTxt('lblSzRoutesSub', t.routesSub);
-            setTxt('btnLoadSamsiText', t.btnLoadSamsi);
+            setTxt('btnClearRoutesText', t.btnClearRoutes || 'Clear');
             const btnAdd = document.getElementById('btnAddRouteBtn');
-            if (btnAdd) btnAdd.innerHTML = `<i class="bi bi-plus-circle me-1"></i> ${t.btnAddRoute}`;
+            if (btnAdd) btnAdd.innerHTML = `<i class="bi bi-plus-circle me-1"></i> <span id="btnAddRouteText">${t.btnAddRoute || 'Add Route'}</span>`;
             setTxt('lblSzTipText', t.tipText);
 
             setTxt('btnSzCancel', t.btnCancel);
@@ -9468,43 +9474,92 @@
         }
 
         async function searchZoneLocation() {
-            const q = (document.getElementById('szMapSearch')?.value || '').trim();
+            const searchInput = document.getElementById('szMapSearch');
+            const q = (searchInput?.value || '').trim();
             if (!q) {
-                alert(getSzT('mapSearchPlaceholder'));
+                alert(currentAdminLang === 'bn' ? 'অনুগ্রহ করে সার্চ বক্সে কোনো স্থানের নাম লিখুন।' : 'Please enter a place name to search on the map.');
                 return;
             }
 
-            const lower = q.toLowerCase();
-            for (const key in LOCAL_GEO_INDEX) {
-                if (lower.includes(key)) {
-                    const loc = LOCAL_GEO_INDEX[key];
-                    updatePickerLocation(loc.lat, loc.lng, null, true);
-                    if (szPickerMap) szPickerMap.setView([loc.lat, loc.lng], 15);
-                    const cityEl = document.getElementById('szCity');
-                    const stateEl = document.getElementById('szState');
-                    if (cityEl && !cityEl.value) cityEl.value = loc.city;
-                    if (stateEl && !stateEl.value) stateEl.value = loc.state;
-                    return;
-                }
+            const findBtn = document.getElementById('btnSzFind');
+            const origHtml = findBtn ? findBtn.innerHTML : 'Find';
+            if (findBtn) {
+                findBtn.disabled = true;
+                findBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status"></span>';
             }
 
             try {
-                const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&countrycodes=in&limit=1&q=${encodeURIComponent(q)}`);
-                const data = await res.json();
-                if (data && data.length > 0) {
-                    const item = data[0];
-                    const lat = parseFloat(item.lat);
-                    const lng = parseFloat(item.lon);
-                    updatePickerLocation(lat, lng, null, true);
-                    if (szPickerMap) szPickerMap.setView([lat, lng], 15);
-                    return;
-                }
-            } catch (e) {}
+                // 1. Try Photon Geocoder (Fast OpenStreetMap search for India, CORS enabled, no API key needed)
+                try {
+                    const photonUrl = `https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&limit=1`;
+                    const res = await fetch(photonUrl);
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data && data.features && data.features.length > 0) {
+                            const feat = data.features[0];
+                            const lng = feat.geometry.coordinates[0];
+                            const lat = feat.geometry.coordinates[1];
+                            const props = feat.properties || {};
 
-            alert(`Location not found: "${q}". Please click directly on the map.`);
+                            updatePickerLocation(lat, lng, null, true);
+                            if (szPickerMap) szPickerMap.setView([lat, lng], 14);
+
+                            // Auto-suggest city and state if inputs are currently empty
+                            const cityEl = document.getElementById('szCity');
+                            const stateEl = document.getElementById('szState');
+                            const detectedCity = props.city || props.town || props.village || props.name || q;
+                            const detectedState = props.state || 'West Bengal';
+                            if (cityEl && !cityEl.value) cityEl.value = detectedCity;
+                            if (stateEl && !stateEl.value) stateEl.value = detectedState;
+                            return;
+                        }
+                    }
+                } catch (e) {
+                    console.warn("Photon search failed:", e);
+                }
+
+                // 2. Check Local Geo Index
+                const lower = q.toLowerCase();
+                for (const key in LOCAL_GEO_INDEX) {
+                    if (lower.includes(key) || key.includes(lower)) {
+                        const loc = LOCAL_GEO_INDEX[key];
+                        updatePickerLocation(loc.lat, loc.lng, null, true);
+                        if (szPickerMap) szPickerMap.setView([loc.lat, loc.lng], 15);
+                        const cityEl = document.getElementById('szCity');
+                        const stateEl = document.getElementById('szState');
+                        if (cityEl && !cityEl.value) cityEl.value = loc.city;
+                        if (stateEl && !stateEl.value) stateEl.value = loc.state;
+                        return;
+                    }
+                }
+
+                // 3. Fallback to OpenStreetMap Nominatim
+                try {
+                    const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&countrycodes=in&limit=1&q=${encodeURIComponent(q)}`);
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data && data.length > 0) {
+                            const lat = parseFloat(data[0].lat);
+                            const lng = parseFloat(data[0].lon);
+                            updatePickerLocation(lat, lng, null, true);
+                            if (szPickerMap) szPickerMap.setView([lat, lng], 14);
+                            return;
+                        }
+                    }
+                } catch (e) {}
+
+                alert(currentAdminLang === 'bn' 
+                    ? `"${q}" স্থানটি ম্যাপে খুঁজে পাওয়া যায়নি। অনুগ্রহ করে সরাসরি ম্যাপের ওপর ক্লিক করে পিন ড্রপ করুন।` 
+                    : `Location "${q}" not found. Please click directly on the map to drop pin.`);
+            } finally {
+                if (findBtn) {
+                    findBtn.disabled = false;
+                    findBtn.innerHTML = origHtml;
+                }
+            }
         }
 
-        // --- SUB-ZONES & ROUTE CORRIDORS ROW GENERATOR (ULTRA COMPACT) ---
+        // --- SUB-ZONES & ROUTE CORRIDORS ROW GENERATOR (CLEAN & DYNAMIC) ---
         function addRouteRow(data = {}) {
             const container = document.getElementById('szRoutesContainer');
             if (!container) return;
@@ -9529,15 +9584,15 @@
                         </select>
                     </div>
                     <div class="col-3">
-                        <input type="text" class="form-control form-control-sm py-0.5 px-1.5 route-from" placeholder="${t.fromPlaceholder}" value="${escapeHtml(data.from || '')}" style="font-size: 0.73rem;" required>
+                        <input type="text" class="form-control form-control-sm py-0.5 px-1.5 route-from" placeholder="${t.fromPlaceholder || 'Enter From Landmark'}" value="${escapeHtml(data.from || '')}" style="font-size: 0.73rem;" required>
                     </div>
                     <div class="col-3">
-                        <input type="text" class="form-control form-control-sm py-0.5 px-1.5 route-to" placeholder="${t.toPlaceholder}" value="${escapeHtml(data.to || '')}" style="font-size: 0.73rem;" required>
+                        <input type="text" class="form-control form-control-sm py-0.5 px-1.5 route-to" placeholder="${t.toPlaceholder || 'Enter To Landmark'}" value="${escapeHtml(data.to || '')}" style="font-size: 0.73rem;" required>
                     </div>
                     <div class="col-2">
                         <div class="input-group input-group-sm">
                             <span class="input-group-text py-0 px-1 text-muted" style="font-size: 0.68rem;">₹</span>
-                            <input type="number" step="1" class="form-control form-control-sm py-0.5 px-1 route-fare text-success fw-bold" placeholder="${t.farePlaceholder}" value="${data.fare || 10}" style="font-size: 0.73rem;">
+                            <input type="number" step="1" class="form-control form-control-sm py-0.5 px-1 route-fare text-success fw-bold" placeholder="${t.farePlaceholder || 'Fare'}" value="${data.fare !== undefined ? data.fare : 10}" style="font-size: 0.73rem;">
                         </div>
                     </div>
                     <div class="col-1 text-end">
@@ -9550,44 +9605,47 @@
             container.appendChild(div);
         }
 
-        function loadSamsiDefaultRoutes() {
+        function clearAllRoutes() {
             const container = document.getElementById('szRoutesContainer');
-            if (container) container.innerHTML = '';
-
-            const samsiRoutes = [
-                { direction: 'North', from: 'Railway Gate', to: 'Motiganj', fare: 10, distance: 2.5 },
-                { direction: 'Central', from: 'Motiganj', to: 'Samsi Station', fare: 10, distance: 1.8 },
-                { direction: 'South', from: 'Ghasiram More', to: 'Samsi Station', fare: 15, distance: 3.2 },
-                { direction: 'North-South', from: 'Railway Gate', to: 'Samsi Station', fare: 15, distance: 3.5 }
-            ];
-
-            samsiRoutes.forEach(r => addRouteRow(r));
+            if (container) {
+                container.innerHTML = '';
+                addRouteRow({ direction: 'North', from: '', to: '', fare: 10 });
+            }
         }
 
         function openAddZoneModal() {
             document.getElementById('serviceZoneForm').reset();
             document.getElementById('szId').value = '';
-            document.getElementById('szPresetSelect').value = '';
+            document.getElementById('szName').value = '';
+            document.getElementById('szCity').value = '';
+            document.getElementById('szState').value = '';
+            document.getElementById('szLat').value = '';
+            document.getElementById('szLng').value = '';
             document.getElementById('szRadius').value = '5.0';
             document.getElementById('szStatus').value = '1';
+            document.getElementById('szPresetSelect').value = '';
+            const searchInput = document.getElementById('szMapSearch');
+            if (searchInput) searchInput.value = '';
 
-            const defaultLat = 25.3950;
-            const defaultLng = 88.0070;
-            document.getElementById('szLat').value = defaultLat.toFixed(6);
-            document.getElementById('szLng').value = defaultLng.toFixed(6);
-            document.getElementById('szCity').value = 'Samsi';
-            document.getElementById('szState').value = 'West Bengal';
+            // Clean routes container with 1 blank route row ready for input
+            const container = document.getElementById('szRoutesContainer');
+            if (container) {
+                container.innerHTML = '';
+                addRouteRow({ direction: 'North', from: '', to: '', fare: 10 });
+            }
 
-            loadSamsiDefaultRoutes();
             applyServiceZoneLanguage(currentAdminLang || 'en');
 
             const modalElem = document.getElementById('serviceZoneModal');
             const modal = bootstrap.Modal.getOrCreateInstance(modalElem);
             modal.show();
 
+            const defaultLat = 22.5726;
+            const defaultLng = 88.3639;
+
             setTimeout(() => {
                 initOrUpdateZonePickerMap(defaultLat, defaultLng, 5.0);
-                if (szPickerMap) szPickerMap.invalidateSize();
+                if (szPickerMap) szPickerMap.invalidateSize(true);
             }, 300);
         }
 
@@ -9612,8 +9670,7 @@
             if (container) {
                 container.innerHTML = '';
                 const routes = Array.isArray(zone.routes) && zone.routes.length > 0 ? zone.routes : [
-                    { direction: 'North', from: 'Railway Gate', to: 'Motiganj', fare: 10, distance: 2.5 },
-                    { direction: 'Central', from: 'Motiganj', to: 'Samsi Station', fare: 10, distance: 1.8 }
+                    { direction: 'North', from: '', to: '', fare: 10 }
                 ];
                 routes.forEach(r => addRouteRow(r));
             }
@@ -9624,13 +9681,13 @@
             const modal = bootstrap.Modal.getOrCreateInstance(modalElem);
             modal.show();
 
-            const lat = parseFloat(zone.center_lat) || 25.3950;
-            const lng = parseFloat(zone.center_lng) || 88.0070;
+            const lat = parseFloat(zone.center_lat) || 22.5726;
+            const lng = parseFloat(zone.center_lng) || 88.3639;
             const rad = parseFloat(zone.radius_km) || 5.0;
 
             setTimeout(() => {
                 initOrUpdateZonePickerMap(lat, lng, rad);
-                if (szPickerMap) szPickerMap.invalidateSize();
+                if (szPickerMap) szPickerMap.invalidateSize(true);
             }, 300);
         }
 
@@ -9742,7 +9799,7 @@
                     ? `${API_BASE}/service-areas/${zoneId}?token=${encodeURIComponent(token)}` 
                     : `${API_BASE}/service-areas?token=${encodeURIComponent(token)}`;
                 const method = isEdit ? 'PUT' : 'POST';
-                await fetch(url, {
+                const apiRes = await fetch(url, {
                     method: method,
                     headers: getAuthHeaders({ 'Content-Type': 'application/json' }),
                     body: JSON.stringify({
@@ -9757,7 +9814,21 @@
                         routes
                     })
                 });
-            } catch (err) {}
+                if (apiRes.ok) {
+                    const apiJson = await apiRes.json();
+                    if (!isEdit && apiJson && apiJson.data && apiJson.data.id) {
+                        const realId = Number(apiJson.data.id);
+                        payload.id = realId;
+                        const pIdx = globalServiceAreas.findIndex(a => a === payload || a.id === zoneId);
+                        if (pIdx !== -1) {
+                            globalServiceAreas[pIdx].id = realId;
+                        }
+                        localStorage.setItem('oitoto_service_areas', JSON.stringify(globalServiceAreas));
+                    }
+                }
+            } catch (err) {
+                console.warn("Failed to persist service zone:", err);
+            }
 
             const modalElem = document.getElementById('serviceZoneModal');
             const modal = bootstrap.Modal.getInstance(modalElem);

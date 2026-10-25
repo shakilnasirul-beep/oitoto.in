@@ -23,6 +23,18 @@ class ServiceAreaController
         ");
         $areas = $stmt->fetchAll();
 
+        foreach ($areas as &$area) {
+            $routes = [];
+            if (!empty($area['boundary_geojson'])) {
+                $decoded = json_decode($area['boundary_geojson'], true);
+                if (isset($decoded['routes']) && is_array($decoded['routes'])) {
+                    $routes = $decoded['routes'];
+                }
+            }
+            $area['routes'] = $routes;
+        }
+        unset($area);
+
         Response::success($areas);
     }
 
@@ -47,6 +59,15 @@ class ServiceAreaController
             return;
         }
 
+        $routes = [];
+        if (!empty($area['boundary_geojson'])) {
+            $decoded = json_decode($area['boundary_geojson'], true);
+            if (isset($decoded['routes']) && is_array($decoded['routes'])) {
+                $routes = $decoded['routes'];
+            }
+        }
+        $area['routes'] = $routes;
+
         Response::success($area);
     }
 
@@ -70,9 +91,12 @@ class ServiceAreaController
         $db->beginTransaction();
 
         try {
+            $routes = $request->get('routes');
+            $boundaryGeojson = !empty($routes) ? json_encode(['routes' => $routes], JSON_UNESCAPED_UNICODE) : null;
+
             $stmt = $db->prepare("
-                INSERT INTO service_areas (name, state, city, center_lat, center_lng, radius_km, max_search_radius_km, is_active)
-                VALUES (?, ?, ?, ?, ?, ?, ?, 1)
+                INSERT INTO service_areas (name, state, city, center_lat, center_lng, radius_km, max_search_radius_km, boundary_geojson, is_active)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
             ");
             $stmt->execute([
                 $request->get('name'),
@@ -81,7 +105,9 @@ class ServiceAreaController
                 $request->get('center_lat'),
                 $request->get('center_lng'),
                 $request->get('radius_km'),
-                $request->get('max_search_radius_km', 4.0)
+                $request->get('max_search_radius_km', 4.0),
+                $boundaryGeojson,
+                (int)$request->get('is_active', 1)
             ]);
             $areaId = (int)$db->lastInsertId();
 
@@ -105,6 +131,9 @@ class ServiceAreaController
         $id = (int)$request->param('id');
         $db = Database::getConnection();
 
+        $routes = $request->get('routes');
+        $boundaryGeojson = $routes !== null ? json_encode(['routes' => $routes], JSON_UNESCAPED_UNICODE) : null;
+
         $stmt = $db->prepare("
             UPDATE service_areas 
             SET name = COALESCE(?, name),
@@ -113,6 +142,7 @@ class ServiceAreaController
                 center_lat = COALESCE(?, center_lat),
                 center_lng = COALESCE(?, center_lng),
                 radius_km = COALESCE(?, radius_km),
+                boundary_geojson = CASE WHEN ? IS NOT NULL THEN ? ELSE boundary_geojson END,
                 is_active = COALESCE(?, is_active)
             WHERE id = ?
         ");
@@ -123,6 +153,8 @@ class ServiceAreaController
             $request->get('center_lat'),
             $request->get('center_lng'),
             $request->get('radius_km'),
+            $boundaryGeojson,
+            $boundaryGeojson,
             $request->get('is_active'),
             $id
         ]);
