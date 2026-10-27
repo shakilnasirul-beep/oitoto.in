@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:latlong2/latlong.dart';
+import 'package:latlong2/latlong.dart' hide Path;
 import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import '../core/theme/app_theme.dart';
@@ -1443,7 +1443,7 @@ class _SlenderDestinationPinPainter extends CustomPainter {
     pinPath.lineTo(cx - 13.0, headCenterY + 4.0);
     // Smooth circle arc over the top of the pin head
     pinPath.arcToPoint(
-      const Offset(cx + 13.0, headCenterY + 4.0),
+      Offset(cx + 13.0, headCenterY + 4.0),
       radius: const Radius.circular(headRadius),
       largeArc: true,
     );
@@ -1479,11 +1479,11 @@ class _SlenderDestinationPinPainter extends CustomPainter {
 
     // 6. Inner Core White Disc
     final coreWhitePaint = Paint()..color = Colors.white;
-    canvas.drawCircle(const Offset(cx, headCenterY), 6.5, coreWhitePaint);
+    canvas.drawCircle(Offset(cx, headCenterY), 6.5, coreWhitePaint);
 
     // 7. Center Focal Dot (Deep Crimson)
     final coreDotPaint = Paint()..color = const Color(0xFF8B0000);
-    canvas.drawCircle(const Offset(cx, headCenterY), 3.0, coreDotPaint);
+    canvas.drawCircle(Offset(cx, headCenterY), 3.0, coreDotPaint);
   }
 
   @override
@@ -1529,7 +1529,7 @@ class _SlenderPickupPinPainter extends CustomPainter {
     pinPath.moveTo(cx, needleTipY);
     pinPath.lineTo(cx - 12.0, headCenterY + 4.0);
     pinPath.arcToPoint(
-      const Offset(cx + 12.0, headCenterY + 4.0),
+      Offset(cx + 12.0, headCenterY + 4.0),
       radius: const Radius.circular(headRadius),
       largeArc: true,
     );
@@ -1564,11 +1564,11 @@ class _SlenderPickupPinPainter extends CustomPainter {
 
     // 6. Inner Core White Disc
     final coreWhitePaint = Paint()..color = Colors.white;
-    canvas.drawCircle(const Offset(cx, headCenterY), 6.0, coreWhitePaint);
+    canvas.drawCircle(Offset(cx, headCenterY), 6.0, coreWhitePaint);
 
     // 7. Center Focal Dot (Deep Green)
     final coreDotPaint = Paint()..color = const Color(0xFF065F2C);
-    canvas.drawCircle(const Offset(cx, headCenterY), 2.5, coreDotPaint);
+    canvas.drawCircle(Offset(cx, headCenterY), 2.5, coreDotPaint);
   }
 
   @override

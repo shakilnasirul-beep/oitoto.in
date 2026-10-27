@@ -119,3 +119,48 @@ jobs:
         with:
           name: oi_toto_driver_apk
           path: apps/driver_app/build/app/outputs/flutter-apk/app-release.apk
+
+  publish-release:
+    name: Publish Release v1.0.6
+    needs: [build-customer-apk, build-driver-apk]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Download Customer APK
+        uses: actions/download-artifact@v4
+        with:
+          name: oi_toto_customer_apk
+          path: ./artifacts_customer
+
+      - name: Download Driver APK
+        uses: actions/download-artifact@v4
+        with:
+          name: oi_toto_driver_apk
+          path: ./artifacts_driver
+
+      - name: Rename APKs
+        run: |
+          mkdir -p ./release_files
+          cp ./artifacts_customer/app-release.apk ./release_files/OiToto_Customer_v1.0.6.apk
+          cp ./artifacts_driver/app-release.apk ./release_files/OiToto_Driver_v1.0.6.apk
+          cp ./artifacts_customer/app-release.apk ./release_files/oi_toto_customer.apk
+          cp ./artifacts_driver/app-release.apk ./release_files/oi_toto_driver.apk
+
+      - name: Upload APKs to GitHub Release v1.0.6
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v1.0.6
+          name: Oi Toto Release v1.0.6
+          body: |
+            ## 🛺 Oi Toto! v1.0.6 Release
+            - **Hybrid Road Navigation:** Automatic routing via Highway and PMGSY / local pocket roads (direct shortcuts for E-Rickshaws).
+            - **Slender Needle Pin:** Sleek teardrop needle pointer with 3D ground contact shadow.
+            - **Dynamic Zone Corridors:** Auto-detection of passenger zone (Samsi & Chanchal hubs pre-loaded).
+          files: |
+            ./release_files/OiToto_Customer_v1.0.6.apk
+            ./release_files/OiToto_Driver_v1.0.6.apk
+            ./release_files/oi_toto_customer.apk
+            ./release_files/oi_toto_driver.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
