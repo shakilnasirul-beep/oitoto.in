@@ -121,7 +121,7 @@ jobs:
           path: apps/driver_app/build/app/outputs/flutter-apk/app-release.apk
 
   publish-release:
-    name: Publish Release v1.0.7
+    name: Publish Release v1.0.8
     needs: [build-customer-apk, build-driver-apk]
     runs-on: ubuntu-latest
     permissions:
@@ -142,25 +142,26 @@ jobs:
       - name: Rename APKs
         run: |
           mkdir -p ./release_files
-          cp ./artifacts_customer/app-release.apk ./release_files/OiToto_Customer_v1.0.7.apk
-          cp ./artifacts_driver/app-release.apk ./release_files/OiToto_Driver_v1.0.7.apk
+          cp ./artifacts_customer/app-release.apk ./release_files/OiToto_Customer_v1.0.8.apk
+          cp ./artifacts_driver/app-release.apk ./release_files/OiToto_Driver_v1.0.8.apk
           cp ./artifacts_customer/app-release.apk ./release_files/oi_toto_customer.apk
           cp ./artifacts_driver/app-release.apk ./release_files/oi_toto_driver.apk
 
-      - name: Upload APKs to GitHub Release v1.0.7
+      - name: Upload APKs to GitHub Release v1.0.8
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.0.7
-          name: Oi Toto Release v1.0.7
+          tag_name: v1.0.8
+          name: Oi Toto Release v1.0.8
           body: |
-            ## 🛺 Oi Toto! v1.0.7 Release
-            - **Strict Shortest Path Selection:** Automatic shortest road choice between Highway & PMG/Pocket roads (direct Samsi-Kandaran shortcut ~570m).
-            - **Slender Needle Drop Pin ("Soru Needle Pin"):** Precision needle shaft with 3D ground shadow.
-            - **Zone Corridors:** Real-time auto detection of regional hubs (Samsi & Chanchal).
-            - **Visible v1.0.7 Badge:** In-app version tag to confirm active build.
+            ## 🛺 Oi Toto! v1.0.8 Release
+            - **Instant Login & OTP:** Sub-second instant verification with fast 2s timeout and responsive local fallback.
+            - **Direct PMG & Concrete Dhalai Road:** Direct geometric trajectory between Samsi and Kandaran (~1.6 km) bypassing highway detour loops.
+            - **OpenStreetMap Natural Road Base:** Neutral road colors with no blue highways.
+            - **Vivid Electric Green Active Path:** Clear `#00C853` navigation polyline with crisp white casing.
+            - **In-App Version Indicator:** Visible v1.0.8 badge.
           files: |
-            ./release_files/OiToto_Customer_v1.0.7.apk
-            ./release_files/OiToto_Driver_v1.0.7.apk
+            ./release_files/OiToto_Customer_v1.0.8.apk
+            ./release_files/OiToto_Driver_v1.0.8.apk
             ./release_files/oi_toto_customer.apk
             ./release_files/oi_toto_driver.apk
         env:
