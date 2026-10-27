@@ -82,6 +82,20 @@ class ApiService {
   }
 
   // --- FARE & NEARBY TOTOS ---
+  Future<Map<String, dynamic>?> getZoneCorridors(double lat, double lng) async {
+    final url = Uri.parse('${ApiConstants.baseUrl}/service-areas/corridors?lat=$lat&lng=$lng');
+    try {
+      final res = await http.get(url, headers: _headers()).timeout(const Duration(seconds: 4));
+      if (res.statusCode == 200) {
+        final json = jsonDecode(res.body);
+        if (json['success'] == true && json['data'] != null) {
+          return json['data'];
+        }
+      }
+    } catch (_) {}
+    return null;
+  }
+
   Future<List<dynamic>> getNearbyTotos(double lat, double lng, {double radius = 4.0}) async {
     final url = Uri.parse('${ApiConstants.baseUrl}${ApiConstants.nearbyTotos}?pickup_lat=$lat&pickup_lng=$lng&radius_km=$radius');
     try {

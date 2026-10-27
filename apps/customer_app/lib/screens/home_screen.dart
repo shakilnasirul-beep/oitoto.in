@@ -51,45 +51,328 @@ class _HomeScreenState extends State<HomeScreen> {
   List<LatLng> _routePoints = [];
   double? _routeDistanceKm;
   int? _routeDurationMins;
+  String _routeRoadType = 'Hybrid Route';
 
   Timer? _activeCheckTimer;
 
-  // Preset popular landmarks for quick selection (Kolkata / Pan-India)
-  final List<Map<String, dynamic>> _quickSpots = [
+  // Dynamic Zone & Authentic Local Corridors State
+  String _currentZoneName = 'Samsi & Chanchal';
+  List<Map<String, dynamic>> _activeZoneCorridors = [];
+
+  // Pan-India & West Bengal Regional Hub & Corridor Registry
+  static final List<Map<String, dynamic>> _zoneRegistry = [
     {
-      'name': 'Metro Station (Gate 1)',
-      'addr': 'Shyambazar Metro Gate 1, Kolkata',
-      'lat': 22.6038,
-      'lng': 88.3713,
-      'icon': Icons.train,
+      'id': 'samsi_chanchal',
+      'name': 'Samsi & Chanchal',
+      'city': 'Malda',
+      'center': const LatLng(25.276269, 88.010118),
+      'radius_km': 25.0,
+      'corridors': [
+        {
+          'name': 'Samsi Railway Station',
+          'addr': 'Station Road, Samsi, Malda',
+          'lat': 25.2745,
+          'lng': 88.0062,
+          'icon': Icons.train,
+          'tag': 'Station',
+        },
+        {
+          'name': 'Samsi College Morh',
+          'addr': 'College Road, Samsi',
+          'lat': 25.2818,
+          'lng': 88.0065,
+          'icon': Icons.school,
+          'tag': 'College',
+        },
+        {
+          'name': 'Ghasiram Morh',
+          'addr': 'Ghasiram Morh Crossing, Samsi',
+          'lat': 25.2731,
+          'lng': 88.0088,
+          'icon': Icons.storefront,
+          'tag': 'Hub',
+        },
+        {
+          'name': 'Kandaran Colony',
+          'addr': 'Kandaran Durga Mandir Road, Chanchal-II',
+          'lat': 25.2773,
+          'lng': 87.9892,
+          'icon': Icons.temple_hindu,
+          'tag': 'Colony',
+        },
+        {
+          'name': 'Chanchal Bus Stand',
+          'addr': 'Chanchal Sub-Division Hub',
+          'lat': 25.3895,
+          'lng': 87.9940,
+          'icon': Icons.directions_bus,
+          'tag': 'Bus Stand',
+        },
+        {
+          'name': 'Binodpur Balia Market',
+          'addr': 'Balia Hat, Ratua-I',
+          'lat': 25.2690,
+          'lng': 88.0150,
+          'icon': Icons.shopping_basket,
+          'tag': 'Market',
+        },
+        {
+          'name': 'Vidyasagar College Rd',
+          'addr': 'Vidyasagar Road Crossing, Samsi',
+          'lat': 25.2748,
+          'lng': 88.0035,
+          'icon': Icons.alt_route,
+          'tag': 'Feeder',
+        },
+        {
+          'name': 'Damanbhiti Morh',
+          'addr': 'Damanbhiti Crossing, Samsi',
+          'lat': 25.2855,
+          'lng': 88.0120,
+          'icon': Icons.turn_sharp_right,
+          'tag': 'Link',
+        },
+      ],
     },
     {
-      'name': 'Railway Station North',
-      'addr': 'Sealdah Railway Station, Kolkata',
-      'lat': 22.5681,
-      'lng': 88.3704,
-      'icon': Icons.directions_railway,
+      'id': 'malda_town',
+      'name': 'Malda Town',
+      'city': 'Malda',
+      'center': const LatLng(25.0065, 88.1420),
+      'radius_km': 18.0,
+      'corridors': [
+        {
+          'name': 'Malda Town Station',
+          'addr': 'Station Road, English Bazar',
+          'lat': 25.0116,
+          'lng': 88.1405,
+          'icon': Icons.train,
+        },
+        {
+          'name': 'Rathbari Morh',
+          'addr': 'NH34, Rathbari, Malda',
+          'lat': 25.0065,
+          'lng': 88.1420,
+          'icon': Icons.alt_route,
+        },
+        {
+          'name': 'Post Office Morh',
+          'addr': 'Main Road, English Bazar',
+          'lat': 25.0010,
+          'lng': 88.1380,
+          'icon': Icons.local_post_office,
+        },
+        {
+          'name': 'Gour Banga University',
+          'addr': 'Mokdumpur, Malda',
+          'lat': 25.0290,
+          'lng': 88.1250,
+          'icon': Icons.school,
+        },
+        {
+          'name': 'Mangalbari Chowrasta',
+          'addr': 'Old Malda Crossing',
+          'lat': 25.0210,
+          'lng': 88.1560,
+          'icon': Icons.storefront,
+        },
+      ],
     },
     {
-      'name': 'Local Market Bazaar',
-      'addr': 'Hatibagan Market Crossing, Kolkata',
-      'lat': 22.5942,
-      'lng': 88.3710,
-      'icon': Icons.storefront,
+      'id': 'siliguri',
+      'name': 'Siliguri',
+      'city': 'Siliguri',
+      'center': const LatLng(26.727101, 88.395287),
+      'radius_km': 20.0,
+      'corridors': [
+        {
+          'name': 'Siliguri Junction',
+          'addr': 'Pradhan Nagar, Siliguri',
+          'lat': 26.7302,
+          'lng': 88.4215,
+          'icon': Icons.train,
+        },
+        {
+          'name': 'Bidhan Market',
+          'addr': 'Hill Cart Road, Siliguri',
+          'lat': 26.7161,
+          'lng': 88.4285,
+          'icon': Icons.shopping_cart,
+        },
+        {
+          'name': 'Venus Morh',
+          'addr': 'Sevoke Road, Siliguri',
+          'lat': 26.7235,
+          'lng': 88.4320,
+          'icon': Icons.alt_route,
+        },
+        {
+          'name': 'Court Morh',
+          'addr': 'Kachari Road, Siliguri',
+          'lat': 26.7110,
+          'lng': 88.4240,
+          'icon': Icons.account_balance,
+        },
+      ],
     },
     {
-      'name': 'College Street Junction',
-      'addr': 'College Street Coffee House, Kolkata',
-      'lat': 22.5754,
-      'lng': 88.3639,
-      'icon': Icons.menu_book,
+      'id': 'kolkata_north',
+      'name': 'Kolkata North',
+      'city': 'Kolkata',
+      'center': const LatLng(22.572646, 88.363895),
+      'radius_km': 20.0,
+      'corridors': [
+        {
+          'name': 'Shyambazar Metro (Gate 1)',
+          'addr': 'Five Point Crossing, Kolkata',
+          'lat': 22.6038,
+          'lng': 88.3713,
+          'icon': Icons.subway,
+        },
+        {
+          'name': 'Sealdah Railway Station',
+          'addr': 'Bipin Behari Ganguly St',
+          'lat': 22.5681,
+          'lng': 88.3704,
+          'icon': Icons.train,
+        },
+        {
+          'name': 'Hatibagan Market',
+          'addr': 'Bidhan Sarani, Kolkata',
+          'lat': 22.5942,
+          'lng': 88.3710,
+          'icon': Icons.storefront,
+        },
+        {
+          'name': 'College Street',
+          'addr': 'Coffee House Crossing',
+          'lat': 22.5754,
+          'lng': 88.3639,
+          'icon': Icons.menu_book,
+        },
+      ],
+    },
+    {
+      'id': 'howrah',
+      'name': 'Howrah Urban',
+      'city': 'Howrah',
+      'center': const LatLng(22.595770, 88.263640),
+      'radius_km': 15.0,
+      'corridors': [
+        {
+          'name': 'Howrah Railway Station',
+          'addr': 'Station Road, Howrah',
+          'lat': 22.5855,
+          'lng': 88.3426,
+          'icon': Icons.train,
+        },
+        {
+          'name': 'Nabanna (Secretariat)',
+          'addr': 'Mandirtala, Shibpur',
+          'lat': 22.5564,
+          'lng': 88.3075,
+          'icon': Icons.location_city,
+        },
+        {
+          'name': 'Kadamtala Market',
+          'addr': 'Bantra, Howrah',
+          'lat': 22.5880,
+          'lng': 88.3120,
+          'icon': Icons.storefront,
+        },
+      ],
     },
   ];
+
+  void _updateZoneCorridors(LatLng point) {
+    Map<String, dynamic>? closestZone;
+    double minDistance = double.infinity;
+
+    for (final zone in _zoneRegistry) {
+      final center = zone['center'] as LatLng;
+      final dist = Geolocator.distanceBetween(
+        point.latitude, point.longitude, center.latitude, center.longitude,
+      ) / 1000.0;
+      final radius = (zone['radius_km'] as num).toDouble();
+      if (dist <= radius && dist < minDistance) {
+        minDistance = dist;
+        closestZone = zone;
+      }
+    }
+
+    if (closestZone != null) {
+      setState(() {
+        _currentZoneName = closestZone!['name'] as String;
+        _activeZoneCorridors = List<Map<String, dynamic>>.from(closestZone['corridors'] as List);
+      });
+    } else {
+      setState(() {
+        _currentZoneName = 'Local Zone';
+        _activeZoneCorridors = [
+          {
+            'name': 'Nearby Railway Station',
+            'addr': 'Local Station Feeder',
+            'lat': point.latitude + 0.005,
+            'lng': point.longitude + 0.003,
+            'icon': Icons.train,
+          },
+          {
+            'name': 'Main Market / Bazaar',
+            'addr': 'Local Central Market',
+            'lat': point.latitude - 0.004,
+            'lng': point.longitude + 0.002,
+            'icon': Icons.storefront,
+          },
+          {
+            'name': 'College / High School',
+            'addr': 'Local Educational Hub',
+            'lat': point.latitude + 0.006,
+            'lng': point.longitude - 0.004,
+            'icon': Icons.school,
+          },
+          {
+            'name': 'Bus Stand / Morh',
+            'addr': 'Local Junction Morh',
+            'lat': point.latitude - 0.005,
+            'lng': point.longitude - 0.003,
+            'icon': Icons.directions_bus,
+          },
+        ];
+      });
+    }
+
+    // Also fetch dynamically from localhost backend if connected
+    _fetchCorridorsFromBackend(point);
+  }
+
+  Future<void> _fetchCorridorsFromBackend(LatLng point) async {
+    try {
+      final data = await ApiService().getZoneCorridors(point.latitude, point.longitude);
+      if (data != null && mounted) {
+        final list = data['corridors'] as List?;
+        if (list != null && list.isNotEmpty) {
+          setState(() {
+            if (data['zone_name'] != null) {
+              _currentZoneName = data['zone_name'];
+            }
+            _activeZoneCorridors = list.map((c) => {
+              'name': c['name'] ?? 'Hub',
+              'addr': c['address'] ?? '',
+              'lat': (c['lat'] as num).toDouble(),
+              'lng': (c['lng'] as num).toDouble(),
+              'icon': Icons.location_on,
+            }).toList();
+          });
+        }
+      }
+    } catch (_) {}
+  }
 
   @override
   void initState() {
     super.initState();
     _pickupController.text = 'Locating GPS...';
+    _updateZoneCorridors(_currentLocation);
     _getCurrentGpsLocation();
     _fetchNearbyDrivers();
     _checkActiveBooking();
@@ -177,6 +460,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _mapController.move(newGps, 15.5);
         _fetchNearbyDrivers();
         _reverseGeocode(newGps, isPickup: true);
+        _updateZoneCorridors(newGps);
 
         // Recalculate road route if destination was already selected
         if (_dropLocation != null) {
@@ -229,43 +513,114 @@ class _HomeScreenState extends State<HomeScreen> {
     } catch (_) {}
   }
 
-  // --- REAL ROAD NAVIGATION ROUTING (OSRM) ---
+  // --- HYBRID ROAD NAVIGATION ROUTING (HIGHWAY + PMG / POCKET ROADS) ---
   Future<void> _fetchRoadRoute(LatLng start, LatLng end) async {
     setState(() => _isLoadingRoute = true);
 
-    try {
-      final url = Uri.parse(
-        'https://router.project-osrm.org/route/v1/driving/'
-        '${start.longitude},${start.latitude};${end.longitude},${end.latitude}'
-        '?overview=full&geometries=geojson',
-      );
-      final res = await http.get(url, headers: {'User-Agent': 'in.oitoto.customer/1.0'});
-      if (res.statusCode == 200) {
-        final json = jsonDecode(res.body);
-        if (json['code'] == 'Ok' && json['routes'] != null && (json['routes'] as List).isNotEmpty) {
-          final route = json['routes'][0];
-          final coords = route['geometry']['coordinates'] as List;
-          final distM = (route['distance'] as num).toDouble();
-          final durS = (route['duration'] as num).toDouble();
+    // 1. PMG & Pocket Road Router (Pradhan Mantri Gram Sadak, Village Links, Tertiary, Tracks)
+    final pmgUri = Uri.parse(
+      'https://routing.openstreetmap.de/routed-bike/route/v1/driving/'
+      '${start.longitude},${start.latitude};${end.longitude},${end.latitude}'
+      '?overview=full&geometries=geojson',
+    );
 
-          if (mounted) {
-            setState(() {
-              _routePoints = coords.map((c) => LatLng((c[1] as num).toDouble(), (c[0] as num).toDouble())).toList();
-              _routeDistanceKm = distM / 1000.0;
-              _routeDurationMins = (durS / 60.0).ceil();
-              _isLoadingRoute = false;
-            });
-            _centerOnRoute(start, end);
-            return;
+    // 2. Highway Router (National Highway, State Highway, Major Trunk Arteries)
+    final highwayUri = Uri.parse(
+      'https://router.project-osrm.org/route/v1/driving/'
+      '${start.longitude},${start.latitude};${end.longitude},${end.latitude}'
+      '?overview=full&geometries=geojson',
+    );
+
+    // 3. Fallback Standard Router
+    final carBackupUri = Uri.parse(
+      'https://routing.openstreetmap.de/routed-car/route/v1/driving/'
+      '${start.longitude},${start.latitude};${end.longitude},${end.latitude}'
+      '?overview=full&geometries=geojson',
+    );
+
+    Future<Map<String, dynamic>?> querySingleRoute(Uri uri) async {
+      try {
+        final res = await http.get(uri, headers: {
+          'User-Agent': 'in.oitoto.customer/1.0',
+        }).timeout(const Duration(milliseconds: 3800));
+        if (res.statusCode == 200) {
+          final json = jsonDecode(res.body);
+          if (json['code'] == 'Ok' && json['routes'] != null && (json['routes'] as List).isNotEmpty) {
+            return json['routes'][0];
           }
+        }
+      } catch (_) {}
+      return null;
+    }
+
+    try {
+      // Query both Highway and PMG/Pocket road networks concurrently
+      final results = await Future.wait([
+        querySingleRoute(pmgUri),
+        querySingleRoute(highwayUri),
+      ]);
+
+      final pmgCandidate = results[0];
+      final highwayCandidate = results[1] ?? await querySingleRoute(carBackupUri);
+
+      Map<String, dynamic>? bestRoute;
+      String roadCategory = 'Direct Toto Road';
+
+      if (pmgCandidate != null && highwayCandidate != null) {
+        final pmgDistM = (pmgCandidate['distance'] as num).toDouble();
+        final hwyDistM = (highwayCandidate['distance'] as num).toDouble();
+
+        // If PMG / Pocket road offers a direct shortcut (e.g. Samsi to Kandaran: 570m vs 5160m),
+        // or is shorter/equal to highway, prioritize PMG/Pocket route!
+        if (pmgDistM <= hwyDistM * 0.95) {
+          bestRoute = pmgCandidate;
+          roadCategory = 'PMG / Pocket Road';
+        } else {
+          bestRoute = highwayCandidate;
+          roadCategory = 'Highway Corridor';
+        }
+      } else if (pmgCandidate != null) {
+        bestRoute = pmgCandidate;
+        roadCategory = 'PMG / Pocket Road';
+      } else if (highwayCandidate != null) {
+        bestRoute = highwayCandidate;
+        roadCategory = 'Highway Corridor';
+      }
+
+      if (bestRoute != null) {
+        final coords = bestRoute['geometry']['coordinates'] as List;
+        final distM = (bestRoute['distance'] as num).toDouble();
+        final distKm = distM / 1000.0;
+        // Realistic E-Rickshaw duration (~20 km/h in Indian suburban & rural corridors)
+        final durMins = ((distKm / 20.0) * 60.0).round().clamp(2, 240);
+
+        if (mounted) {
+          setState(() {
+            _routePoints = coords.map((c) => LatLng((c[1] as num).toDouble(), (c[0] as num).toDouble())).toList();
+            _routeDistanceKm = distKm;
+            _routeDurationMins = durMins;
+            _routeRoadType = roadCategory;
+            _isLoadingRoute = false;
+          });
+          _centerOnRoute(start, end);
+          return;
         }
       }
     } catch (_) {}
 
     // Fallback if network routing unavailable
     if (mounted) {
+      final straightDistKm = Geolocator.distanceBetween(
+        start.latitude, start.longitude, end.latitude, end.longitude,
+      ) / 1000.0;
+      final estRoadKm = (straightDistKm * 1.25);
+      final estMins = ((estRoadKm / 20.0) * 60.0).round().clamp(2, 240);
+
       setState(() {
         _routePoints = [start, end];
+        _routeDistanceKm = estRoadKm;
+        _routeDurationMins = estMins;
+        _routeRoadType = 'Pocket Road Feeder';
         _isLoadingRoute = false;
       });
       _centerOnRoute(start, end);
@@ -331,8 +686,24 @@ class _HomeScreenState extends State<HomeScreen> {
     if (mounted) {
       setState(() {
         _isEstimatingFare = false;
-        if (res['success'] == true) {
+        if (res['success'] == true && res['data'] != null) {
           _fareEstimate = res['data'];
+        } else {
+          // Localhost offline/fallback fare calculation (Base ₹20 for 1.5 km + ₹10/km)
+          final roadKm = _routeDistanceKm ?? (Geolocator.distanceBetween(
+            _currentLocation.latitude, _currentLocation.longitude,
+            _dropLocation!.latitude, _dropLocation!.longitude,
+          ) / 1000.0 * 1.2);
+          final finalFare = roadKm <= 1.5 ? 20 : (20 + (roadKm - 1.5) * 10).round();
+          final durMins = ((roadKm / 20.0) * 60.0).round().clamp(2, 180);
+
+          _fareEstimate = {
+            'final_fare': finalFare,
+            'base_fare': 20,
+            'distance_km': roadKm.toStringAsFixed(1),
+            'estimated_duration_mins': durMins,
+            'service_area': {'name': _currentZoneName},
+          };
         }
       });
     }
@@ -460,49 +831,23 @@ class _HomeScreenState extends State<HomeScreen> {
               // Markers Layer
               MarkerLayer(
                 markers: [
-                  // Current Pickup Marker
+                  // Current Pickup Marker (Slender Pointer Pin)
                   Marker(
                     point: _currentLocation,
-                    width: 48,
-                    height: 48,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: AppColors.primaryGreen,
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Colors.white, width: 3.5),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.primaryGreen.withOpacity(0.4),
-                            blurRadius: 12,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
-                      ),
-                      child: const Icon(Icons.person_pin_circle, color: Colors.white, size: 26),
-                    ),
+                    width: 34,
+                    height: 52,
+                    alignment: Alignment.topCenter,
+                    child: const SlenderPickupPin(),
                   ),
 
-                  // Destination Drop Marker (if selected)
+                  // Destination Drop Marker (Slender Pointer Pin with Needle Tip)
                   if (_dropLocation != null)
                     Marker(
                       point: _dropLocation!,
-                      width: 48,
-                      height: 48,
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: AppColors.errorRed,
-                          shape: BoxShape.circle,
-                          border: Border.all(color: Colors.white, width: 3.5),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.25),
-                              blurRadius: 10,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
-                        ),
-                        child: const Icon(Icons.flag_rounded, color: Colors.white, size: 24),
-                      ),
+                      width: 34,
+                      height: 54,
+                      alignment: Alignment.topCenter,
+                      child: const SlenderDestinationPin(),
                     ),
 
                   // Nearby Online E-Rickshaws
@@ -820,15 +1165,42 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       const SizedBox(height: 12),
 
+                      // Dynamic Zone Corridor Header
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 6),
+                        child: Row(
+                          children: [
+                            const Icon(Icons.explore_outlined, size: 14, color: AppColors.primaryGreen),
+                            const SizedBox(width: 4),
+                            Text(
+                              '$_currentZoneName Corridors:',
+                              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold, color: AppColors.deepNavy),
+                            ),
+                            const Spacer(),
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                              decoration: BoxDecoration(
+                                color: AppColors.primaryGreenLight,
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: Text(
+                                '${_activeZoneCorridors.length} Hubs',
+                                style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: AppColors.primaryGreenDark),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
                       // Quick Destination Chips
                       SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Row(
-                          children: _quickSpots.map((spot) {
+                          children: _activeZoneCorridors.map((spot) {
                             return Padding(
                               padding: const EdgeInsets.only(right: 8),
                               child: ActionChip(
-                                avatar: Icon(spot['icon'] as IconData, size: 16, color: AppColors.primaryGreen),
+                                avatar: Icon(spot['icon'] as IconData? ?? Icons.location_on, size: 15, color: AppColors.primaryGreen),
                                 label: Text(spot['name'] as String, style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w600)),
                                 backgroundColor: Colors.white,
                                 side: const BorderSide(color: AppColors.border),
@@ -869,15 +1241,34 @@ class _HomeScreenState extends State<HomeScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   Row(
+                                    mainAxisSize: MainAxisSize.min,
                                     children: [
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                                        decoration: BoxDecoration(
+                                          color: _routeRoadType.contains('PMG') ? const Color(0xFFE8F5E9) : const Color(0xFFFFF8E1),
+                                          borderRadius: BorderRadius.circular(4),
+                                          border: Border.all(
+                                            color: _routeRoadType.contains('PMG') ? const Color(0xFF4CAF50) : const Color(0xFFFFB300),
+                                            width: 0.8,
+                                          ),
+                                        ),
+                                        child: Text(
+                                          _routeRoadType.contains('PMG') ? '🛤️ PMG / Pocket' : '🛣️ Highway',
+                                          style: TextStyle(
+                                            fontSize: 10,
+                                            fontWeight: FontWeight.bold,
+                                            color: _routeRoadType.contains('PMG') ? const Color(0xFF2E7D32) : const Color(0xFFE65100),
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 6),
                                       Text(
                                         _routeDistanceKm != null
-                                            ? '${_routeDistanceKm!.toStringAsFixed(1)} km road route'
+                                            ? '${_routeDistanceKm!.toStringAsFixed(1)} km'
                                             : '${_fareEstimate!['distance_km']} km',
                                         style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w700, color: AppColors.deepNavy),
                                       ),
-                                      const SizedBox(width: 4),
-                                      const Text('🛣️', style: TextStyle(fontSize: 14)),
                                     ],
                                   ),
                                   const SizedBox(height: 2),
@@ -1005,4 +1396,181 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+}
+
+// ==============================================================================
+// 📍 SLENDER NEEDLE NAVIGATION MARKER PINS ("Soru Needle Pin")
+// ==============================================================================
+
+/// Slender Destination Pin with Razor-Sharp Needle Tip and 3D Ground Contact Shadow
+class SlenderDestinationPin extends StatelessWidget {
+  const SlenderDestinationPin({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomPaint(
+      size: const Size(34, 54),
+      painter: _SlenderDestinationPinPainter(),
+    );
+  }
+}
+
+class _SlenderDestinationPinPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final cx = size.width / 2; // 17.0
+    const headCenterY = 16.0;
+    const headRadius = 14.0;
+    final needleTipY = size.height - 4.0; // 50.0
+
+    // 1. Ground 3D Contact Shadow on the Road Surface
+    final shadowPaint = Paint()
+      ..color = Colors.black.withOpacity(0.35)
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2.5);
+    canvas.drawOval(
+      Rect.fromCenter(
+        center: Offset(cx, size.height - 2.0),
+        width: 14,
+        height: 4.5,
+      ),
+      shadowPaint,
+    );
+
+    // 2. Slender Needle Teardrop Body Path
+    final pinPath = Path();
+    pinPath.moveTo(cx, needleTipY);
+    // Left tapered line up to top circle tangent
+    pinPath.lineTo(cx - 13.0, headCenterY + 4.0);
+    // Smooth circle arc over the top of the pin head
+    pinPath.arcToPoint(
+      const Offset(cx + 13.0, headCenterY + 4.0),
+      radius: const Radius.circular(headRadius),
+      largeArc: true,
+    );
+    // Right tapered line down to razor-sharp needle point
+    pinPath.lineTo(cx, needleTipY);
+    pinPath.close();
+
+    // 3. Pin Ambient Drop Shadow
+    final pinShadowPaint = Paint()
+      ..color = Colors.black.withOpacity(0.25)
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 3.0);
+    canvas.save();
+    canvas.translate(0, 1.5);
+    canvas.drawPath(pinPath, pinShadowPaint);
+    canvas.restore();
+
+    // 4. Vibrant Crimson Gradient Fill
+    final fillPaint = Paint()
+      ..shader = const LinearGradient(
+        colors: [Color(0xFFFF3B30), Color(0xFFC0392B)],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      ).createShader(Rect.fromLTWH(0, 0, size.width, size.height));
+    canvas.drawPath(pinPath, fillPaint);
+
+    // 5. High-Precision White Outer Border
+    final strokePaint = Paint()
+      ..color = Colors.white
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.0
+      ..strokeJoin = StrokeJoin.round;
+    canvas.drawPath(pinPath, strokePaint);
+
+    // 6. Inner Core White Disc
+    final coreWhitePaint = Paint()..color = Colors.white;
+    canvas.drawCircle(const Offset(cx, headCenterY), 6.5, coreWhitePaint);
+
+    // 7. Center Focal Dot (Deep Crimson)
+    final coreDotPaint = Paint()..color = const Color(0xFF8B0000);
+    canvas.drawCircle(const Offset(cx, headCenterY), 3.0, coreDotPaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+/// Slender Pickup Pin with Razor-Sharp Needle Tip (Eco-Green Signature)
+class SlenderPickupPin extends StatelessWidget {
+  const SlenderPickupPin({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return CustomPaint(
+      size: const Size(34, 52),
+      painter: _SlenderPickupPinPainter(),
+    );
+  }
+}
+
+class _SlenderPickupPinPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final cx = size.width / 2; // 17.0
+    const headCenterY = 15.0;
+    const headRadius = 13.0;
+    final needleTipY = size.height - 4.0; // 48.0
+
+    // 1. Ground 3D Contact Shadow
+    final shadowPaint = Paint()
+      ..color = Colors.black.withOpacity(0.35)
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2.5);
+    canvas.drawOval(
+      Rect.fromCenter(
+        center: Offset(cx, size.height - 2.0),
+        width: 14,
+        height: 4.5,
+      ),
+      shadowPaint,
+    );
+
+    // 2. Slender Needle Teardrop Body Path
+    final pinPath = Path();
+    pinPath.moveTo(cx, needleTipY);
+    pinPath.lineTo(cx - 12.0, headCenterY + 4.0);
+    pinPath.arcToPoint(
+      const Offset(cx + 12.0, headCenterY + 4.0),
+      radius: const Radius.circular(headRadius),
+      largeArc: true,
+    );
+    pinPath.lineTo(cx, needleTipY);
+    pinPath.close();
+
+    // 3. Ambient Shadow
+    final pinShadowPaint = Paint()
+      ..color = Colors.black.withOpacity(0.22)
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 3.0);
+    canvas.save();
+    canvas.translate(0, 1.5);
+    canvas.drawPath(pinPath, pinShadowPaint);
+    canvas.restore();
+
+    // 4. Eco-Green Gradient Fill
+    final fillPaint = Paint()
+      ..shader = const LinearGradient(
+        colors: [Color(0xFF10B981), Color(0xFF047857)],
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+      ).createShader(Rect.fromLTWH(0, 0, size.width, size.height));
+    canvas.drawPath(pinPath, fillPaint);
+
+    // 5. White Outer Contour
+    final strokePaint = Paint()
+      ..color = Colors.white
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2.0
+      ..strokeJoin = StrokeJoin.round;
+    canvas.drawPath(pinPath, strokePaint);
+
+    // 6. Inner Core White Disc
+    final coreWhitePaint = Paint()..color = Colors.white;
+    canvas.drawCircle(const Offset(cx, headCenterY), 6.0, coreWhitePaint);
+
+    // 7. Center Focal Dot (Deep Green)
+    final coreDotPaint = Paint()..color = const Color(0xFF065F2C);
+    canvas.drawCircle(const Offset(cx, headCenterY), 2.5, coreDotPaint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }

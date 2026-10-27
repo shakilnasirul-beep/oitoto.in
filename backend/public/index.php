@@ -102,6 +102,7 @@ $router->group('/api/v1', function(Router $r) {
     $r->post('/vehicles/{id}/assign-driver', [VehicleController::class, 'assignDriver'], [AuthMiddleware::class, RoleMiddleware::allow('admin', 'super_admin', 'owner')]);
 
     // --- SERVICE AREAS & ZONING ---
+    $r->get('/service-areas/corridors', [ServiceAreaController::class, 'corridors']);
     $r->get('/service-areas', [ServiceAreaController::class, 'index']);
     $r->get('/service-areas/{id}', [ServiceAreaController::class, 'show']);
     $r->post('/service-areas', [ServiceAreaController::class, 'store'], [AuthMiddleware::class, RoleMiddleware::allow('admin', 'super_admin')]);

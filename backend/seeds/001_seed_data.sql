@@ -15,7 +15,9 @@ INSERT INTO `service_areas` (`id`, `name`, `state`, `city`, `center_lat`, `cente
 (2, 'Howrah Station & Urban Zone', 'West Bengal', 'Howrah', 22.595770, 88.263640, 10.00, 3.00, 'approved', 1),
 (3, 'Siliguri Town & Junction Corridor', 'West Bengal', 'Siliguri', 26.727101, 88.395287, 8.00, 2.50, 'approved', 1),
 (4, 'Lucknow Charbagh & Gomti Nagar Feeders', 'Uttar Pradesh', 'Lucknow', 26.846709, 80.946166, 15.00, 4.00, 'approved', 1),
-(5, 'Patna Junction & Bailey Road', 'Bihar', 'Patna', 25.594095, 85.137566, 12.00, 3.50, 'approved', 1);
+(5, 'Patna Junction & Bailey Road', 'Bihar', 'Patna', 25.594095, 85.137566, 12.00, 3.50, 'approved', 1),
+(6, 'Samsi & Chanchal Toto Corridor', 'West Bengal', 'Malda', 25.276269, 88.010118, 25.00, 5.00, 'approved', 1),
+(7, 'Malda Town & English Bazar Feeder', 'West Bengal', 'Malda', 25.006500, 88.142000, 18.00, 4.00, 'approved', 1);
 
 -- 3. FARE RULES PER SERVICE AREA
 INSERT INTO `fare_rules` (`service_area_id`, `vehicle_type`, `base_fare`, `base_distance_km`, `per_km_rate`, `minimum_fare`, `per_minute_waiting_charge`, `free_waiting_minutes`, `night_surge_multiplier`, `platform_commission_percentage`, `cancellation_fee_customer`, `cancellation_fee_driver`, `is_active`) VALUES
@@ -23,7 +25,9 @@ INSERT INTO `fare_rules` (`service_area_id`, `vehicle_type`, `base_fare`, `base_
 (2, 'e_rickshaw', 18.00, 1.50, 9.50, 18.00, 1.00, 3, 1.20, 10.00, 15.00, 20.00, 1),
 (3, 'e_rickshaw', 20.00, 1.50, 11.00, 20.00, 20.00, 1.00, 1.25, 10.00, 15.00, 20.00, 1),
 (4, 'e_rickshaw', 25.00, 2.00, 10.00, 25.00, 1.00, 3, 1.20, 10.00, 15.00, 20.00, 1),
-(5, 'e_rickshaw', 20.00, 1.50, 9.00, 20.00, 1.00, 3, 1.15, 10.00, 15.00, 20.00, 1);
+(5, 'e_rickshaw', 20.00, 1.50, 9.00, 20.00, 1.00, 3, 1.15, 10.00, 15.00, 20.00, 1),
+(6, 'e_rickshaw', 20.00, 1.50, 10.00, 20.00, 1.00, 3, 1.25, 10.00, 15.00, 20.00, 1),
+(7, 'e_rickshaw', 20.00, 1.50, 10.00, 20.00, 1.00, 3, 1.25, 10.00, 15.00, 20.00, 1);
 
 -- 4. VEHICLE OWNER (Company Fleet Operator)
 INSERT INTO `users` (`id`, `phone`, `full_name`, `email`, `role`, `status`, `language`) VALUES
