@@ -66,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
       'name': 'Samsi & Chanchal',
       'city': 'Malda',
       'center': const LatLng(25.276269, 88.010118),
-      'radius_km': 25.0,
+      'radius_km': 45.0,
       'corridors': [
         {
           'name': 'Samsi Railway Station',
@@ -115,6 +115,14 @@ class _HomeScreenState extends State<HomeScreen> {
           'lng': 88.0150,
           'icon': Icons.shopping_basket,
           'tag': 'Market',
+        },
+        {
+          'name': 'Makaram Morh',
+          'addr': 'Makaram Road, Samsi',
+          'lat': 25.2715,
+          'lng': 87.9840,
+          'icon': Icons.alt_route,
+          'tag': 'Link',
         },
         {
           'name': 'Vidyasagar College Rd',
@@ -297,6 +305,20 @@ class _HomeScreenState extends State<HomeScreen> {
       if (dist <= radius && dist < minDistance) {
         minDistance = dist;
         closestZone = zone;
+      }
+    }
+
+    // Fallback: If outside defined radius, pick the nearest registered zone if within 70 km
+    if (closestZone == null) {
+      for (final zone in _zoneRegistry) {
+        final center = zone['center'] as LatLng;
+        final dist = Geolocator.distanceBetween(
+          point.latitude, point.longitude, center.latitude, center.longitude,
+        ) / 1000.0;
+        if (dist <= 70.0 && dist < minDistance) {
+          minDistance = dist;
+          closestZone = zone;
+        }
       }
     }
 
@@ -517,62 +539,91 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _fetchRoadRoute(LatLng start, LatLng end) async {
     setState(() => _isLoadingRoute = true);
 
-    // 1. PMG & Pocket Road Router (Pradhan Mantri Gram Sadak, Village Links, Tertiary, Tracks)
-    final pmgUri = Uri.parse(
-      'https://routing.openstreetmap.de/routed-bike/route/v1/driving/'
-      '${start.longitude},${start.latitude};${end.longitude},${end.latitude}'
-      '?overview=full&geometries=geojson',
-    );
+    // 1. PMG, Gram Sadak, and Local Pocket Road Routers (OSRM Bike profile traversing rural tracks, living streets & alleys)
+    final pmgUris = [
+      Uri.parse(
+        'https://routing.openstreetmap.de/routed-bike/route/v1/driving/'
+        '${start.longitude},${start.latitude};${end.longitude},${end.latitude}'
+        '?overview=full&geometries=geojson',
+      ),
+      Uri.parse(
+        'http://routing.openstreetmap.de/routed-bike/route/v1/driving/'
+        '${start.longitude},${start.latitude};${end.longitude},${end.latitude}'
+        '?overview=full&geometries=geojson',
+      ),
+      Uri.parse(
+        'https://routing.openstreetmap.de/routed-bike/route/v1/bicycle/'
+        '${start.longitude},${start.latitude};${end.longitude},${end.latitude}'
+        '?overview=full&geometries=geojson',
+      ),
+      Uri.parse(
+        'http://routing.openstreetmap.de/routed-bike/route/v1/bicycle/'
+        '${start.longitude},${start.latitude};${end.longitude},${end.latitude}'
+        '?overview=full&geometries=geojson',
+      ),
+    ];
 
-    // 2. Highway Router (National Highway, State Highway, Major Trunk Arteries)
-    final highwayUri = Uri.parse(
-      'https://router.project-osrm.org/route/v1/driving/'
-      '${start.longitude},${start.latitude};${end.longitude},${end.latitude}'
-      '?overview=full&geometries=geojson',
-    );
+    // 2. Highway and Major Arterial Routers (OSRM Car Driving profile)
+    final highwayUris = [
+      Uri.parse(
+        'https://router.project-osrm.org/route/v1/driving/'
+        '${start.longitude},${start.latitude};${end.longitude},${end.latitude}'
+        '?overview=full&geometries=geojson',
+      ),
+      Uri.parse(
+        'http://router.project-osrm.org/route/v1/driving/'
+        '${start.longitude},${start.latitude};${end.longitude},${end.latitude}'
+        '?overview=full&geometries=geojson',
+      ),
+      Uri.parse(
+        'https://routing.openstreetmap.de/routed-car/route/v1/driving/'
+        '${start.longitude},${start.latitude};${end.longitude},${end.latitude}'
+        '?overview=full&geometries=geojson',
+      ),
+      Uri.parse(
+        'http://routing.openstreetmap.de/routed-car/route/v1/driving/'
+        '${start.longitude},${start.latitude};${end.longitude},${end.latitude}'
+        '?overview=full&geometries=geojson',
+      ),
+    ];
 
-    // 3. Fallback Standard Router
-    final carBackupUri = Uri.parse(
-      'https://routing.openstreetmap.de/routed-car/route/v1/driving/'
-      '${start.longitude},${start.latitude};${end.longitude},${end.latitude}'
-      '?overview=full&geometries=geojson',
-    );
-
-    Future<Map<String, dynamic>?> querySingleRoute(Uri uri) async {
-      try {
-        final res = await http.get(uri, headers: {
-          'User-Agent': 'in.oitoto.customer/1.0',
-        }).timeout(const Duration(milliseconds: 3800));
-        if (res.statusCode == 200) {
-          final json = jsonDecode(res.body);
-          if (json['code'] == 'Ok' && json['routes'] != null && (json['routes'] as List).isNotEmpty) {
-            return json['routes'][0];
+    Future<Map<String, dynamic>?> queryCandidates(List<Uri> uris) async {
+      for (final uri in uris) {
+        try {
+          final res = await http.get(uri, headers: {
+            'User-Agent': 'in.oitoto.customer/1.0',
+          }).timeout(const Duration(milliseconds: 6500));
+          if (res.statusCode == 200) {
+            final json = jsonDecode(res.body);
+            if (json['code'] == 'Ok' && json['routes'] != null && (json['routes'] as List).isNotEmpty) {
+              return json['routes'][0];
+            }
           }
-        }
-      } catch (_) {}
+        } catch (_) {}
+      }
       return null;
     }
 
     try {
       // Query both Highway and PMG/Pocket road networks concurrently
       final results = await Future.wait([
-        querySingleRoute(pmgUri),
-        querySingleRoute(highwayUri),
+        queryCandidates(pmgUris),
+        queryCandidates(highwayUris),
       ]);
 
       final pmgCandidate = results[0];
-      final highwayCandidate = results[1] ?? await querySingleRoute(carBackupUri);
+      final highwayCandidate = results[1];
 
       Map<String, dynamic>? bestRoute;
-      String roadCategory = 'Direct Toto Road';
+      String roadCategory = 'Direct Shortest Road';
 
       if (pmgCandidate != null && highwayCandidate != null) {
         final pmgDistM = (pmgCandidate['distance'] as num).toDouble();
         final hwyDistM = (highwayCandidate['distance'] as num).toDouble();
 
-        // If PMG / Pocket road offers a direct shortcut (e.g. Samsi to Kandaran: 570m vs 5160m),
-        // or is shorter/equal to highway, prioritize PMG/Pocket route!
-        if (pmgDistM <= hwyDistM * 0.95) {
+        // STRICT SHORTEST ROUTE PRIORITY: Always select the route with the shortest distance!
+        // E.g. Samsi to Kandaran: PMG 569m vs Highway Detour 4946m -> PMG is selected!
+        if (pmgDistM <= hwyDistM) {
           bestRoute = pmgCandidate;
           roadCategory = 'PMG / Pocket Road';
         } else {
@@ -834,7 +885,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   // Current Pickup Marker (Slender Pointer Pin)
                   Marker(
                     point: _currentLocation,
-                    width: 34,
+                    width: 28,
                     height: 52,
                     alignment: Alignment.topCenter,
                     child: const SlenderPickupPin(),
@@ -844,7 +895,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   if (_dropLocation != null)
                     Marker(
                       point: _dropLocation!,
-                      width: 34,
+                      width: 28,
                       height: 54,
                       alignment: Alignment.topCenter,
                       child: const SlenderDestinationPin(),
@@ -947,6 +998,23 @@ class _HomeScreenState extends State<HomeScreen> {
                                 const SizedBox(width: 2),
                                 const Icon(Icons.edit, size: 9, color: Color(0xFF1E40AF)),
                               ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 5),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFEFF6FF),
+                            borderRadius: BorderRadius.circular(6),
+                            border: Border.all(color: const Color(0xFF3B82F6), width: 0.8),
+                          ),
+                          child: const Text(
+                            'v1.0.7',
+                            style: TextStyle(
+                              color: Color(0xFF1D4ED8),
+                              fontSize: 9.5,
+                              fontWeight: FontWeight.w900,
                             ),
                           ),
                         ),
@@ -1402,14 +1470,14 @@ class _HomeScreenState extends State<HomeScreen> {
 // 📍 SLENDER NEEDLE NAVIGATION MARKER PINS ("Soru Needle Pin")
 // ==============================================================================
 
-/// Slender Destination Pin with Razor-Sharp Needle Tip and 3D Ground Contact Shadow
+/// Slender Destination Pin with Razor-Sharp Needle Tip and 3D Ground Contact Shadow ("Soru Needle Pin")
 class SlenderDestinationPin extends StatelessWidget {
   const SlenderDestinationPin({super.key});
 
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
-      size: const Size(34, 54),
+      size: const Size(28, 54),
       painter: _SlenderDestinationPinPainter(),
     );
   }
@@ -1418,43 +1486,41 @@ class SlenderDestinationPin extends StatelessWidget {
 class _SlenderDestinationPinPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    final cx = size.width / 2; // 17.0
-    const headCenterY = 16.0;
-    const headRadius = 14.0;
-    final needleTipY = size.height - 4.0; // 50.0
+    final cx = size.width / 2; // 14.0
+    const headCenterY = 12.0;
+    const headRadius = 10.5;
+    final needleTipY = size.height - 4.5; // 49.5
 
-    // 1. Ground 3D Contact Shadow on the Road Surface
+    // 1. Ground 3D Contact Shadow on Road Surface
     final shadowPaint = Paint()
-      ..color = Colors.black.withOpacity(0.35)
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2.5);
+      ..color = Colors.black.withOpacity(0.38)
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2.0);
     canvas.drawOval(
       Rect.fromCenter(
         center: Offset(cx, size.height - 2.0),
-        width: 14,
-        height: 4.5,
+        width: 13,
+        height: 4.0,
       ),
       shadowPaint,
     );
 
-    // 2. Slender Needle Teardrop Body Path
+    // 2. Ultra-Slender Needle Teardrop Body ("Soru Needle")
     final pinPath = Path();
     pinPath.moveTo(cx, needleTipY);
-    // Left tapered line up to top circle tangent
-    pinPath.lineTo(cx - 13.0, headCenterY + 4.0);
-    // Smooth circle arc over the top of the pin head
+    // Sleek needle contour tapering smoothly into compact bead head
+    pinPath.lineTo(cx - 7.5, headCenterY + 5.0);
     pinPath.arcToPoint(
-      Offset(cx + 13.0, headCenterY + 4.0),
+      Offset(cx + 7.5, headCenterY + 5.0),
       radius: const Radius.circular(headRadius),
       largeArc: true,
     );
-    // Right tapered line down to razor-sharp needle point
     pinPath.lineTo(cx, needleTipY);
     pinPath.close();
 
-    // 3. Pin Ambient Drop Shadow
+    // 3. Ambient Drop Shadow
     final pinShadowPaint = Paint()
-      ..color = Colors.black.withOpacity(0.25)
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 3.0);
+      ..color = Colors.black.withOpacity(0.28)
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2.5);
     canvas.save();
     canvas.translate(0, 1.5);
     canvas.drawPath(pinPath, pinShadowPaint);
@@ -1463,27 +1529,31 @@ class _SlenderDestinationPinPainter extends CustomPainter {
     // 4. Vibrant Crimson Gradient Fill
     final fillPaint = Paint()
       ..shader = const LinearGradient(
-        colors: [Color(0xFFFF3B30), Color(0xFFC0392B)],
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
+        colors: [Color(0xFFFF2A2A), Color(0xFFB71C1C)],
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
       ).createShader(Rect.fromLTWH(0, 0, size.width, size.height));
     canvas.drawPath(pinPath, fillPaint);
 
-    // 5. High-Precision White Outer Border
+    // 5. Crisp White Outer Contour
     final strokePaint = Paint()
       ..color = Colors.white
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.0
+      ..strokeWidth = 1.8
       ..strokeJoin = StrokeJoin.round;
     canvas.drawPath(pinPath, strokePaint);
 
     // 6. Inner Core White Disc
     final coreWhitePaint = Paint()..color = Colors.white;
-    canvas.drawCircle(Offset(cx, headCenterY), 6.5, coreWhitePaint);
+    canvas.drawCircle(Offset(cx, headCenterY), 5.0, coreWhitePaint);
 
-    // 7. Center Focal Dot (Deep Crimson)
-    final coreDotPaint = Paint()..color = const Color(0xFF8B0000);
-    canvas.drawCircle(Offset(cx, headCenterY), 3.0, coreDotPaint);
+    // 7. Razor Focal Dot (Deep Crimson)
+    final coreDotPaint = Paint()..color = const Color(0xFF7F0000);
+    canvas.drawCircle(Offset(cx, headCenterY), 2.4, coreDotPaint);
+
+    // 8. Ground Contact Pinpoint Dot
+    final groundPinPoint = Paint()..color = const Color(0xFFFF2A2A);
+    canvas.drawCircle(Offset(cx, needleTipY), 1.2, groundPinPoint);
   }
 
   @override
@@ -1497,7 +1567,7 @@ class SlenderPickupPin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
-      size: const Size(34, 52),
+      size: const Size(28, 52),
       painter: _SlenderPickupPinPainter(),
     );
   }
@@ -1506,20 +1576,20 @@ class SlenderPickupPin extends StatelessWidget {
 class _SlenderPickupPinPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    final cx = size.width / 2; // 17.0
-    const headCenterY = 15.0;
-    const headRadius = 13.0;
+    final cx = size.width / 2; // 14.0
+    const headCenterY = 12.0;
+    const headRadius = 10.0;
     final needleTipY = size.height - 4.0; // 48.0
 
     // 1. Ground 3D Contact Shadow
     final shadowPaint = Paint()
       ..color = Colors.black.withOpacity(0.35)
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2.5);
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2.0);
     canvas.drawOval(
       Rect.fromCenter(
         center: Offset(cx, size.height - 2.0),
-        width: 14,
-        height: 4.5,
+        width: 12,
+        height: 3.8,
       ),
       shadowPaint,
     );
@@ -1527,9 +1597,9 @@ class _SlenderPickupPinPainter extends CustomPainter {
     // 2. Slender Needle Teardrop Body Path
     final pinPath = Path();
     pinPath.moveTo(cx, needleTipY);
-    pinPath.lineTo(cx - 12.0, headCenterY + 4.0);
+    pinPath.lineTo(cx - 7.0, headCenterY + 4.5);
     pinPath.arcToPoint(
-      Offset(cx + 12.0, headCenterY + 4.0),
+      Offset(cx + 7.0, headCenterY + 4.5),
       radius: const Radius.circular(headRadius),
       largeArc: true,
     );
@@ -1538,8 +1608,8 @@ class _SlenderPickupPinPainter extends CustomPainter {
 
     // 3. Ambient Shadow
     final pinShadowPaint = Paint()
-      ..color = Colors.black.withOpacity(0.22)
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 3.0);
+      ..color = Colors.black.withOpacity(0.24)
+      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2.5);
     canvas.save();
     canvas.translate(0, 1.5);
     canvas.drawPath(pinPath, pinShadowPaint);
@@ -1549,8 +1619,8 @@ class _SlenderPickupPinPainter extends CustomPainter {
     final fillPaint = Paint()
       ..shader = const LinearGradient(
         colors: [Color(0xFF10B981), Color(0xFF047857)],
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
       ).createShader(Rect.fromLTWH(0, 0, size.width, size.height));
     canvas.drawPath(pinPath, fillPaint);
 
@@ -1558,17 +1628,21 @@ class _SlenderPickupPinPainter extends CustomPainter {
     final strokePaint = Paint()
       ..color = Colors.white
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 2.0
+      ..strokeWidth = 1.8
       ..strokeJoin = StrokeJoin.round;
     canvas.drawPath(pinPath, strokePaint);
 
     // 6. Inner Core White Disc
     final coreWhitePaint = Paint()..color = Colors.white;
-    canvas.drawCircle(Offset(cx, headCenterY), 6.0, coreWhitePaint);
+    canvas.drawCircle(Offset(cx, headCenterY), 4.8, coreWhitePaint);
 
     // 7. Center Focal Dot (Deep Green)
     final coreDotPaint = Paint()..color = const Color(0xFF065F2C);
-    canvas.drawCircle(Offset(cx, headCenterY), 2.5, coreDotPaint);
+    canvas.drawCircle(Offset(cx, headCenterY), 2.2, coreDotPaint);
+
+    // 8. Ground Contact Pinpoint Dot
+    final groundPinPoint = Paint()..color = const Color(0xFF10B981);
+    canvas.drawCircle(Offset(cx, needleTipY), 1.2, groundPinPoint);
   }
 
   @override

@@ -1,7 +1,7 @@
 name: oi_toto_driver
 description: "Oi Toto Partner — E-Rickshaw Driver & Fleet Owner App. Tap. Book. Cholo!"
 publish_to: 'none'
-version: 1.0.6+6
+version: 1.0.7+7
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
