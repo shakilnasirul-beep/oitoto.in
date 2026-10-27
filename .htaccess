@@ -19,10 +19,12 @@ RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]
 RewriteRule ^backend(/.*)?$ - [F,L]
 
 # 2. High-speed Direct APK Downloads via GitHub Releases (Bypasses 10MB Free Hosting Limit)
+Redirect 302 /downloads/OiToto_Customer_v1.0.6.apk https://github.com/shakilnasirul-beep/oitoto.in/releases/download/v1.0.6/OiToto_Customer_v1.0.6.apk
+Redirect 302 /downloads/OiToto_Driver_v1.0.6.apk https://github.com/shakilnasirul-beep/oitoto.in/releases/download/v1.0.6/OiToto_Driver_v1.0.6.apk
+Redirect 302 /downloads/oi_toto_customer.apk https://github.com/shakilnasirul-beep/oitoto.in/releases/download/v1.0.6/OiToto_Customer_v1.0.6.apk
+Redirect 302 /downloads/oi_toto_driver.apk https://github.com/shakilnasirul-beep/oitoto.in/releases/download/v1.0.6/OiToto_Driver_v1.0.6.apk
 Redirect 302 /downloads/OiToto_Customer_v1.0.5.apk https://github.com/shakilnasirul-beep/oitoto.in/releases/download/v1.0.5/OiToto_Customer_v1.0.5.apk
 Redirect 302 /downloads/OiToto_Driver_v1.0.5.apk https://github.com/shakilnasirul-beep/oitoto.in/releases/download/v1.0.5/OiToto_Driver_v1.0.5.apk
-Redirect 302 /downloads/oi_toto_customer.apk https://github.com/shakilnasirul-beep/oitoto.in/releases/download/v1.0.5/OiToto_Customer_v1.0.5.apk
-Redirect 302 /downloads/oi_toto_driver.apk https://github.com/shakilnasirul-beep/oitoto.in/releases/download/v1.0.5/OiToto_Driver_v1.0.5.apk
 Redirect 302 /downloads/OiToto_Customer_v1.0.4.apk https://github.com/shakilnasirul-beep/oitoto.in/releases/download/v1.0.5/OiToto_Customer_v1.0.5.apk
 Redirect 302 /downloads/OiToto_Driver_v1.0.4.apk https://github.com/shakilnasirul-beep/oitoto.in/releases/download/v1.0.5/OiToto_Driver_v1.0.5.apk
 
