@@ -187,11 +187,6 @@ class ApiService {
       }
     };
   }
-        'promo_code': promo,
-      }),
-    );
-    return jsonDecode(res.body);
-  }
 
   // --- BOOKING ---
   Future<Map<String, dynamic>> createBooking({
