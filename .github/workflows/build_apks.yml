@@ -121,7 +121,7 @@ jobs:
           path: apps/driver_app/build/app/outputs/flutter-apk/app-release.apk
 
   publish-release:
-    name: Publish Release v1.0.8
+    name: Publish Release v1.0.9
     needs: [build-customer-apk, build-driver-apk]
     runs-on: ubuntu-latest
     permissions:
@@ -142,26 +142,27 @@ jobs:
       - name: Rename APKs
         run: |
           mkdir -p ./release_files
-          cp ./artifacts_customer/app-release.apk ./release_files/OiToto_Customer_v1.0.8.apk
-          cp ./artifacts_driver/app-release.apk ./release_files/OiToto_Driver_v1.0.8.apk
+          cp ./artifacts_customer/app-release.apk ./release_files/OiToto_Customer_v1.0.9.apk
+          cp ./artifacts_driver/app-release.apk ./release_files/OiToto_Driver_v1.0.9.apk
           cp ./artifacts_customer/app-release.apk ./release_files/oi_toto_customer.apk
           cp ./artifacts_driver/app-release.apk ./release_files/oi_toto_driver.apk
 
-      - name: Upload APKs to GitHub Release v1.0.8
+      - name: Upload APKs to GitHub Release v1.0.9
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.0.8
-          name: Oi Toto Release v1.0.8
+          tag_name: v1.0.9
+          name: Oi Toto Release v1.0.9
           body: |
-            ## 🛺 Oi Toto! v1.0.8 Release
-            - **Instant Login & OTP:** Sub-second instant verification with fast 2s timeout and responsive local fallback.
-            - **Direct PMG & Concrete Dhalai Road:** Direct geometric trajectory between Samsi and Kandaran (~1.6 km) bypassing highway detour loops.
-            - **OpenStreetMap Natural Road Base:** Neutral road colors with no blue highways.
-            - **Vivid Electric Green Active Path:** Clear `#00C853` navigation polyline with crisp white casing.
-            - **In-App Version Indicator:** Visible v1.0.8 badge.
+            ## 🛺 Oi Toto! v1.0.9 Release
+            - **Seamless Start-to-End Green Line:** The green route starts directly under your pickup pin, follows the PMG/feeder road to the highway, and connects directly to the drop pin without gaps.
+            - **PMG + Highway Hybrid Routing:** Smooth combination of pocket roads, concrete dhalai roads, and highway corridors.
+            - **Live Progressive Ride Animation:** Toto vehicle moves step-by-step along the route in real time with auto camera centering.
+            - **Payment Method on Completion:** Cash to Driver vs UPI Online options appear on ride completion with interactive QR scanner and payment confirmation.
+            - **Bottom Sheet Polish:** Cleaned booking card without premature payment buttons.
+            - **In-App Version Indicator:** Visible v1.0.9 badge.
           files: |
-            ./release_files/OiToto_Customer_v1.0.8.apk
-            ./release_files/OiToto_Driver_v1.0.8.apk
+            ./release_files/OiToto_Customer_v1.0.9.apk
+            ./release_files/OiToto_Driver_v1.0.9.apk
             ./release_files/oi_toto_customer.apk
             ./release_files/oi_toto_driver.apk
         env:

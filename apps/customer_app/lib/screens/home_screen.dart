@@ -538,34 +538,67 @@ class _HomeScreenState extends State<HomeScreen> {
 
   // --- DIRECT PMG, CONCRETE DHALAI & POCKET ROAD GEOMETRIC SYNTHESIS ---
   List<LatLng> _synthesizePmgPocketRoute(LatLng p1, LatLng p2) {
-    // Check if this route is within the Samsi <-> Kandaran / Ratua suburban corridor
-    final isSamsiCorridor = (p1.latitude >= 25.24 && p1.latitude <= 25.31 && p1.longitude >= 87.96 && p1.longitude <= 88.04) &&
-                            (p2.latitude >= 25.24 && p2.latitude <= 25.31 && p2.longitude >= 87.96 && p2.longitude <= 88.04);
+    // Hub points around Samsi & Malda rural/suburban network
+    const pttiCollege = LatLng(25.2748, 88.0076);
+    const pttiHwyJunction = LatLng(25.2748, 88.0090);
+    const stationRoadCrossing = LatLng(25.2750, 88.0055);
+    const stationPocketLink = LatLng(25.2756, 88.0008);
+    const pmgConcreteCenter = LatLng(25.2763, 87.9962);
+    const kandaranVillage = LatLng(25.2769, 87.9922);
+    const kandaranColony = LatLng(25.2773, 87.9892);
+    const ghasiramMorh = LatLng(25.2731, 88.0088);
+    const samsiCollegeMorh = LatLng(25.2818, 88.0065);
+    const samsiCollegeHwy = LatLng(25.2825, 88.0095);
+
+    final isSamsiCorridor = (p1.latitude >= 25.23 && p1.latitude <= 25.32 && p1.longitude >= 87.95 && p1.longitude <= 88.05) &&
+                            (p2.latitude >= 25.23 && p2.latitude <= 25.32 && p2.longitude >= 87.95 && p2.longitude <= 88.05);
 
     if (isSamsiCorridor) {
       final pts = <LatLng>[p1];
-      if (p1.longitude > p2.longitude) {
-        // East (Samsi Station / NH31) to West (Kandaran / Ratua)
-        pts.add(const LatLng(25.2750, 88.0055)); // Samsi Station Road Crossing
-        pts.add(const LatLng(25.2756, 88.0008)); // Station Pocket Link (Level Crossing)
-        pts.add(const LatLng(25.2763, 87.9962)); // PMGSY Concrete Dhalai Road Center
-        pts.add(const LatLng(25.2769, 87.9922)); // Kandaran Village East Link
-        pts.add(const LatLng(25.2773, 87.9892)); // Kandaran Colony / Durga Mandir Road
+
+      // If start is west of NH31 (e.g. Nagar PTTI College or Kandaran)
+      final p1IsPtti = Geolocator.distanceBetween(p1.latitude, p1.longitude, pttiCollege.latitude, pttiCollege.longitude) < 350;
+      final p2IsPtti = Geolocator.distanceBetween(p2.latitude, p2.longitude, pttiCollege.latitude, pttiCollege.longitude) < 350;
+
+      if (p1IsPtti && !p2IsPtti) {
+        // From Nagar PTTI College through pocket feeder road eastward to NH31
+        pts.add(const LatLng(25.2748, 88.0083));
+        pts.add(pttiHwyJunction);
+        // Then along NH31 towards p2
+        if (p2.latitude < p1.latitude) {
+          pts.add(ghasiramMorh);
+        } else {
+          pts.add(const LatLng(25.2780, 88.0092));
+        }
+      } else if (!p1IsPtti && p2IsPtti) {
+        // Towards Nagar PTTI College
+        if (p1.latitude < p2.latitude) {
+          pts.add(ghasiramMorh);
+        }
+        pts.add(pttiHwyJunction);
+        pts.add(const LatLng(25.2748, 88.0083));
+      } else if (p1.longitude > p2.longitude) {
+        // East (NH31 / Station) to West (Kandaran / Ratua)
+        pts.add(stationRoadCrossing);
+        pts.add(stationPocketLink);
+        pts.add(pmgConcreteCenter);
+        pts.add(kandaranVillage);
+        pts.add(kandaranColony);
       } else {
-        // West (Kandaran / Ratua) to East (Samsi Station / NH31)
-        pts.add(const LatLng(25.2773, 87.9892)); // Kandaran Colony
-        pts.add(const LatLng(25.2769, 87.9922)); // Kandaran Village Link
-        pts.add(const LatLng(25.2763, 87.9962)); // PMGSY Concrete Dhalai Road Center
-        pts.add(const LatLng(25.2756, 88.0008)); // Station Pocket Link
-        pts.add(const LatLng(25.2750, 88.0055)); // Samsi Station Road Crossing
+        // West (Kandaran / Ratua) to East (NH31 / Station)
+        pts.add(kandaranColony);
+        pts.add(kandaranVillage);
+        pts.add(pmgConcreteCenter);
+        pts.add(stationPocketLink);
+        pts.add(stationRoadCrossing);
       }
       pts.add(p2);
       return pts;
     }
 
-    // General suburban/rural pocket road synthesis with natural terrain curves
+    // General suburban/rural pocket road synthesis with natural road terrain curves
     final pts = <LatLng>[p1];
-    const steps = 6;
+    const steps = 8;
     for (int i = 1; i < steps; i++) {
       final t = i / steps;
       final lat = p1.latitude + (p2.latitude - p1.latitude) * t;
@@ -588,17 +621,12 @@ class _HomeScreenState extends State<HomeScreen> {
     // 1. PMG, Gram Sadak, and Local Pocket Road Routers (OSRM Bike profile traversing rural tracks, living streets & alleys)
     final pmgUris = [
       Uri.parse(
-        'https://routing.openstreetmap.de/routed-bike/route/v1/driving/'
-        '${start.longitude},${start.latitude};${end.longitude},${end.latitude}'
-        '?overview=full&geometries=geojson',
-      ),
-      Uri.parse(
-        'http://routing.openstreetmap.de/routed-bike/route/v1/driving/'
-        '${start.longitude},${start.latitude};${end.longitude},${end.latitude}'
-        '?overview=full&geometries=geojson',
-      ),
-      Uri.parse(
         'https://routing.openstreetmap.de/routed-bike/route/v1/bicycle/'
+        '${start.longitude},${start.latitude};${end.longitude},${end.latitude}'
+        '?overview=full&geometries=geojson',
+      ),
+      Uri.parse(
+        'http://routing.openstreetmap.de/routed-bike/route/v1/bicycle/'
         '${start.longitude},${start.latitude};${end.longitude},${end.latitude}'
         '?overview=full&geometries=geojson',
       ),
@@ -623,7 +651,7 @@ class _HomeScreenState extends State<HomeScreen> {
         try {
           final res = await http.get(uri, headers: {
             'User-Agent': 'in.oitoto.customer/1.0',
-          }).timeout(const Duration(milliseconds: 3500));
+          }).timeout(const Duration(milliseconds: 2500));
           if (res.statusCode == 200) {
             final json = jsonDecode(res.body);
             if (json['code'] == 'Ok' && json['routes'] != null && (json['routes'] as List).isNotEmpty) {
@@ -694,14 +722,60 @@ class _HomeScreenState extends State<HomeScreen> {
         }
 
         final coords = bestRoute['geometry']['coordinates'] as List;
+        final roadPoints = coords.map((c) => LatLng((c[1] as num).toDouble(), (c[0] as num).toDouble())).toList();
+
+        // Ensure unbroken continuous route directly from start pin to end pin:
+        final fullRoute = <LatLng>[start];
+
+        final startGapM = Geolocator.distanceBetween(
+          start.latitude, start.longitude,
+          roadPoints.first.latitude, roadPoints.first.longitude,
+        );
+
+        if (startGapM > 5.0) {
+          final steps = (startGapM / 25.0).ceil().clamp(1, 10);
+          for (int i = 1; i < steps; i++) {
+            final t = i / steps;
+            fullRoute.add(LatLng(
+              start.latitude + (roadPoints.first.latitude - start.latitude) * t,
+              start.longitude + (roadPoints.first.longitude - start.longitude) * t,
+            ));
+          }
+        }
+
+        fullRoute.addAll(roadPoints);
+
+        final endGapM = Geolocator.distanceBetween(
+          roadPoints.last.latitude, roadPoints.last.longitude,
+          end.latitude, end.longitude,
+        );
+
+        if (endGapM > 5.0) {
+          final lastPt = roadPoints.last;
+          final steps = (endGapM / 25.0).ceil().clamp(1, 10);
+          for (int i = 1; i < steps; i++) {
+            final t = i / steps;
+            fullRoute.add(LatLng(
+              lastPt.latitude + (end.latitude - lastPt.latitude) * t,
+              lastPt.longitude + (end.longitude - lastPt.longitude) * t,
+            ));
+          }
+          fullRoute.add(end);
+        } else {
+          fullRoute.add(end);
+        }
+
         final durMins = ((distKm / 20.0) * 60.0).round().clamp(2, 240);
+        final finalCategory = (startGapM > 25.0 || endGapM > 25.0)
+            ? 'PMG Road + Highway Hybrid'
+            : roadCategory;
 
         if (mounted) {
           setState(() {
-            _routePoints = coords.map((c) => LatLng((c[1] as num).toDouble(), (c[0] as num).toDouble())).toList();
+            _routePoints = fullRoute;
             _routeDistanceKm = distKm;
             _routeDurationMins = durMins;
-            _routeRoadType = roadCategory;
+            _routeRoadType = finalCategory;
             _isLoadingRoute = false;
           });
           _centerOnRoute(start, end);
@@ -720,7 +794,7 @@ class _HomeScreenState extends State<HomeScreen> {
         _routePoints = pmgPoints;
         _routeDistanceKm = estRoadKm;
         _routeDurationMins = estMins;
-        _routeRoadType = 'PMG / Pocket Dhalai Road';
+        _routeRoadType = 'PMG Road + Highway Hybrid';
         _isLoadingRoute = false;
       });
       _centerOnRoute(start, end);
@@ -751,7 +825,7 @@ class _HomeScreenState extends State<HomeScreen> {
       _activeCheckTimer?.cancel();
       Navigator.push(
         context,
-        MaterialPageRoute(builder: (_) => ActiveRideScreen(booking: active)),
+        MaterialPageRoute(builder: (_) => ActiveRideScreen(booking: active, routePoints: _routePoints)),
       ).then((_) {
         _activeCheckTimer = Timer.periodic(const Duration(seconds: 10), (_) {
           _fetchNearbyDrivers();
@@ -847,6 +921,7 @@ class _HomeScreenState extends State<HomeScreen> {
             builder: (_) => ActiveRideScreen(
               bookingId: res['data']['booking_id'],
               initialData: res['data'],
+              routePoints: _routePoints,
             ),
           ),
         );
@@ -934,7 +1009,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     point: _currentLocation,
                     width: 28,
                     height: 52,
-                    alignment: Alignment.topCenter,
+                    alignment: Alignment.bottomCenter,
                     child: const SlenderPickupPin(),
                   ),
 
@@ -944,7 +1019,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       point: _dropLocation!,
                       width: 28,
                       height: 54,
-                      alignment: Alignment.topCenter,
+                      alignment: Alignment.bottomCenter,
                       child: const SlenderDestinationPin(),
                     ),
 
@@ -1057,7 +1132,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             border: Border.all(color: const Color(0xFF3B82F6), width: 0.8),
                           ),
                           child: const Text(
-                            'v1.0.8',
+                            'v1.0.9',
                             style: TextStyle(
                               color: Color(0xFF1D4ED8),
                               fontSize: 9.5,
@@ -1397,62 +1472,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             ],
                           ),
-                        ),
-                        const SizedBox(height: 12),
-
-                        // Payment Method Selector
-                        Row(
-                          children: [
-                            Expanded(
-                              child: InkWell(
-                                onTap: () => setState(() => _selectedPaymentMode = 'cash'),
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(vertical: 10),
-                                  decoration: BoxDecoration(
-                                    color: _selectedPaymentMode == 'cash' ? AppColors.warmYellowLight : Colors.white,
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(
-                                      color: _selectedPaymentMode == 'cash' ? AppColors.warmYellowDark : AppColors.border,
-                                      width: _selectedPaymentMode == 'cash' ? 2 : 1,
-                                    ),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: const [
-                                      Icon(Icons.payments_outlined, size: 18, color: AppColors.textMain),
-                                      SizedBox(width: 6),
-                                      Text('Cash to Driver', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: InkWell(
-                                onTap: () => setState(() => _selectedPaymentMode = 'upi'),
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(vertical: 10),
-                                  decoration: BoxDecoration(
-                                    color: _selectedPaymentMode == 'upi' ? AppColors.primaryGreenLight : Colors.white,
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(
-                                      color: _selectedPaymentMode == 'upi' ? AppColors.primaryGreen : AppColors.border,
-                                      width: _selectedPaymentMode == 'upi' ? 2 : 1,
-                                    ),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: const [
-                                      Icon(Icons.qr_code, size: 18, color: AppColors.primaryGreenDark),
-                                      SizedBox(width: 6),
-                                      Text('UPI / Online', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 13)),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
                         ),
                         const SizedBox(height: 14),
                       ],

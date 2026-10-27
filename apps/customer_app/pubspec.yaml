@@ -1,7 +1,7 @@
 name: oi_toto_customer
 description: "Oi Toto! — Pan-India E-Rickshaw Ride Booking Customer App. Tap. Book. Cholo!"
 publish_to: 'none'
-version: 1.0.8+8
+version: 1.0.9+9
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
